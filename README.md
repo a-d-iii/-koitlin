@@ -16,7 +16,12 @@ The resulting APK will be located at `app/build/outputs/apk/debug/app-debug.apk`
 
 ## Sharing via QR Code
 
-A small Python script is provided to host the APK on a local HTTP server and display a QR code. Ensure your mobile device is on the same network as this machine.
+ 
+A small Python script is provided to display a QR code that lets you install the APK wirelessly.
+By default it hosts the APK on a local HTTP server. If your phone is not on the same network,
+pass `--upload` to have the script upload the APK to a temporary hosting service and generate
+a QR code for that public link.
+ 
 
 Install the Python dependency:
 
@@ -24,10 +29,20 @@ Install the Python dependency:
 pip install qrcode
 ```
 
-Run the script:
+ 
+Run the script for local network sharing:
+ 
 
 ```bash
 python3 serve_apk.py
 ```
 
-Scan the displayed QR code with your mobile device to download the APK directly without a USB cable.
+ 
+If your phone is on a different network, run:
+
+```bash
+python3 serve_apk.py --upload
+```
+
+The script will print a public URL and QR code that you can scan to download the APK without a USB cable.
+ 
