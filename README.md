@@ -5,8 +5,13 @@ This repository contains a minimal Kotlin Android application using Jetpack Comp
 ## Building the app
 
 1. Install the Android SDK and ensure `ANDROID_HOME` is set.
-2. Run the Gradle wrapper to build the debug APK. The wrapper will download its
-   required JAR on first use if it is not present:
+2. If the Gradle wrapper JAR is missing, generate it with a local Gradle installation:
+
+```bash
+gradle wrapper
+```
+
+   Then run the wrapper to build the debug APK. It will download the Gradle distribution automatically:
 
 ```bash
 ./gradlew assembleDebug
