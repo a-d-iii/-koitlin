@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace 'com.example.randomqr'
+    namespace 'com.example.basic'
     compileSdk 35
 
     defaultConfig {
-        applicationId 'com.example.randomqr'
+        applicationId 'com.example.basic'
         minSdk 24
         targetSdk 35
         versionCode 1
@@ -18,7 +18,6 @@ android {
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
     compileOptions {
@@ -42,6 +41,4 @@ dependencies {
     implementation platform('androidx.compose:compose-bom:2023.10.01')
     implementation 'androidx.compose.ui:ui'
     implementation 'androidx.compose.material3:material3'
-    implementation 'com.google.android.material:material:1.11.0'
-    implementation 'androidx.navigation:navigation-compose:2.7.7'
 }
