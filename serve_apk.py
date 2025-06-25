@@ -4,9 +4,11 @@ import socketserver
 import qrcode
 import socket
 import os
+ 
 import subprocess
 import re
 import sys
+ 
 
 APK_PATH = os.path.join('app', 'build', 'outputs', 'apk', 'debug', 'app-debug.apk')
 PORT = 8000
@@ -15,6 +17,7 @@ if not os.path.exists(APK_PATH):
     print('APK not found. Build it with ./gradlew assembleDebug first.')
     exit(1)
 
+ 
 def qr_print(text: str) -> None:
     qr = qrcode.QRCode(border=2)
     qr.add_data(text)
@@ -60,3 +63,4 @@ else:
             httpd.serve_forever()
         except KeyboardInterrupt:
             pass
+ 
