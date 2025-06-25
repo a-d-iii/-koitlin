@@ -1,2 +1,2 @@
-rootProject.name = 'RandomQrApp'
+rootProject.name = 'BasicApp'
 include ':app'
