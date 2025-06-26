@@ -378,7 +378,9 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   mealBlockEnded: {
-    opacity: 0.6,
+    // Use a lighter background instead of opacity so the text
+    // label doesn't show a white halo when the card is dimmed.
+    backgroundColor: '#ddd',
   },
   mealHeader: {
     flexDirection: 'row',
