@@ -8,6 +8,7 @@ import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -64,6 +65,14 @@ private val sampleMenu = listOf(
         14,
         0,
         listOf("Rice", "Paneer Curry", "Salad")
+    ),
+    Meal(
+        "Snacks",
+        16,
+        0,
+        17,
+        0,
+        listOf("Samosa", "Juice", "Biscuits")
     ),
     Meal(
         "Dinner",
@@ -210,8 +219,10 @@ private fun MealCard(
     Card(
         shape = RoundedCornerShape(8.dp),
         colors = CardDefaults.cardColors(containerColor = background),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         modifier = Modifier
             .fillMaxWidth()
+            .heightIn(min = 130.dp)
             .graphicsLayer { alpha = if (ended) 0.6f else 1f }
     ) {
         Column(modifier = Modifier.padding(12.dp)) {
@@ -242,6 +253,15 @@ private fun MealCard(
                     )
                     Spacer(Modifier.width(4.dp))
                     Text(text = if (ended) "Done" else status, style = MaterialTheme.typography.labelSmall, color = Color(0xFF333333))
+                    if (!ended && status == "Upcoming") {
+                        Spacer(Modifier.width(8.dp))
+                        val diff = start.timeInMillis - now.time
+                        val h = diff / 3600000
+                        val m = (diff % 3600000) / 60000
+                        val s = (diff % 60000) / 1000
+                        val timer = if (h > 0) String.format("%02d:%02d:%02d", h, m, s) else String.format("%02d:%02d", m, s)
+                        Text(timer, style = MaterialTheme.typography.labelSmall, color = Color(0xFF333333))
+                    }
                     Spacer(Modifier.width(8.dp))
                     Icon(
                         imageVector = if (liked) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
@@ -250,7 +270,10 @@ private fun MealCard(
                         modifier = Modifier
                             .size(20.dp)
                             .graphicsLayer(scaleX = scale.value, scaleY = scale.value)
-                            .clickable {
+                            .clickable(
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = null
+                            ) {
                                 scope.launch {
                                     scale.snapTo(1.2f)
                                     onLike()
@@ -264,7 +287,10 @@ private fun MealCard(
             Text(text = meal.items.joinToString(", "), style = MaterialTheme.typography.bodySmall, color = Color(0xFF555555))
             Spacer(modifier = Modifier.height(8.dp))
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
-                OutlinedButton(onClick = onRate) {
+                Button(
+                    onClick = onRate,
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF007BFF))
+                ) {
                     Icon(Icons.Default.Star, contentDescription = null, tint = Color.White, modifier = Modifier.size(16.dp))
                     Spacer(Modifier.width(4.dp))
                     Text("Rate", color = Color.White)
@@ -281,16 +307,20 @@ fun RatingDialog(meal: Meal, onDismiss: () -> Unit, onSubmit: (Int) -> Unit) {
         onDismissRequest = onDismiss,
         title = { Text(text = "Rate ${'$'}{meal.name}") },
         text = {
-            Row {
-                (1..5).forEach { i ->
-                    Icon(
-                        imageVector = if (i <= rating) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
-                        contentDescription = null,
-                        tint = Color.Red,
-                        modifier = Modifier
-                            .size(32.dp)
-                            .clickable { rating = i }
-                    )
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Text(text = "How was it?", style = MaterialTheme.typography.bodyMedium)
+                Spacer(modifier = Modifier.height(8.dp))
+                Row(horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()) {
+                    (1..5).forEach { i ->
+                        Icon(
+                            imageVector = if (i <= rating) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
+                            contentDescription = null,
+                            tint = Color.Red,
+                            modifier = Modifier
+                                .size(32.dp)
+                                .clickable { rating = i }
+                        )
+                    }
                 }
             }
         },
