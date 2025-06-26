@@ -21,11 +21,15 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_21
-        targetCompatibility JavaVersion.VERSION_21
+        // Android currently supports up to Java 17. Using a higher version can
+        // cause runtime issues or crashes on older devices.
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = '21'
+        // Align the Kotlin JVM target with the compile options for broader
+        // device compatibility.
+        jvmTarget = '17'
     }
     buildFeatures {
         compose true
