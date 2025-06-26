@@ -16,7 +16,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -63,15 +62,13 @@ fun ClassCard(
         listOf(Color(0xFF27AE60), Color(0xFF2980B9), Color(0xFF8E44AD)),
         listOf(Color(0xFFE67E22), Color(0xFFD35400), Color(0xFFCD6155))
     )
-    val gradientColors by remember(index) {
-        derivedStateOf { gradients[index % gradients.size] }
-    }
+    val gradientColors = gradients[index % gradients.size]
 
     val today = remember { LocalDate.now() }
     val weekday = today.dayOfWeek.getDisplayName(TextStyle.FULL, Locale.US)
     val dateNum = today.format(DateTimeFormatter.ofPattern("MMM d, yyyy"))
 
-    var flipped by rememberSaveable { mutableStateOf(false) }
+    var flipped by remember { mutableStateOf(false) }
     val rotation by animateFloatAsState(
         targetValue = if (flipped) 180f else 0f,
         animationSpec = tween(350, easing = LinearEasing)
@@ -150,13 +147,11 @@ fun ClassCard(
                     .padding(top = 68.dp, end = 24.dp)
             )
 
-            val parts by remember(info.title) {
-                mutableStateOf(
-                    if (info.title.contains("@")) info.title.split("@").map { it.trim() } else listOf(info.title)
-                )
+            val parts = remember(info.title) {
+                if (info.title.contains("@")) info.title.split("@").map { it.trim() } else listOf(info.title)
             }
-            val courseCode by remember(parts) { derivedStateOf { parts.firstOrNull() ?: "" } }
-            val roomDetail by remember(parts) { derivedStateOf { parts.getOrNull(1) ?: "" } }
+            val courseCode = parts.firstOrNull() ?: ""
+            val roomDetail = parts.getOrNull(1) ?: ""
 
             Column(
                 modifier = Modifier
