@@ -219,8 +219,6 @@ const styles = StyleSheet.create({
     padding: 8,
     borderTopLeftRadius: 12,
     borderTopRightRadius: 12,
-    borderBottomLeftRadius: 12,
-    borderBottomRightRadius: 12,
     alignItems: 'center',
   },
   weekLabel: {
@@ -237,9 +235,8 @@ const styles = StyleSheet.create({
   dayBlock: {
     padding: 12,
     marginHorizontal: 4,
-    borderBottomWidth: 1,
-    borderBottomColor: '#555',
-    borderStyle: 'dotted',
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: '#bbb',
   },
   firstDay: { borderTopLeftRadius: 12, borderTopRightRadius: 12, marginTop: 4 },
   lastDay: {
