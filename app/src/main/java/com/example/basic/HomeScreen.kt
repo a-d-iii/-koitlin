@@ -7,6 +7,7 @@ import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
@@ -17,6 +18,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.input.pointer.pointerInput
+import kotlinx.coroutines.launch
 
 enum class PanelState { None, Top, Bottom }
 
@@ -32,8 +35,11 @@ fun HomeScreen() {
         ClassInfo("4", "CHE1004 @ Lab 2", "11:00 – 11:50"),
         ClassInfo("5", "CSE1005 @ Room 201", "12:00 – 12:50"),
     )
-    val pagerState = rememberPagerState(pageCount = { baseCards.size + 1 })
+    val cards = listOf(ClassInfo("overview", "", "")) + baseCards
+    val pagerState = rememberPagerState(pageCount = { cards.size })
     var panel by remember { mutableStateOf(PanelState.None) }
+    val scope = rememberCoroutineScope()
+    var dragAmount by remember { mutableStateOf(0f) }
 
     Box(
         modifier = Modifier
@@ -43,7 +49,26 @@ fun HomeScreen() {
         Column(modifier = Modifier.fillMaxSize()) {
             HorizontalPager(
                 state = pagerState,
-                modifier = Modifier.weight(1f)
+                modifier = Modifier
+                    .weight(1f)
+                    .pointerInput(panel) {
+                        detectDragGestures(
+                            onDragEnd = {
+                                if (panel == PanelState.None) {
+                                    if (dragAmount > 40f) panel = PanelState.Top
+                                    else if (dragAmount < -40f) panel = PanelState.Bottom
+                                } else if (panel == PanelState.Top && dragAmount < -40f) {
+                                    panel = PanelState.None
+                                } else if (panel == PanelState.Bottom && dragAmount > 40f) {
+                                    panel = PanelState.None
+                                }
+                                dragAmount = 0f
+                            },
+                            onDrag = { change, drag ->
+                                dragAmount += drag.y
+                            }
+                        )
+                    }
             ) { page ->
                 if (page == 0) {
                     SummaryCard()
@@ -52,14 +77,12 @@ fun HomeScreen() {
                 }
             }
 
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                horizontalArrangement = Arrangement.SpaceEvenly
-            ) {
-                Button(onClick = { panel = PanelState.Top }) { Text("Top Panel") }
-                Button(onClick = { panel = PanelState.Bottom }) { Text("Bottom Panel") }
+            if (pagerState.currentPage > 0) {
+                NumberRow(
+                    count = baseCards.size,
+                    activeIndex = pagerState.currentPage - 1,
+                    onTap = { idx -> scope.launch { pagerState.animateScrollToPage(idx + 1) } }
+                )
             }
         }
 
@@ -136,6 +159,29 @@ private fun SummaryCard() {
 }
 
 @Composable
+private fun NumberRow(count: Int, activeIndex: Int, onTap: (Int) -> Unit) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp),
+        horizontalArrangement = Arrangement.Center
+    ) {
+        repeat(count) { idx ->
+            val selected = idx == activeIndex
+            Text(
+                text = "${idx + 1}",
+                modifier = Modifier
+                    .padding(horizontal = 8.dp)
+                    .clickable { onTap(idx) },
+                color = if (selected) MaterialTheme.colorScheme.primary else Color.Gray,
+                style = MaterialTheme.typography.bodyMedium,
+                fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal
+            )
+        }
+    }
+}
+
+@Composable
 private fun WhatsNextPanel(onDismiss: () -> Unit) {
     Surface(
         modifier = Modifier
@@ -155,7 +201,29 @@ private fun WhatsNextPanel(onDismiss: () -> Unit) {
                 fontWeight = FontWeight.Bold
             )
             Spacer(Modifier.height(8.dp))
-            Text("Next meal in 00:00:00")
+
+            val meal = remember { mutableStateOf("Breakfast") }
+            val range = remember { mutableStateOf("08:00 – 09:00") }
+            val items = remember { mutableStateOf(listOf("Pancakes", "Juice")) }
+            var countdown by remember { mutableStateOf("00:00:00") }
+
+            LaunchedEffect(Unit) {
+                while (true) {
+                    val now = System.currentTimeMillis()
+                    val target = now + 3600000 // +1h
+                    val diff = target - now
+                    val h = diff / 3600000
+                    val m = diff % 3600000 / 60000
+                    val s = diff % 60000 / 1000
+                    countdown = String.format("%02d:%02d:%02d", h, m, s)
+                    kotlinx.coroutines.delay(1000)
+                }
+            }
+
+            Text("${meal.value} · ${range.value}")
+            Text("Starts in $countdown")
+            Text(items.value.joinToString(), modifier = Modifier.padding(top = 8.dp))
+
             Spacer(modifier = Modifier.weight(1f))
             Button(
                 onClick = onDismiss,
@@ -180,10 +248,38 @@ private fun BottomPanel(onDismiss: () -> Unit) {
                 .padding(16.dp)
         ) {
             Text(
+                "Reminders / To‑Do",
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold
+            )
+            val reminders = listOf(
+                "Finish ECE1001 Lab report",
+                "Review MAT1002 notes",
+                "PHY1003 problem set",
+                "CHE1004 lab prep",
+                "CSE1005 assignment"
+            )
+            reminders.forEach {
+                Text("• $it", modifier = Modifier.padding(vertical = 4.dp))
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(
                 "Utilities",
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold
             )
+            val utilities = listOf(
+                "Calculator",
+                "Attendance Tracker",
+                "Grade Predictor",
+                "Campus Map",
+                "Help Desk"
+            )
+            utilities.forEach {
+                Text(it, modifier = Modifier.padding(vertical = 2.dp))
+            }
+
             Spacer(modifier = Modifier.weight(1f))
             Button(
                 onClick = onDismiss,
