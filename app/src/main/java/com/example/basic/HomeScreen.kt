@@ -4,27 +4,20 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.input.pointer.pointerInput
 import kotlinx.coroutines.launch
 
 enum class PanelState { None, Top, Bottom }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun HomeScreen() {
     val baseCards = listOf(
@@ -35,65 +28,27 @@ fun HomeScreen() {
         ClassInfo("5", "CSE1005 @ Room 201", "12:00 – 12:50"),
     )
     val cards = listOf(ClassInfo("overview", "", "")) + baseCards
-    val pagerState = rememberPagerState(pageCount = { cards.size })
     var panel by remember { mutableStateOf(PanelState.None) }
-    val scope = rememberCoroutineScope()
-    var dragAmount by remember { mutableStateOf(0f) }
 
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(Color(0xFFF0F0F0))
     ) {
-        Column(modifier = Modifier.fillMaxSize()) {
-            HorizontalPager(
-                state = pagerState,
-                modifier = Modifier
-                    .weight(1f)
-                    .pointerInput(panel) {
-                        detectDragGestures(
-                            onDragEnd = {
-                                if (panel == PanelState.None) {
-                                    if (dragAmount > 40f) panel = PanelState.Top
-                                    else if (dragAmount < -40f) panel = PanelState.Bottom
-                                } else if (panel == PanelState.Top && dragAmount < -40f) {
-                                    panel = PanelState.None
-                                } else if (panel == PanelState.Bottom && dragAmount > 40f) {
-                                    panel = PanelState.None
-                                }
-                                dragAmount = 0f
-                            },
-                            onDrag = { _, drag ->
-                                dragAmount += drag.y
-                            }
-                        )
-                    }
-            ) { page ->
-                Box(
-                    modifier = Modifier.fillMaxWidth(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    if (page == 0) {
-                        SummaryCard()
-                    } else {
-                        ClassCard(
-                            info = baseCards[page - 1],
-                            index = page - 1,
-                            daySchedule = baseCards,
-                            locationName = "Amaravati"
-                        )
-                    }
-                }
-            }
-
-            if (pagerState.currentPage > 0) {
-                NumberRow(
-                    count = baseCards.size,
-                    activeIndex = pagerState.currentPage - 1,
-                    onTap = { idx -> scope.launch { pagerState.animateScrollToPage(idx + 1) } }
-                )
-            }
-        }
+ 
+        CardCarousel(
+            cards = cards,
+            onSwipeDown = {
+                if (panel == PanelState.None) panel = PanelState.Top
+                else if (panel == PanelState.Bottom) panel = PanelState.None
+            },
+            onSwipeUp = {
+                if (panel == PanelState.None) panel = PanelState.Bottom
+                else if (panel == PanelState.Top) panel = PanelState.None
+            },
+            locationName = "Amaravati"
+        )
+ 
 
         if (panel != PanelState.None) {
             Box(
@@ -118,50 +73,6 @@ fun HomeScreen() {
             exit = slideOutVertically(targetOffsetY = { it }, animationSpec = tween(150))
         ) {
             BottomPanel(onDismiss = { panel = PanelState.None })
-        }
-    }
-}
-
-
-@Composable
-private fun SummaryCard() {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(32.dp)
-            .height(180.dp),
-        colors = CardDefaults.cardColors(containerColor = Color(0xFFE8F4FF)),
-        elevation = CardDefaults.cardElevation(4.dp)
-    ) {
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            Text(
-                "Overview",
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold
-            )
-        }
-    }
-}
-
-@Composable
-private fun NumberRow(count: Int, activeIndex: Int, onTap: (Int) -> Unit) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 8.dp),
-        horizontalArrangement = Arrangement.Center
-    ) {
-        repeat(count) { idx ->
-            val selected = idx == activeIndex
-            Text(
-                text = "${idx + 1}",
-                modifier = Modifier
-                    .padding(horizontal = 8.dp)
-                    .clickable { onTap(idx) },
-                color = if (selected) MaterialTheme.colorScheme.primary else Color.Gray,
-                style = MaterialTheme.typography.bodyMedium,
-                fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal
-            )
         }
     }
 }
