@@ -84,7 +84,7 @@ private fun SubjectCard(item: Subject, isLab: Boolean) {
     Card(
         modifier = Modifier
             .padding(6.dp)
-            .height(130.dp),
+            .height(150.dp),
         colors = CardDefaults.cardColors(containerColor = backgroundColor(item.attendance)),
         border = if (isLab) BorderStroke(2.dp, Color(0xFF757575)) else null
     ) {
@@ -93,14 +93,14 @@ private fun SubjectCard(item: Subject, isLab: Boolean) {
                 .fillMaxSize()
                 .padding(8.dp)
         ) {
-            Column(modifier = Modifier.weight(0.3f)) {
+            Column(modifier = Modifier.weight(0.4f)) {
                 Text(text = item.name, fontSize = 18.sp, fontWeight = FontWeight.SemiBold, color = Color(0xFF212121))
                 Text(text = item.code, fontSize = 14.sp, color = Color(0xFF212121))
             }
             Spacer(modifier = Modifier.weight(0.1f))
             Row(
                 modifier = Modifier
-                    .weight(0.6f)
+                    .weight(0.5f)
                     .fillMaxSize(),
                 verticalAlignment = Alignment.Bottom,
                 horizontalArrangement = androidx.compose.foundation.layout.Arrangement.SpaceBetween

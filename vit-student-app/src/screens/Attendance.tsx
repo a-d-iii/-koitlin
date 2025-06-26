@@ -31,7 +31,7 @@ const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const CARD_MARGIN = 12;
  
 const CARD_WIDTH = (SCREEN_WIDTH - CARD_MARGIN * 3) / 2 - 8;
-const CARD_HEIGHT = 130;
+const CARD_HEIGHT = 150;
  
 
 function getBackgroundColor(p: number): string {
@@ -159,7 +159,7 @@ const styles = StyleSheet.create({
     opacity: 0.8,
   },
   header: {
-    flex: 0.3,
+    flex: 0.4,
     justifyContent: 'center',
     paddingHorizontal: 8,
     paddingTop: 12,
@@ -174,7 +174,7 @@ const styles = StyleSheet.create({
     color: '#212121',
   },
   body: {
-    flex: 0.7,
+    flex: 0.6,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-end',
