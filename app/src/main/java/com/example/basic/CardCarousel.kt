@@ -69,15 +69,20 @@ fun CardCarousel(
                 .fillMaxSize()
                 .graphicsLayer { clip = false }
         ) { page ->
-            if (page == 0) {
-                SummaryCard()
-            } else {
-                ClassCard(
-                    info = cards[page],
-                    index = page - 1,
-                    daySchedule = cards.drop(1),
-                    locationName = locationName
-                )
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                if (page == 0) {
+                    SummaryCard()
+                } else {
+                    ClassCard(
+                        info = cards[page],
+                        index = page - 1,
+                        daySchedule = cards.drop(1),
+                        locationName = locationName
+                    )
+                }
             }
         }
 
