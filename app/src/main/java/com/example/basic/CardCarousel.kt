@@ -34,7 +34,7 @@ fun CardCarousel(
     locationName: String,
     modifier: Modifier = Modifier
 ) {
-    val pagerState = rememberPagerState()
+    val pagerState = rememberPagerState(pageCount = { cards.size })
     val scope = rememberCoroutineScope()
     var dragAmount by remember { mutableStateOf(0f) }
 
@@ -65,12 +65,11 @@ fun CardCarousel(
             }
     ) {
         HorizontalPager(
-            pageCount = cards.size,
             state = pagerState,
             modifier = Modifier
                 .fillMaxSize()
                 .graphicsLayer { clip = false },
-            beyondBoundsPageCount = 2
+            beyondBoundsPageCount = 1
         ) { page ->
             Box(
                 modifier = Modifier.fillMaxSize(),
