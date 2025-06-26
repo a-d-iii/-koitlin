@@ -6,8 +6,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.*
-import com.google.accompanist.pager.HorizontalPager
-import com.google.accompanist.pager.rememberPagerState
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
@@ -34,7 +34,7 @@ fun CardCarousel(
     locationName: String,
     modifier: Modifier = Modifier
 ) {
-    val pagerState = rememberPagerState()
+    val pagerState = rememberPagerState(pageCount = { cards.size })
     val scope = rememberCoroutineScope()
     var dragAmount by remember { mutableStateOf(0f) }
 
@@ -65,12 +65,11 @@ fun CardCarousel(
             }
     ) {
         HorizontalPager(
-            count = cards.size,
             state = pagerState,
             modifier = Modifier
                 .fillMaxSize()
                 .graphicsLayer { clip = false },
-            beyondBoundsPageCount = 2
+            beyondBoundsPageCount = 1
         ) { page ->
             Box(
                 modifier = Modifier.fillMaxSize(),
