@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
@@ -14,11 +15,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import org.json.JSONObject
 import java.util.*
@@ -107,17 +110,51 @@ fun MonthlyMenuScreen(onBack: () -> Unit) {
     val weeks = remember(menu) { toWeeks(menu!!) }
     val today = remember { java.text.SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date()) }
 
+    val listState = rememberLazyListState()
+
+    LaunchedEffect(weeks) {
+        var target = 0
+        var index = 0
+        outer@ for (week in weeks) {
+            index++ // header
+            index++ // space after header
+            for (day in week.days) {
+                if (day.date == today) {
+                    target = index
+                    break@outer
+                }
+                index++
+            }
+            index++ // space after week
+        }
+        if (target != 0) {
+            listState.scrollToItem(target)
+        }
+    }
+
     Scaffold(
         topBar = {
-            SmallTopAppBar(
-                title = { Text("Monthly Menu") },
+            CenterAlignedTopAppBar(
+                title = {
+                    Text(
+                        "Monthly Menu",
+                        fontWeight = FontWeight.Bold,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                },
                 navigationIcon = {
                     IconButton(onClick = onBack) { Icon(Icons.Default.ArrowBack, contentDescription = "Back") }
                 }
             )
         }
     ) { padding ->
-        LazyColumn(modifier = Modifier.padding(padding)) {
+        LazyColumn(
+            state = listState,
+            modifier = Modifier
+                .padding(padding),
+            contentPadding = PaddingValues(horizontal = 16.dp)
+        ) {
             weeks.forEach { week ->
                 stickyHeader {
                     WeekHeader(
@@ -125,16 +162,21 @@ fun MonthlyMenuScreen(onBack: () -> Unit) {
                         color = week.color
                     )
                 }
-                items(week.days) { day ->
+                item { Spacer(modifier = Modifier.height(8.dp)) }
+                itemsIndexed(week.days) { i, day ->
                     DayBlock(
                         day = day,
                         color = week.dayColor,
                         isPast = day.date < today,
-                        first = day == week.days.first(),
-                        last = day == week.days.last(),
+                        first = i == 0,
+                        last = i == week.days.lastIndex,
+                        showDivider = i != week.days.lastIndex,
                         likes = likes,
                         toggleLike = { key -> likes[key] = !(likes[key] ?: false) }
                     )
+                }
+                item {
+                    Spacer(modifier = Modifier.height(16.dp))
                 }
             }
         }
@@ -146,6 +188,7 @@ private fun WeekHeader(title: String, color: Color, modifier: Modifier = Modifie
     Box(
         modifier = modifier
             .fillMaxWidth()
+            .clip(RoundedCornerShape(12.dp))
             .background(color)
             .padding(8.dp)
     ) {
@@ -167,18 +210,23 @@ private fun DayBlock(
     isPast: Boolean,
     first: Boolean,
     last: Boolean,
+    showDivider: Boolean,
     likes: MutableMap<String, Boolean>,
     toggleLike: (String) -> Unit
 ) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(color)
-            .then(
-                Modifier
-                    .padding(horizontal = 4.dp)
-                    .padding(top = if (first) 4.dp else 0.dp, bottom = if (last) 8.dp else 0.dp)
+            .clip(
+                RoundedCornerShape(
+                    topStart = if (first) 12.dp else 0.dp,
+                    topEnd = if (first) 12.dp else 0.dp,
+                    bottomStart = if (last) 12.dp else 0.dp,
+                    bottomEnd = if (last) 12.dp else 0.dp
+                )
             )
+            .background(color)
+            .padding(top = if (first) 4.dp else 0.dp, bottom = if (last) 8.dp else 0.dp)
             .alpha(if (isPast) 0.5f else 1f)
             .padding(12.dp)
     ) {
@@ -211,6 +259,13 @@ private fun DayBlock(
                 Text(meal.items.joinToString(", "), color = Color(0xFF555555))
             }
         }
+    }
+    if (showDivider) {
+        Divider(
+            thickness = 0.5.dp,
+            color = Color.LightGray,
+            modifier = Modifier.fillMaxWidth()
+        )
     }
 }
 
