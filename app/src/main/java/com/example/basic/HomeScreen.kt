@@ -64,7 +64,7 @@ fun HomeScreen() {
                                 }
                                 dragAmount = 0f
                             },
-                            onDrag = { change, drag ->
+                            onDrag = { _, drag ->
                                 dragAmount += drag.y
                             }
                         )
