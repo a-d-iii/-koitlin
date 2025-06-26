@@ -6,6 +6,7 @@ import {
   SectionList,
   ActivityIndicator,
   Pressable,
+  ViewToken,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Ionicons from '@expo/vector-icons/Ionicons';
@@ -32,6 +33,7 @@ type WeekSection = {
   title: string;
   color: string;
   dayColor: string;
+  index: number;
   data: { date: string; meals: Meal[] }[];
 };
 
@@ -43,6 +45,7 @@ export default function MonthlyMenuScreen() {
 
   const [loading, setLoading] = useState(true);
   const [likes, setLikes] = useState<Record<string, boolean>>({});
+  const [stickyHeader, setStickyHeader] = useState<number | null>(null);
   const listRef = useRef<SectionList<any>>(null);
   const scrollTarget = useRef<{ sectionIndex: number; itemIndex: number }>();
 
@@ -102,6 +105,18 @@ export default function MonthlyMenuScreen() {
     }, 50);
   };
 
+  const viewabilityConfig = useRef({ viewAreaCoveragePercentThreshold: 50 });
+  const onViewableItemsChanged = useRef(
+    ({ viewableItems }: { viewableItems: ViewToken[] }) => {
+      const header = viewableItems.find(
+        (v) => v.index === null && (v.section as WeekSection).index !== undefined
+      );
+      if (header) {
+        setStickyHeader((header.section as WeekSection).index);
+      }
+    }
+  );
+
   const toWeeks = (): WeekSection[] => {
     if (!menu) return [];
 
@@ -114,6 +129,7 @@ export default function MonthlyMenuScreen() {
         title: `Week ${index + 1}`,
         color: WEEK_COLORS[index % WEEK_COLORS.length],
         dayColor: DAY_COLORS[index % DAY_COLORS.length],
+        index,
         data: slice.map((d) => ({ date: d, meals: menu[d] })),
       });
     }
@@ -193,7 +209,11 @@ export default function MonthlyMenuScreen() {
         }
         renderSectionHeader={({ section }) => (
           <View
-            style={[styles.weekHeaderContainer, { backgroundColor: section.dayColor }]}
+            style={[
+              styles.weekHeaderContainer,
+              { backgroundColor: section.dayColor },
+              stickyHeader === section.index && styles.stickyHeader,
+            ]}
           >
             <View style={styles.weekLabel}>
               <Text style={styles.sectionHeader}>{section.title}</Text>
@@ -203,6 +223,8 @@ export default function MonthlyMenuScreen() {
         onScrollToIndexFailed={handleScrollToIndexFailed}
         SectionSeparatorComponent={() => <View style={{ height: 12 }} />}
         stickySectionHeadersEnabled
+        onViewableItemsChanged={onViewableItemsChanged.current}
+        viewabilityConfig={viewabilityConfig.current}
         contentContainerStyle={styles.listContent}
       />
     </SafeAreaView>
@@ -223,6 +245,10 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 12,
     overflow: 'hidden',
     alignItems: 'center',
+  },
+  stickyHeader: {
+    borderTopLeftRadius: 0,
+    borderTopRightRadius: 0,
   },
   weekLabel: {
     backgroundColor: '#000',
