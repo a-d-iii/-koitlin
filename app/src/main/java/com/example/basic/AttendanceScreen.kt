@@ -88,7 +88,8 @@ private fun SubjectCard(item: Subject, isLab: Boolean) {
     Card(
         modifier = Modifier
             .padding(6.dp)
-            .height(130.dp)
+            // Shorten the card height a bit so the boxes take up less space
+            .height(110.dp)
             .graphicsLayer(scaleX = cardScale.value, scaleY = cardScale.value)
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
