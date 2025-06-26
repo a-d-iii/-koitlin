@@ -79,11 +79,7 @@ export default function Planner() {
         {...pan.panHandlers}
       >
         {classes.map((cls, idx) => (
-          <TouchableOpacity
-            key={idx}
-            style={styles.classBox}
-            activeOpacity={0.7}
-          >
+          <View key={idx} style={styles.classBox}>
             <View style={styles.classLeft}>
               <Text style={styles.courseText}>{cls.course}</Text>
               <Text style={styles.facultyText}>{cls.faculty}</Text>
@@ -94,7 +90,7 @@ export default function Planner() {
               </Text>
               <Text style={styles.roomText}>{cls.room}</Text>
             </View>
-          </TouchableOpacity>
+          </View>
         ))}
       </ScrollView>
     </SafeAreaView>
