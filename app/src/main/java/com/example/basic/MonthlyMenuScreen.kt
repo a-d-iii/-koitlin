@@ -4,6 +4,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.stickyHeader
+import androidx.compose.foundation.lazy.animateItemPlacement
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
@@ -118,8 +120,12 @@ fun MonthlyMenuScreen(onBack: () -> Unit) {
     ) { padding ->
         LazyColumn(modifier = Modifier.padding(padding)) {
             weeks.forEach { week ->
-                item {
-                    WeekHeader(title = week.title, color = week.color, dayColor = week.dayColor)
+                stickyHeader {
+                    WeekHeader(
+                        title = week.title,
+                        color = week.color,
+                        modifier = Modifier.animateItemPlacement()
+                    )
                 }
                 items(week.days) { day ->
                     DayBlock(
@@ -138,9 +144,9 @@ fun MonthlyMenuScreen(onBack: () -> Unit) {
 }
 
 @Composable
-private fun WeekHeader(title: String, color: Color, dayColor: Color) {
+private fun WeekHeader(title: String, color: Color, modifier: Modifier = Modifier) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .background(color)
             .padding(8.dp)
