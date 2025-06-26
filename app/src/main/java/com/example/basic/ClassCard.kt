@@ -35,7 +35,6 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
 import java.util.Locale
-import kotlin.random.Random
 
 // Shared data model
 data class ClassInfo(val id: String, val title: String, val time: String)
@@ -107,7 +106,6 @@ fun ClassCard(
                     .matchParentSize()
                     .background(Color.Black.copy(alpha = 0.2f))
             )
-            Raindrops(cardWidth, cardHeight)
 
             // Weekday and date
             Column(
@@ -290,53 +288,6 @@ private fun BlobPattern(cardWidth: Dp, cardHeight: Dp) {
     }
 }
 
-@Composable
-private fun Raindrops(cardWidth: Dp, cardHeight: Dp) {
-    val density = LocalDensity.current
-    val widthPx = with(density) { cardWidth.toPx() }
-    val heightPx = with(density) { cardHeight.toPx() }
-    val drops = remember {
-        List(12) {
-            mutableStateOf(RandomDropState(
-                anim = Animatable(-Random.nextFloat() * heightPx)
-            ))
-        }
-    }
-
-    drops.forEach { state ->
-        LaunchedEffect(state) {
-            while (true) {
-                state.value.anim.snapTo(-20f)
-                state.value.anim.animateTo(
-                    targetValue = heightPx + 20f,
-                    animationSpec = tween(
-                        durationMillis = (6000 + Random.nextInt(4000)),
-                        easing = LinearEasing,
-                        delayMillis = Random.nextInt(0, 1200)
-                    )
-                )
-            }
-        }
-    }
-
-    Canvas(modifier = Modifier.fillMaxSize()) {
-        drops.forEach { state ->
-            val x = state.value.xPos(widthPx)
-            drawRoundRect(
-                color = Color.White.copy(alpha = 0.6f),
-                topLeft = Offset(x, state.value.anim.value),
-                size = androidx.compose.ui.geometry.Size(1f, 12f),
-                cornerRadius = androidx.compose.ui.geometry.CornerRadius(0.5f, 0.5f)
-            )
-        }
-    }
-}
-
-private class RandomDropState(
-    val anim: Animatable<Float, AnimationVector1D>
-) {
-    fun xPos(width: Float) = Random.nextFloat() * (width - 2f) + 1f
-}
 
 @Composable
 private fun TemperatureBadge(

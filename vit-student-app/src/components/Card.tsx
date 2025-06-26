@@ -25,12 +25,6 @@ const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 export const CARD_WIDTH = SCREEN_WIDTH * 0.85;
 export const CARD_HEIGHT = SCREEN_HEIGHT * 0.7;
 
-/** Number of raindrops */
-const RAINDROP_COUNT = 12;
-/** Base duration for extremely slow raindrops */
-const RAINDROP_BASE_DURATION = 30000; // 30 seconds
-/** Additional random duration variance */
-const RAINDROP_DURATION_VARIANCE = 20000; // up to 20s slower
 
 function isClassOver(timeRange: string) {
   const parts = timeRange.split('–').map((s) => s.trim());
@@ -196,7 +190,6 @@ export default function Card({
             style={styles.gradient}
           >
             <BlobPattern />
-            <Raindrops />
             <View style={styles.darkenOverlay} />
 
             {/* WEEKDAY & DATE */}
@@ -303,74 +296,6 @@ export default function Card({
         onSubmit={submitRating}
         initialRating={currentRating}
       />
-    </View>
-  );
-}
-
-/** Raindrops animation **/
-function Raindrops() {
-  const drops = useRef<{
-    anim: Animated.Value;
-    xPos: number;
-    delay: number;
-    speed: number;
-  }[]>(
-    Array.from({ length: RAINDROP_COUNT }).map(() => ({
-      anim: new Animated.Value(-Math.random() * CARD_HEIGHT),
-      xPos: Math.random() * (CARD_WIDTH - 2) + 1,
-      delay: Math.random() * 2000,
-      speed:
-        RAINDROP_BASE_DURATION + Math.random() * RAINDROP_DURATION_VARIANCE,
-    }))
-  ).current;
-
-  useEffect(() => {
-    drops.forEach(({ anim, delay, speed }) => {
-      const loop = () => {
-        anim.setValue(-20);
-        Animated.timing(anim, {
-          toValue: CARD_HEIGHT + 20,
-          duration: speed,
-          delay,
-          easing: Easing.linear,
-          useNativeDriver: true,
-        }).start(({ finished }) => {
-          if (finished) {
-            const newSpeed =
-              RAINDROP_BASE_DURATION +
-              Math.random() * RAINDROP_DURATION_VARIANCE;
-            const newDelay = Math.random() * 1200;
-            anim.setValue(-20);
-            Animated.timing(anim, {
-              toValue: CARD_HEIGHT + 20,
-              duration: newSpeed,
-              delay: newDelay,
-              easing: Easing.linear,
-              useNativeDriver: true,
-            }).start(({ finished: f2 }) => {
-              if (f2) loop();
-            });
-          }
-        });
-      };
-      loop();
-    });
-  }, [drops]);
-
-  return (
-    <View style={StyleSheet.absoluteFill}>
-      {drops.map(({ anim, xPos }, idx) => (
-        <Animated.View
-          key={idx}
-          style={[
-            styles.raindrop,
-            {
-              left: xPos,
-              transform: [{ translateY: anim }],
-            },
-          ]}
-        />
-      ))}
     </View>
   );
 }
@@ -521,13 +446,6 @@ const styles = StyleSheet.create({
     color: '#f0f0f0',
     alignSelf: 'flex-start',
     marginLeft: 20,
-  },
-  raindrop: {
-    position: 'absolute',
-    width: 1,
-    height: 12,
-    borderRadius: 0.5,
-    backgroundColor: 'rgba(255, 255, 255, 0.6)',
   },
   backContent: {
     flex: 1,
