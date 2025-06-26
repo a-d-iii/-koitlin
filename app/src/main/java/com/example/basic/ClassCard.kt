@@ -134,7 +134,7 @@ fun ClassCard(
                 wind = "12 km/h",
                 modifier = Modifier
                     .align(Alignment.TopEnd)
-                    .padding(top = 20.dp, end = 20.dp)
+                    .padding(top = 12.dp, end = 24.dp)
             )
 
             Text(
@@ -305,7 +305,7 @@ private fun TemperatureBadge(
     modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+        modifier = modifier,
         horizontalAlignment = Alignment.End
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
