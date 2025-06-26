@@ -4,8 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.lazy.stickyHeader
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
@@ -20,7 +18,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.zIndex
 import androidx.compose.ui.unit.dp
 import org.json.JSONObject
 import java.util.*
@@ -111,20 +108,18 @@ fun MonthlyMenuScreen(onBack: () -> Unit) {
 
     Scaffold(
         topBar = {
-            TopAppBar(
+            SmallTopAppBar(
                 title = { Text("Monthly Menu") },
                 navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Back")
-                    }
+                    IconButton(onClick = onBack) { Icon(Icons.Default.ArrowBack, contentDescription = "Back") }
                 }
             )
         }
     ) { padding ->
-        LazyColumn(state = rememberLazyListState(), modifier = Modifier.padding(padding)) {
+        LazyColumn(modifier = Modifier.padding(padding)) {
             weeks.forEach { week ->
-                stickyHeader {
-                    WeekHeader(title = week.title, color = week.color)
+                item {
+                    WeekHeader(title = week.title, color = week.color, dayColor = week.dayColor)
                 }
                 items(week.days) { day ->
                     DayBlock(
@@ -143,13 +138,9 @@ fun MonthlyMenuScreen(onBack: () -> Unit) {
 }
 
 @Composable
-private fun WeekHeader(
-    title: String,
-    color: Color,
-    modifier: Modifier = Modifier
-) {
+private fun WeekHeader(title: String, color: Color, dayColor: Color) {
     Box(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxWidth()
             .background(color)
             .padding(8.dp)
