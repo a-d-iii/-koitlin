@@ -15,8 +15,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Cloud
 import androidx.compose.material.icons.filled.Fastfood
+import coil.compose.AsyncImage
+import coil.compose.AsyncImagePainter
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -25,6 +28,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -82,11 +86,16 @@ private fun WeatherCard() {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(
-                        Icons.Default.Cloud,
+                    AsyncImage(
+                        model = coil.request.ImageRequest.Builder(LocalContext.current)
+                            .data("https://placekitten.com/128/128")
+                            .crossfade(true)
+                            .size(coil.size.Size.ORIGINAL)
+                            .build(),
                         contentDescription = null,
-                        tint = Color.White,
-                        modifier = Modifier.size(72.dp)
+                        modifier = Modifier.size(72.dp),
+                        placeholder = painterResource(android.R.drawable.ic_menu_report_image),
+                        contentScale = ContentScale.Fit
                     )
                     Spacer(Modifier.width(12.dp))
                     Text(

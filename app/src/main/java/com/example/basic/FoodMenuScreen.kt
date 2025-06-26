@@ -35,6 +35,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.util.*
 
 /**
@@ -97,6 +99,10 @@ fun FoodMenuScreen(onShowSummary: () -> Unit, onViewMonth: () -> Unit = {}) {
     var likes by remember { mutableStateOf(setOf<String>()) }
     var ratingMeal by remember { mutableStateOf<Meal?>(null) }
 
+    val menu by produceState(initialValue = emptyList<Meal>()) {
+        withContext(Dispatchers.IO) { value = sampleMenu }
+    }
+
     val iconAnim = rememberInfiniteTransition()
     val iconScale by iconAnim.animateFloat(
         initialValue = 1f,
@@ -156,7 +162,7 @@ fun FoodMenuScreen(onShowSummary: () -> Unit, onViewMonth: () -> Unit = {}) {
             }
             Spacer(modifier = Modifier.height(16.dp))
 
-            sampleMenu.forEachIndexed { index, meal ->
+            menu.forEachIndexed { index, meal ->
                 MealCard(
                     meal = meal,
                     now = now,
