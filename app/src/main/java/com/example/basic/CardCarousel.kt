@@ -17,6 +17,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.foundation.shape.CircleShape
 import kotlinx.coroutines.launch
@@ -35,6 +37,15 @@ fun CardCarousel(
     val pagerState = rememberPagerState(pageCount = { cards.size })
     val scope = rememberCoroutineScope()
     var dragAmount by remember { mutableStateOf(0f) }
+
+    // Calculate bottom offset for the number row similar to the JS version
+    val config = LocalConfiguration.current
+    val density = LocalDensity.current
+    val screenHeightPx = with(density) { config.screenHeightDp.dp.toPx() }
+    val cardHeightPx = screenHeightPx * 0.7f
+    val numberTopPx = (screenHeightPx - cardHeightPx) / 3f + cardHeightPx + with(density) { 20.dp.toPx() }
+    val rowHeightPx = with(density) { (16.dp * 1.5f).toPx() }
+    val numberBottomDp = with(density) { (screenHeightPx - numberTopPx - rowHeightPx).toDp() }
 
     LaunchedEffect(pagerState.currentPage) {
         onIndexChange?.invoke(pagerState.currentPage)
@@ -78,8 +89,8 @@ fun CardCarousel(
                 pageOffset = pagerState.currentPageOffsetFraction,
                 onTap = { idx -> scope.launch { pagerState.animateScrollToPage(idx + 1) } },
                 modifier = Modifier
-                    .align(Alignment.TopCenter)
-                    .padding(top = 16.dp)
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = numberBottomDp)
             )
 
             Text(
