@@ -53,7 +53,7 @@ fun ClassCard(
     val wPx = with(density) { config.screenWidthDp.dp.toPx() }
     val hPx = with(density) { config.screenHeightDp.dp.toPx() }
     val cardW = wPx * 0.85f
-    val cardH = hPx * 0.75f
+    val cardH = hPx * 0.7f
     val cardWidth = with(density) { cardW.toDp() }
     val cardHeight = with(density) { cardH.toDp() }
 
