@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.stickyHeader
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
@@ -118,7 +119,7 @@ fun MonthlyMenuScreen(onBack: () -> Unit) {
     ) { padding ->
         LazyColumn(modifier = Modifier.padding(padding)) {
             weeks.forEach { week ->
-                item {
+                stickyHeader {
                     WeekHeader(title = week.title, color = week.color, dayColor = week.dayColor)
                 }
                 items(week.days) { day ->
