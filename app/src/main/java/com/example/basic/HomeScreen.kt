@@ -12,14 +12,30 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Camera
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.AnimationVector1D
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalConfiguration
 import kotlinx.coroutines.launch
+import kotlin.random.Random
 
 enum class PanelState { None, Top, Bottom }
 
@@ -73,7 +89,11 @@ fun HomeScreen() {
                 if (page == 0) {
                     SummaryCard()
                 } else {
-                    ClassCard(info = baseCards[page - 1])
+                    ClassCard(
+                        info = baseCards[page - 1],
+                        index = page - 1,
+                        daySchedule = baseCards
+                    )
                 }
             }
 
@@ -114,26 +134,111 @@ fun HomeScreen() {
 }
 
 @Composable
-private fun ClassCard(info: ClassInfo) {
-    Card(
+private fun ClassCard(info: ClassInfo, index: Int, daySchedule: List<ClassInfo>) {
+    val config = LocalConfiguration.current
+    val density = LocalDensity.current
+    val wPx = with(density) { config.screenWidthDp.dp.toPx() }
+    val hPx = with(density) { config.screenHeightDp.dp.toPx() }
+    val cardW = wPx * 0.85f
+    val cardH = hPx * 0.60f
+    val cardWidth = with(density) { cardW.toDp() }
+    val cardHeight = with(density) { cardH.toDp() }
+
+    val gradients = listOf(
+        listOf(Color(0xFF8E44AD), Color(0xFFC0392B), Color(0xFFF39C12)),
+        listOf(Color(0xFF2C3E50), Color(0xFF34495E), Color(0xFF16A085)),
+        listOf(Color(0xFFE74C3C), Color(0xFFD35400), Color(0xFFF1C40F)),
+        listOf(Color(0xFF27AE60), Color(0xFF2980B9), Color(0xFF8E44AD)),
+        listOf(Color(0xFFE67E22), Color(0xFFD35400), Color(0xFFCD6155))
+    )
+    val gradientColors = gradients[index % gradients.size]
+
+    var flipped by remember { mutableStateOf(false) }
+    val rotation by animateFloatAsState(
+        targetValue = if (flipped) 180f else 0f,
+        animationSpec = tween(350, easing = LinearEasing)
+    )
+
+    Box(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(32.dp)
-            .height(180.dp),
-        elevation = CardDefaults.cardElevation(4.dp)
+            .width(cardWidth)
+            .height(cardHeight)
+            .padding(vertical = 16.dp)
+            .pointerInput(Unit) { detectTapGestures(onDoubleTap = { flipped = !flipped }) }
     ) {
-        Column(
+        // FRONT
+        Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp),
-            verticalArrangement = Arrangement.SpaceBetween
+                .graphicsLayer {
+                    rotationY = rotation
+                    cameraDistance = 8 * density.density
+                    alpha = if (rotation <= 90f) 1f else 0f
+                }
         ) {
-            Text(
-                text = info.title,
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold
+            Box(
+                modifier = Modifier
+                    .matchParentSize()
+                    .background(
+                        Brush.linearGradient(
+                            colors = gradientColors,
+                            start = Offset.Zero,
+                            end = Offset(cardW, cardH)
+                        )
+                    )
             )
-            Text(text = info.time, style = MaterialTheme.typography.bodyMedium)
+            Raindrops(cardWidth = cardWidth, cardHeight = cardHeight)
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(24.dp),
+                verticalArrangement = Arrangement.Center
+            ) {
+                Text(info.title, color = Color.White, fontSize = MaterialTheme.typography.headlineSmall.fontSize, fontWeight = FontWeight.Black)
+                Spacer(Modifier.height(8.dp))
+                Text(info.time, color = Color.White)
+                Spacer(Modifier.height(24.dp))
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    Icon(Icons.Filled.Camera, contentDescription = null, tint = Color.White)
+                    Icon(Icons.Filled.Star, contentDescription = null, tint = Color.White)
+                }
+            }
+        }
+
+        // BACK
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .graphicsLayer {
+                    rotationY = rotation - 180f
+                    cameraDistance = 8 * density.density
+                    alpha = if (rotation > 90f) 1f else 0f
+                }
+        ) {
+            Box(
+                modifier = Modifier
+                    .matchParentSize()
+                    .background(
+                        Brush.linearGradient(
+                            colors = gradientColors,
+                            start = Offset.Zero,
+                            end = Offset(cardW, cardH)
+                        )
+                    )
+            )
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(24.dp)
+            ) {
+                Text("Today's Schedule", color = Color.White, fontWeight = FontWeight.Bold)
+                Spacer(Modifier.height(8.dp))
+                daySchedule.forEach {
+                    Text("${it.time} • ${it.title}", color = Color.White, fontSize = MaterialTheme.typography.bodyMedium.fontSize)
+                }
+            }
         }
     }
 }
@@ -287,4 +392,52 @@ private fun BottomPanel(onDismiss: () -> Unit) {
             ) { Text("Close") }
         }
     }
+}
+
+@Composable
+private fun Raindrops(cardWidth: Dp, cardHeight: Dp) {
+    val density = LocalDensity.current
+    val widthPx = with(density) { cardWidth.toPx() }
+    val heightPx = with(density) { cardHeight.toPx() }
+    val drops = remember {
+        List(12) {
+            mutableStateOf(RandomDropState(
+                anim = Animatable(-Random.nextFloat() * heightPx)
+            ))
+        }
+    }
+
+    drops.forEach { state ->
+        LaunchedEffect(state) {
+            while (true) {
+                state.value.anim.snapTo(-20f)
+                state.value.anim.animateTo(
+                    targetValue = heightPx + 20f,
+                    animationSpec = tween(
+                        durationMillis = (1800 + Random.nextInt(800)),
+                        easing = LinearEasing,
+                        delayMillis = Random.nextInt(0, 1200)
+                    )
+                )
+            }
+        }
+    }
+
+    Canvas(modifier = Modifier.fillMaxSize()) {
+        drops.forEach { state ->
+            val x = state.value.xPos(widthPx)
+            drawRoundRect(
+                color = Color.White.copy(alpha = 0.6f),
+                topLeft = Offset(x, state.value.anim.value),
+                size = androidx.compose.ui.geometry.Size(1f, 12f),
+                cornerRadius = androidx.compose.ui.geometry.CornerRadius(0.5f, 0.5f)
+            )
+        }
+    }
+}
+
+private class RandomDropState(
+    val anim: Animatable<Float, AnimationVector1D>
+) {
+    fun xPos(width: Float) = Random.nextFloat() * (width - 2f) + 1f
 }
