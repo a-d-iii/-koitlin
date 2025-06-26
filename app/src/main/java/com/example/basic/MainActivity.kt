@@ -37,6 +37,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 
 import com.example.basic.FoodMenuScreen
 import com.example.basic.FoodSummaryScreen
+import com.example.basic.PlannerScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -92,6 +93,7 @@ fun BasicApp() {
                 contentAlignment = Alignment.Center
             ) {
                 when (selectedIndex) {
+                    1 -> PlannerScreen()
                     2 -> AttendanceScreen()
                     3 -> {
                         if (foodScreen == 0) {
