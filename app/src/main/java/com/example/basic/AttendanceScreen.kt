@@ -5,6 +5,8 @@ import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -78,13 +80,25 @@ private fun iconColor(p: Int): Color = when {
 @Composable
 private fun SubjectCard(item: Subject, isLab: Boolean) {
     val iconScale = remember { Animatable(0.5f) }
+    val cardScale = remember { Animatable(1f) }
+    val scope = rememberCoroutineScope()
     LaunchedEffect(Unit) {
         iconScale.animateTo(1f, animationSpec = tween(durationMillis = 400))
     }
     Card(
         modifier = Modifier
             .padding(6.dp)
-            .height(130.dp),
+            .height(130.dp)
+            .graphicsLayer(scaleX = cardScale.value, scaleY = cardScale.value)
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null
+            ) {
+                scope.launch {
+                    cardScale.animateTo(0.96f, animationSpec = tween(100))
+                    cardScale.animateTo(1f, animationSpec = tween(100))
+                }
+            },
         colors = CardDefaults.cardColors(containerColor = backgroundColor(item.attendance)),
         border = if (isLab) BorderStroke(2.dp, Color(0xFF757575)) else null,
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
@@ -133,6 +147,7 @@ fun AttendanceScreen() {
             Text(
                 text = "Attendance",
                 style = MaterialTheme.typography.headlineMedium,
+                fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(16.dp),
                 color = Color(0xFF212121)
             )
