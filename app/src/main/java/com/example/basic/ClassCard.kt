@@ -146,7 +146,7 @@ fun ClassCard(
                 fontWeight = FontWeight.SemiBold,
                 modifier = Modifier
                     .align(Alignment.TopEnd)
-                    .padding(top = 80.dp, end = 24.dp)
+                    .padding(top = 68.dp, end = 24.dp)
             )
 
             val parts = remember(info.title) {
