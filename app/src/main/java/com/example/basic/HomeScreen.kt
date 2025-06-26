@@ -35,6 +35,7 @@ fun HomeScreen() {
             .fillMaxSize()
             .background(Color(0xFFF0F0F0))
     ) {
+ 
         CardCarousel(
             cards = cards,
             onSwipeDown = {
@@ -47,6 +48,7 @@ fun HomeScreen() {
             },
             locationName = "Amaravati"
         )
+ 
 
         if (panel != PanelState.None) {
             Box(

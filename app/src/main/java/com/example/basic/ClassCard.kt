@@ -53,7 +53,7 @@ fun ClassCard(
     val wPx = with(density) { config.screenWidthDp.dp.toPx() }
     val hPx = with(density) { config.screenHeightDp.dp.toPx() }
     val cardW = wPx * 0.85f
-    val cardH = hPx * 0.60f
+    val cardH = hPx * 0.75f
     val cardWidth = with(density) { cardW.toDp() }
     val cardHeight = with(density) { cardH.toDp() }
 
@@ -148,7 +148,7 @@ fun ClassCard(
 
             Column(
                 modifier = Modifier
-                    .align(Alignment.Center)
+                    .align(Alignment.CenterStart)
                     .padding(horizontal = 24.dp),
                 horizontalAlignment = Alignment.Start
             ) {
@@ -301,7 +301,7 @@ private fun Raindrops(cardWidth: Dp, cardHeight: Dp) {
                 state.value.anim.animateTo(
                     targetValue = heightPx + 20f,
                     animationSpec = tween(
-                        durationMillis = (4000 + Random.nextInt(2000)),
+                        durationMillis = (6000 + Random.nextInt(4000)),
                         easing = LinearEasing,
                         delayMillis = Random.nextInt(0, 1200)
                     )
