@@ -77,16 +77,17 @@ function MainTabs() {
           let iconName = '';
 
           if (route.name === 'Home') {
-            iconName = focused ? 'home' : 'home-outline';
+            // Use filled style icons when focused for a bolder look
+            iconName = focused ? 'home-sharp' : 'home-outline';
           } else if (route.name === 'Planner') {
-            iconName = focused ? 'calendar' : 'calendar-outline';
+            iconName = focused ? 'calendar-sharp' : 'calendar-outline';
           } else if (route.name === 'Attendance') {
             iconName = focused ? 'checkmark-circle' : 'checkmark-circle-outline';
           } else if (route.name === 'Food') {
             iconName = focused ? 'fast-food' : 'fast-food-outline';
           } else if (route.name === 'More') {
             iconName = focused
-              ? 'ellipsis-horizontal'
+              ? 'ellipsis-horizontal-sharp'
               : 'ellipsis-horizontal-outline';
           }
 
