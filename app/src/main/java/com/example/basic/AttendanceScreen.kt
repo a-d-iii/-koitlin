@@ -20,7 +20,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Cancel
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Card
@@ -66,7 +66,7 @@ private fun backgroundColor(p: Int): Color = when {
 private fun iconFor(p: Int) = when {
     p >= 75 -> Icons.Default.CheckCircle
     p >= 70 -> Icons.Default.Warning
-    else -> Icons.Default.Close
+    else -> Icons.Default.Cancel
 }
 
 private fun iconColor(p: Int): Color = when {
