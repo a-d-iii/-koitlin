@@ -6,7 +6,7 @@
         android:icon="@android:drawable/ic_menu_gallery"
         android:roundIcon="@android:drawable/ic_menu_gallery"
         android:supportsRtl="true"
-        android:theme="@android:style/Theme.Material.Light">
+        android:theme="@android:style/Theme.Material.Light.NoActionBar">
         <activity android:name=".MainActivity" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

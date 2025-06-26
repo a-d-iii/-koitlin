@@ -80,6 +80,7 @@ fun ClassCard(
             .width(cardWidth)
             .height(cardHeight)
             .padding(vertical = 16.dp)
+ 
             .pointerInput(Unit) { detectTapGestures(onDoubleTap = { flipped = !flipped }) }
     ) {
         // FRONT
