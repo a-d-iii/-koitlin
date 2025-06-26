@@ -31,7 +31,7 @@ const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const CARD_MARGIN = 12;
  
 const CARD_WIDTH = (SCREEN_WIDTH - CARD_MARGIN * 3) / 2 - 8;
-const CARD_HEIGHT = 150;
+const CARD_HEIGHT = 130;
  
 
 function getBackgroundColor(p: number): string {
@@ -150,6 +150,10 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     margin: CARD_MARGIN / 2,
     overflow: 'hidden',
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
   },
   labCard: {
     borderWidth: 2,
