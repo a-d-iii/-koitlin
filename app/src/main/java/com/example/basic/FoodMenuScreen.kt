@@ -171,7 +171,7 @@ fun FoodMenuScreen(onShowSummary: () -> Unit, onViewMonth: () -> Unit = {}) {
             }
             Button(
                 onClick = onShowSummary,
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF007BFF)),
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50)),
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             ) {
                 Text("Food Summary", color = Color.White)
@@ -295,7 +295,7 @@ private fun MealCard(
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
                 Button(
                     onClick = onRate,
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF007BFF))
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFF9800))
                 ) {
                     Icon(Icons.Default.Star, contentDescription = null, tint = Color.White, modifier = Modifier.size(16.dp))
                     Spacer(Modifier.width(4.dp))
