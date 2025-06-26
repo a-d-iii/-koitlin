@@ -124,6 +124,7 @@ fun FoodMenuScreen(onShowSummary: () -> Unit, onViewMonth: () -> Unit = {}) {
                 Text(
                     text = "Today's Menu",
                     style = MaterialTheme.typography.headlineMedium,
+                    fontWeight = FontWeight.Bold,
                     modifier = Modifier.alignByBaseline()
                 )
                 Spacer(Modifier.width(8.dp))
@@ -136,7 +137,6 @@ fun FoodMenuScreen(onShowSummary: () -> Unit, onViewMonth: () -> Unit = {}) {
                         .graphicsLayer {
                             scaleX = iconScale
                             scaleY = iconScale
-                            rotationZ = iconRotate
                         }
                         .alignByBaseline()
                 )
@@ -171,8 +171,11 @@ fun FoodMenuScreen(onShowSummary: () -> Unit, onViewMonth: () -> Unit = {}) {
             }
             Button(
                 onClick = onShowSummary,
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF007BFF)),
                 modifier = Modifier.align(Alignment.CenterHorizontally)
-            ) { Text("Food Summary") }
+            ) {
+                Text("Food Summary", color = Color.White)
+            }
         }
 
         MonthBar(onClick = onViewMonth, modifier = Modifier.align(Alignment.BottomCenter))
@@ -217,7 +220,7 @@ private fun MealCard(
         else -> "Upcoming"
     }
     val ended = now.after(end.time)
-    val containerColor = if (ended) Color(0xFFDADADA) else background
+    val containerColor = background
     Card(
         shape = RoundedCornerShape(8.dp),
         colors = CardDefaults.cardColors(containerColor = containerColor),
