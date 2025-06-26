@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.foundation.shape.CircleShape
 import kotlinx.coroutines.launch
@@ -36,6 +37,12 @@ fun CardCarousel(
     val scope = rememberCoroutineScope()
     var dragAmount by remember { mutableStateOf(0f) }
 
+    // Calculate vertical offset for the number row so it sits just under the cards
+    val config = LocalConfiguration.current
+    val screenHeight = config.screenHeightDp.dp
+    val cardHeight = screenHeight * 0.7f
+    val numberTop = (screenHeight - cardHeight) / 3f + cardHeight + 20.dp
+
     LaunchedEffect(pagerState.currentPage) {
         onIndexChange?.invoke(pagerState.currentPage)
     }
@@ -43,6 +50,7 @@ fun CardCarousel(
     Box(
         modifier = modifier
             .fillMaxSize()
+            .graphicsLayer { clip = false }
             .pointerInput(Unit) {
                 detectDragGestures(
                     onDrag = { _, drag ->
@@ -57,7 +65,9 @@ fun CardCarousel(
     ) {
         HorizontalPager(
             state = pagerState,
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
+                .graphicsLayer { clip = false }
         ) { page ->
             if (page == 0) {
                 SummaryCard()
@@ -79,7 +89,7 @@ fun CardCarousel(
                 onTap = { idx -> scope.launch { pagerState.animateScrollToPage(idx + 1) } },
                 modifier = Modifier
                     .align(Alignment.TopCenter)
-                    .padding(top = 16.dp)
+                    .padding(top = numberTop)
             )
 
             Text(
