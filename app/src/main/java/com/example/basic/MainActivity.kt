@@ -8,15 +8,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material.icons.filled.Event
+import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.MoreHoriz
-import androidx.compose.material.icons.filled.Restaurant
+import androidx.compose.material.icons.filled.Fastfood
 import androidx.compose.material.icons.outlined.CheckCircle
-import androidx.compose.material.icons.outlined.Event
+import androidx.compose.material.icons.outlined.CalendarToday
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.MoreHoriz
-import androidx.compose.material.icons.outlined.Restaurant
+import androidx.compose.material.icons.outlined.Fastfood
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -60,9 +60,9 @@ data class NavItem(
 fun BasicApp() {
     val items = listOf(
         NavItem(R.string.home, Icons.Filled.Home, Icons.Outlined.Home),
-        NavItem(R.string.planner, Icons.Filled.Event, Icons.Outlined.Event),
+        NavItem(R.string.planner, Icons.Filled.CalendarToday, Icons.Outlined.CalendarToday),
         NavItem(R.string.attendance, Icons.Filled.CheckCircle, Icons.Outlined.CheckCircle),
-        NavItem(R.string.food, Icons.Filled.Restaurant, Icons.Outlined.Restaurant),
+        NavItem(R.string.food, Icons.Filled.Fastfood, Icons.Outlined.Fastfood),
         NavItem(R.string.more, Icons.Filled.MoreHoriz, Icons.Outlined.MoreHoriz)
     )
     var selectedIndex by remember { mutableIntStateOf(0) }
