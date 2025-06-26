@@ -16,14 +16,13 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.input.pointer.pointerInput
 import kotlinx.coroutines.launch
 
 enum class PanelState { None, Top, Bottom }
-
-data class ClassInfo(val id: String, val title: String, val time: String)
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -73,7 +72,11 @@ fun HomeScreen() {
                 if (page == 0) {
                     SummaryCard()
                 } else {
-                    ClassCard(info = baseCards[page - 1])
+                    ClassCard(
+                        info = baseCards[page - 1],
+                        index = page - 1,
+                        daySchedule = baseCards
+                    )
                 }
             }
 
@@ -113,30 +116,6 @@ fun HomeScreen() {
     }
 }
 
-@Composable
-private fun ClassCard(info: ClassInfo) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(32.dp)
-            .height(180.dp),
-        elevation = CardDefaults.cardElevation(4.dp)
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp),
-            verticalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text(
-                text = info.title,
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold
-            )
-            Text(text = info.time, style = MaterialTheme.typography.bodyMedium)
-        }
-    }
-}
 
 @Composable
 private fun SummaryCard() {
@@ -288,3 +267,4 @@ private fun BottomPanel(onDismiss: () -> Unit) {
         }
     }
 }
+
