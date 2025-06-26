@@ -22,6 +22,8 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalContext
+import android.widget.Toast
 
 @Composable
 fun PlannerScreen() {
@@ -30,6 +32,7 @@ fun PlannerScreen() {
     val day = days[dayIndex]
     val classes = WEEKLY_SCHEDULE[day].orEmpty()
     var dragAmount by remember { mutableStateOf(0f) }
+    val context = LocalContext.current
 
     Column(
         modifier = Modifier
@@ -89,7 +92,14 @@ fun PlannerScreen() {
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(vertical = 6.dp),
+                        .padding(vertical = 6.dp)
+                        .clickable {
+                            Toast.makeText(
+                                context,
+                                "${cls.course} ${cls.start} – ${cls.end} @ ${cls.room}",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        },
                     colors = CardDefaults.cardColors(containerColor = Color.White),
                     elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
                     shape = RoundedCornerShape(12.dp)
