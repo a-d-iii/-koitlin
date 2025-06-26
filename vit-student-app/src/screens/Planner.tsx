@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import {
   SafeAreaView,
   View,
@@ -8,14 +8,36 @@ import {
   TouchableOpacity,
   Platform,
   StatusBar,
+  PanResponder,
+  GestureResponderEvent,
+  PanResponderGestureState,
 } from 'react-native';
 import { WEEKLY_SCHEDULE, ClassEntry } from '../data/weeklySchedule';
 
 const DAYS = Object.keys(WEEKLY_SCHEDULE);
 
 export default function Planner() {
-  const [day, setDay] = useState<string>(DAYS[0]);
+  const [index, setIndex] = useState<number>(0);
+  const day = DAYS[index];
   const classes: ClassEntry[] = WEEKLY_SCHEDULE[day];
+
+  const pan = useRef(
+    PanResponder.create({
+      onStartShouldSetPanResponder: () => false,
+      onMoveShouldSetPanResponder: (
+        _evt: GestureResponderEvent,
+        g: PanResponderGestureState
+      ) => Math.abs(g.dx) > 20 && Math.abs(g.dx) > Math.abs(g.dy),
+      onPanResponderRelease: (_e, g) => {
+        if (g.dx < -20) {
+          setIndex((i) => Math.min(i + 1, DAYS.length - 1));
+        } else if (g.dx > 20) {
+          setIndex((i) => Math.max(i - 1, 0));
+        }
+      },
+      onPanResponderTerminationRequest: () => false,
+    })
+  ).current;
 
   return (
     <SafeAreaView
@@ -32,10 +54,10 @@ export default function Planner() {
         style={styles.dayRow}
         contentContainerStyle={{ paddingHorizontal: 16 }}
       >
-        {DAYS.map((d) => (
+        {DAYS.map((d, i) => (
           <TouchableOpacity
             key={d}
-            onPress={() => setDay(d)}
+            onPress={() => setIndex(i)}
             style={[styles.dayButton, day === d && styles.dayButtonActive]}
           >
             <Text
@@ -47,7 +69,10 @@ export default function Planner() {
         ))}
       </ScrollView>
 
-      <ScrollView contentContainerStyle={styles.scheduleContainer}>
+      <ScrollView
+        contentContainerStyle={styles.scheduleContainer}
+        {...pan.panHandlers}
+      >
         {classes.map((cls, idx) => (
           <View key={idx} style={styles.classBox}>
             <View style={styles.classLeft}>
