@@ -1,20 +1,35 @@
 package com.example.basic
 
 import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.filled.Icecream
+import androidx.compose.material.icons.filled.LunchDining
+import androidx.compose.material.icons.filled.NightsStay
 import androidx.compose.material.icons.filled.Restaurant
+import androidx.compose.material.icons.filled.WbSunny
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Timer
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -61,41 +76,127 @@ private val sampleMenu = listOf(
 )
 
 @Composable
-fun FoodMenuScreen(onShowSummary: () -> Unit) {
+fun FoodMenuScreen(onShowSummary: () -> Unit, onViewMonth: () -> Unit = {}) {
     val now by produceState(initialValue = Date()) {
         while (true) {
             value = Date()
             delay(1000)
         }
     }
+    val dayLabel = remember { java.text.SimpleDateFormat("EEEE, MMMM d", Locale.getDefault()).format(Date()) }
     var likes by remember { mutableStateOf(setOf<String>()) }
     var ratingMeal by remember { mutableStateOf<Meal?>(null) }
 
-    Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
-        Text(
-            text = "Today's Menu",
-            style = MaterialTheme.typography.headlineMedium,
-            modifier = Modifier.align(Alignment.CenterHorizontally)
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        sampleMenu.forEach { meal ->
-            MealCard(meal = meal, now = now, liked = likes.contains(meal.name), onLike = {
-                likes = if (likes.contains(meal.name)) likes - meal.name else likes + meal.name
-            }, onRate = { ratingMeal = meal })
-            Spacer(modifier = Modifier.height(12.dp))
+    val iconAnim = rememberInfiniteTransition()
+    val iconScale by iconAnim.animateFloat(
+        initialValue = 1f,
+        targetValue = 1.15f,
+        animationSpec = infiniteRepeatable(tween(800), RepeatMode.Reverse)
+    )
+    val iconRotate by iconAnim.animateFloat(
+        initialValue = 0f,
+        targetValue = -10f,
+        animationSpec = infiniteRepeatable(tween(800), RepeatMode.Reverse)
+    )
+
+    Box(modifier = Modifier.fillMaxSize()) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp)
+                .padding(bottom = 72.dp)
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(
+                    text = "Today's Menu",
+                    style = MaterialTheme.typography.headlineMedium,
+                    modifier = Modifier.alignByBaseline()
+                )
+                Spacer(Modifier.width(8.dp))
+                Icon(
+                    imageVector = Icons.Default.Restaurant,
+                    contentDescription = null,
+                    tint = Color(0xFFFF6347),
+                    modifier = Modifier
+                        .size(24.dp)
+                        .graphicsLayer {
+                            scaleX = iconScale
+                            scaleY = iconScale
+                            rotationZ = iconRotate
+                        }
+                        .alignByBaseline()
+                )
+            }
+            Spacer(modifier = Modifier.height(8.dp))
+            Surface(
+                shape = RoundedCornerShape(20.dp),
+                color = Color.Black,
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            ) {
+                Text(
+                    text = dayLabel,
+                    color = Color.White,
+                    fontWeight = FontWeight.SemiBold,
+                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp)
+                )
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+
+            sampleMenu.forEachIndexed { index, meal ->
+                MealCard(
+                    meal = meal,
+                    now = now,
+                    liked = likes.contains(meal.name),
+                    onLike = {
+                        likes = if (likes.contains(meal.name)) likes - meal.name else likes + meal.name
+                    },
+                    onRate = { ratingMeal = meal },
+                    background = mealColors[index % mealColors.size]
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+            }
+            Button(
+                onClick = onShowSummary,
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            ) { Text("Food Summary") }
         }
-        Button(
-            onClick = onShowSummary,
-            modifier = Modifier.align(Alignment.CenterHorizontally)
-        ) { Text("Food Summary") }
-    }
-    ratingMeal?.let { meal ->
-        RatingDialog(meal = meal, onDismiss = { ratingMeal = null }) { ratingMeal = null }
+
+        MonthBar(onClick = onViewMonth, modifier = Modifier.align(Alignment.BottomCenter))
+
+        ratingMeal?.let { meal ->
+            RatingDialog(meal = meal, onDismiss = { ratingMeal = null }) { ratingMeal = null }
+        }
     }
 }
 
+private val mealColors = listOf(
+    Color(0xFFFFEEF0),
+    Color(0xFFEEF7FF),
+    Color(0xFFE8FFF0),
+    Color(0xFFFFF5E0)
+)
+
+private fun mealIcon(name: String) = when (name.lowercase()) {
+    "breakfast" -> Icons.Default.WbSunny
+    "lunch" -> Icons.Default.LunchDining
+    "snacks" -> Icons.Default.Icecream
+    "dinner" -> Icons.Default.NightsStay
+    else -> Icons.Default.Restaurant
+}
+
 @Composable
-private fun MealCard(meal: Meal, now: Date, liked: Boolean, onLike: () -> Unit, onRate: () -> Unit) {
+private fun MealCard(
+    meal: Meal,
+    now: Date,
+    liked: Boolean,
+    onLike: () -> Unit,
+    onRate: () -> Unit,
+    background: Color
+) {
     val scope = rememberCoroutineScope()
     val scale = remember { Animatable(1f) }
     val start = Calendar.getInstance().apply { set(Calendar.HOUR_OF_DAY, meal.startHour); set(Calendar.MINUTE, meal.startMinute) }
@@ -105,40 +206,69 @@ private fun MealCard(meal: Meal, now: Date, liked: Boolean, onLike: () -> Unit, 
         now.after(start.time) -> "Ongoing"
         else -> "Upcoming"
     }
+    val ended = now.after(end.time)
     Card(
         shape = RoundedCornerShape(8.dp),
-        colors = CardDefaults.cardColors(containerColor = Color(0xFFFAFAFA)),
-        modifier = Modifier.fillMaxWidth()
+        colors = CardDefaults.cardColors(containerColor = background),
+        modifier = Modifier
+            .fillMaxWidth()
+            .graphicsLayer { alpha = if (ended) 0.6f else 1f }
     ) {
         Column(modifier = Modifier.padding(12.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(Icons.Default.Restaurant, contentDescription = null)
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(text = meal.name, style = MaterialTheme.typography.titleMedium)
-                Spacer(Modifier.weight(1f))
-                Icon(
-                    imageVector = if (liked) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
-                    contentDescription = "Like",
-                    tint = if (liked) Color.Red else Color.Black,
+                Icon(mealIcon(meal.name), contentDescription = null, tint = Color(0xFFFFA500))
+                Spacer(modifier = Modifier.width(6.dp))
+                Text(
+                    text = meal.name,
+                    color = Color.White,
+                    style = MaterialTheme.typography.bodyMedium,
                     modifier = Modifier
-                        .size(24.dp)
-                        .graphicsLayer(scaleX = scale.value, scaleY = scale.value)
-                        .clickable {
-                            scope.launch {
-                                scale.snapTo(1.2f)
-                                onLike()
-                                scale.animateTo(1f, animationSpec = tween(300))
-                            }
-                        }
+                        .background(Color(0xFF333333), RoundedCornerShape(12.dp))
+                        .padding(horizontal = 8.dp, vertical = 2.dp)
                 )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = String.format("%02d:%02d - %02d:%02d", meal.startHour, meal.startMinute, meal.endHour, meal.endMinute),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = Color(0xFF333333)
+                )
+                Spacer(Modifier.weight(1f))
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        imageVector = if (ended) Icons.Default.CheckCircle else Icons.Default.Timer,
+                        contentDescription = null,
+                        tint = if (ended) Color.Green else Color(0xFFD00000),
+                        modifier = Modifier.size(16.dp)
+                    )
+                    Spacer(Modifier.width(4.dp))
+                    Text(text = if (ended) "Done" else status, style = MaterialTheme.typography.labelSmall, color = Color(0xFF333333))
+                    Spacer(Modifier.width(8.dp))
+                    Icon(
+                        imageVector = if (liked) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
+                        contentDescription = "Like",
+                        tint = if (liked) Color.Red else Color.Black,
+                        modifier = Modifier
+                            .size(20.dp)
+                            .graphicsLayer(scaleX = scale.value, scaleY = scale.value)
+                            .clickable {
+                                scope.launch {
+                                    scale.snapTo(1.2f)
+                                    onLike()
+                                    scale.animateTo(1f, animationSpec = tween(300))
+                                }
+                            }
+                    )
+                }
             }
             Spacer(modifier = Modifier.height(4.dp))
-            Text(text = meal.items.joinToString(", "), style = MaterialTheme.typography.bodySmall)
-            Spacer(modifier = Modifier.height(4.dp))
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(text = status, style = MaterialTheme.typography.bodySmall)
-                Spacer(Modifier.weight(1f))
-                OutlinedButton(onClick = onRate) { Text("Rate") }
+            Text(text = meal.items.joinToString(", "), style = MaterialTheme.typography.bodySmall, color = Color(0xFF555555))
+            Spacer(modifier = Modifier.height(8.dp))
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
+                OutlinedButton(onClick = onRate) {
+                    Icon(Icons.Default.Star, contentDescription = null, tint = Color.White, modifier = Modifier.size(16.dp))
+                    Spacer(Modifier.width(4.dp))
+                    Text("Rate", color = Color.White)
+                }
             }
         }
     }
@@ -171,5 +301,32 @@ fun RatingDialog(meal: Meal, onDismiss: () -> Unit, onSubmit: (Int) -> Unit) {
             OutlinedButton(onClick = onDismiss) { Text("Cancel") }
         }
     )
+}
+
+@Composable
+private fun MonthBar(onClick: () -> Unit, modifier: Modifier = Modifier) {
+    Surface(color = Color(0xFF007BFF), modifier = modifier) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp, horizontal = 16.dp),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                imageVector = Icons.Default.CalendarToday,
+                contentDescription = null,
+                tint = Color.White,
+                modifier = Modifier.size(16.dp)
+            )
+            Spacer(Modifier.width(6.dp))
+            Text(
+                text = "View Full Month",
+                color = Color.White,
+                style = MaterialTheme.typography.labelLarge,
+                modifier = Modifier.clickable(onClick = onClick)
+            )
+        }
+    }
 }
 
