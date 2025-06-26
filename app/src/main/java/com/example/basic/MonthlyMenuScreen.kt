@@ -4,7 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
@@ -15,13 +14,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.clip
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import org.json.JSONObject
 import java.util.*
@@ -110,49 +107,17 @@ fun MonthlyMenuScreen(onBack: () -> Unit) {
     val weeks = remember(menu) { toWeeks(menu!!) }
     val today = remember { java.text.SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date()) }
 
-    val listState = rememberLazyListState()
-
-    LaunchedEffect(weeks) {
-        var target = 0
-        var index = 0
-        outer@ for (week in weeks) {
-            index++ // header
-            for (day in week.days) {
-                if (day.date == today) {
-                    target = index
-                    break@outer
-                }
-                index++
-            }
-        }
-        if (target != 0) {
-            listState.scrollToItem(target)
-        }
-    }
-
     Scaffold(
         topBar = {
-            CenterAlignedTopAppBar(
-                title = {
-                    Text(
-                        "Monthly Menu",
-                        fontWeight = FontWeight.Bold,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                },
+            SmallTopAppBar(
+                title = { Text("Monthly Menu") },
                 navigationIcon = {
                     IconButton(onClick = onBack) { Icon(Icons.Default.ArrowBack, contentDescription = "Back") }
                 }
             )
         }
     ) { padding ->
-        LazyColumn(
-            state = listState,
-            modifier = Modifier
-                .padding(padding),
-            contentPadding = PaddingValues(horizontal = 16.dp)
-        ) {
+        LazyColumn(modifier = Modifier.padding(padding)) {
             weeks.forEach { week ->
                 stickyHeader {
                     WeekHeader(
@@ -170,9 +135,6 @@ fun MonthlyMenuScreen(onBack: () -> Unit) {
                         likes = likes,
                         toggleLike = { key -> likes[key] = !(likes[key] ?: false) }
                     )
-                }
-                item {
-                    Spacer(modifier = Modifier.height(16.dp))
                 }
             }
         }
@@ -211,16 +173,12 @@ private fun DayBlock(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .clip(
-                RoundedCornerShape(
-                    topStart = if (first) 12.dp else 0.dp,
-                    topEnd = if (first) 12.dp else 0.dp,
-                    bottomStart = if (last) 12.dp else 0.dp,
-                    bottomEnd = if (last) 12.dp else 0.dp
-                )
-            )
             .background(color)
-            .padding(top = if (first) 4.dp else 0.dp, bottom = if (last) 8.dp else 0.dp)
+            .then(
+                Modifier
+                    .padding(horizontal = 4.dp)
+                    .padding(top = if (first) 4.dp else 0.dp, bottom = if (last) 8.dp else 0.dp)
+            )
             .alpha(if (isPast) 0.5f else 1f)
             .padding(12.dp)
     ) {
