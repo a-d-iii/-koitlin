@@ -258,32 +258,40 @@ fun ClassCard(
 @Composable
 private fun BlobPattern(cardWidth: Dp, cardHeight: Dp) {
     val density = LocalDensity.current
-    val w = with(density) { cardWidth.toPx() }
-    val h = with(density) { cardHeight.toPx() }
-    Canvas(modifier = Modifier.fillMaxSize()) {
-        val p1 = Path().apply {
+    val (p1, p2, p3) = remember(cardWidth, cardHeight, density) {
+        val w = with(density) { cardWidth.toPx() }
+        val h = with(density) { cardHeight.toPx() }
+
+        val path1 = Path().apply {
             moveTo(0.1f * w, 0.15f * h)
             cubicTo(-0.15f * w, -0.1f * h, 0.6f * w, 0.25f * h, 0.5f * w, 0.5f * h)
             cubicTo(0.4f * w, 0.8f * h, -0.05f * w, 0.85f * h, 0.1f * w, 0.55f * h)
             cubicTo(0.25f * w, 0.3f * h, -0.05f * w, 0.35f * h, 0.1f * w, 0.15f * h)
             close()
         }
-        drawPath(p1, Color.White.copy(alpha = 0.12f))
-        val p2 = Path().apply {
+
+        val path2 = Path().apply {
             moveTo(0.5f * w, 0.2f * h)
             cubicTo(0.8f * w, 0.05f * h, 1.2f * w, 0.4f * h, 0.9f * w, 0.55f * h)
             cubicTo(0.7f * w, 0.75f * h, 0.6f * w, 0.45f * h, 0.5f * w, 0.3f * h)
             cubicTo(0.4f * w, 0.15f * h, 0.3f * w, 0.25f * h, 0.5f * w, 0.2f * h)
             close()
         }
-        drawPath(p2, Color.White.copy(alpha = 0.08f))
-        val p3 = Path().apply {
+
+        val path3 = Path().apply {
             moveTo(0.2f * w, 0.6f * h)
             cubicTo(0f * w, 0.8f * h, 0.4f * w, 1.1f * h, 0.7f * w, 0.9f * h)
             cubicTo(1.0f * w, 0.75f * h, 0.6f * w, 0.65f * h, 0.4f * w, 0.7f * h)
             cubicTo(0.2f * w, 0.75f * h, 0.15f * w, 0.55f * h, 0.2f * w, 0.6f * h)
             close()
         }
+
+        Triple(path1, path2, path3)
+    }
+
+    Canvas(modifier = Modifier.fillMaxSize()) {
+        drawPath(p1, Color.White.copy(alpha = 0.12f))
+        drawPath(p2, Color.White.copy(alpha = 0.08f))
         drawPath(p3, Color.White.copy(alpha = 0.05f))
     }
 }
