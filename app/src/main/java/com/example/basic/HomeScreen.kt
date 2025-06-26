@@ -75,7 +75,8 @@ fun HomeScreen() {
                     ClassCard(
                         info = baseCards[page - 1],
                         index = page - 1,
-                        daySchedule = baseCards
+                        daySchedule = baseCards,
+                        locationName = "Amaravati"
                     )
                 }
             }

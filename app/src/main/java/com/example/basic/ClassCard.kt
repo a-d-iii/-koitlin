@@ -9,6 +9,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Camera
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.filled.DeviceThermostat
+import androidx.compose.material.icons.filled.WaterDrop
+import androidx.compose.material.icons.filled.Speed
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -28,13 +31,23 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.format.TextStyle
+import java.util.Locale
 import kotlin.random.Random
 
 // Shared data model
 data class ClassInfo(val id: String, val title: String, val time: String)
 
 @Composable
-fun ClassCard(info: ClassInfo, index: Int, daySchedule: List<ClassInfo>) {
+fun ClassCard(
+    info: ClassInfo,
+    index: Int,
+    daySchedule: List<ClassInfo>,
+    locationName: String
+) {
     val config = LocalConfiguration.current
     val density = LocalDensity.current
     val wPx = with(density) { config.screenWidthDp.dp.toPx() }
@@ -52,6 +65,10 @@ fun ClassCard(info: ClassInfo, index: Int, daySchedule: List<ClassInfo>) {
         listOf(Color(0xFFE67E22), Color(0xFFD35400), Color(0xFFCD6155))
     )
     val gradientColors = gradients[index % gradients.size]
+
+    val today = remember { LocalDate.now() }
+    val weekday = today.dayOfWeek.getDisplayName(TextStyle.FULL, Locale.US)
+    val dateNum = today.format(DateTimeFormatter.ofPattern("MMM d, yyyy"))
 
     var flipped by remember { mutableStateOf(false) }
     val rotation by animateFloatAsState(
@@ -92,24 +109,82 @@ fun ClassCard(info: ClassInfo, index: Int, daySchedule: List<ClassInfo>) {
                     .background(Color.Black.copy(alpha = 0.2f))
             )
             Raindrops(cardWidth, cardHeight)
+
+            // Weekday and date
             Column(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .padding(24.dp),
-                verticalArrangement = Arrangement.Center
+                    .align(Alignment.TopStart)
+                    .padding(start = 24.dp, top = 20.dp)
             ) {
-                Text(
-                    info.title,
-                    color = Color.White,
-                    fontSize = MaterialTheme.typography.headlineSmall.fontSize,
-                    fontWeight = FontWeight.Black
-                )
-                Spacer(Modifier.height(8.dp))
-                Text(info.time, color = Color.White)
-                Spacer(Modifier.height(24.dp))
-                Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                Text(weekday, color = Color.White, fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
+                Text(dateNum, color = Color.White, fontSize = 12.sp)
+            }
+
+            // Weather badge
+            TemperatureBadge(
+                value = "27°C",
+                humidity = "65%",
+                wind = "12 km/h",
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(top = 12.dp, end = 24.dp)
+            )
+
+            Text(
+                locationName,
+                color = Color.White,
+                fontSize = 14.sp,
+                fontWeight = FontWeight.SemiBold,
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(top = 88.dp, end = 24.dp)
+            )
+
+            val parts = remember(info.title) {
+                if (info.title.contains("@")) info.title.split("@").map { it.trim() } else listOf(info.title)
+            }
+            val courseCode = parts.firstOrNull() ?: ""
+            val roomDetail = parts.getOrNull(1) ?: ""
+
+            Column(
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .padding(horizontal = 24.dp),
+                horizontalAlignment = Alignment.Start
+            ) {
+                Text(courseCode, color = Color.White, fontSize = 36.sp, fontWeight = FontWeight.Black, modifier = Modifier.padding(start = 20.dp, bottom = 8.dp))
+                if (roomDetail.isNotEmpty()) {
+                    Text(roomDetail, color = Color(0xFFF0F0F0), fontSize = 28.sp, modifier = Modifier.padding(start = 20.dp, bottom = 8.dp))
+                }
+                Text(info.time, color = Color(0xFFF0F0F0), fontSize = 24.sp, modifier = Modifier.padding(start = 20.dp))
+            }
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.BottomCenter)
+                    .padding(start = 24.dp, end = 24.dp, bottom = 12.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Row(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(8.dp))
+                        .background(Color.Black.copy(alpha = 0.45f))
+                        .padding(horizontal = 12.dp, vertical = 6.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
                     Icon(Icons.Filled.Camera, contentDescription = null, tint = Color.White)
+                    Text("Capture", color = Color.White, fontSize = 14.sp, fontWeight = FontWeight.SemiBold, modifier = Modifier.padding(start = 6.dp))
+                }
+                Row(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(8.dp))
+                        .background(Color.Black.copy(alpha = 0.45f))
+                        .padding(horizontal = 12.dp, vertical = 6.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
                     Icon(Icons.Filled.Star, contentDescription = null, tint = Color.White)
+                    Text("Rate", color = Color.White, fontSize = 14.sp, fontWeight = FontWeight.SemiBold, modifier = Modifier.padding(start = 6.dp))
                 }
             }
         }
@@ -143,11 +218,29 @@ fun ClassCard(info: ClassInfo, index: Int, daySchedule: List<ClassInfo>) {
                     Text("Today's Schedule", color = Color.White, fontWeight = FontWeight.Bold)
                     Spacer(Modifier.height(8.dp))
                     daySchedule.forEach {
-                        Text(
-                            "${'$'}{it.time} • ${'$'}{it.title}",
-                            color = Color.White,
-                            fontSize = MaterialTheme.typography.bodyMedium.fontSize
-                        )
+                        val parts = if (it.title.contains("@")) it.title.split("@").map { p -> p.trim() } else listOf(it.title)
+                        val display = if (parts.size > 1) "${'$'}{parts[0]} • ${'$'}{parts[1]}" else it.title
+                        val past = isClassOver(it.time)
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 6.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                it.time,
+                                color = Color(0xFFE0F0FF),
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.SemiBold,
+                                modifier = Modifier.width(90.dp)
+                            )
+                            Text(
+                                display,
+                                color = if (past) Color(0xFFFF6666) else Color.White,
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Medium
+                            )
+                        }
                     }
                 }
             }
@@ -208,7 +301,7 @@ private fun Raindrops(cardWidth: Dp, cardHeight: Dp) {
                 state.value.anim.animateTo(
                     targetValue = heightPx + 20f,
                     animationSpec = tween(
-                        durationMillis = (1800 + Random.nextInt(800)),
+                        durationMillis = (4000 + Random.nextInt(2000)),
                         easing = LinearEasing,
                         delayMillis = Random.nextInt(0, 1200)
                     )
@@ -234,5 +327,42 @@ private class RandomDropState(
     val anim: Animatable<Float, AnimationVector1D>
 ) {
     fun xPos(width: Float) = Random.nextFloat() * (width - 2f) + 1f
+}
+
+@Composable
+private fun TemperatureBadge(
+    value: String,
+    humidity: String,
+    wind: String,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.End
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Icon(Icons.Filled.DeviceThermostat, contentDescription = null, tint = Color.White, modifier = Modifier.size(18.dp))
+            Text(value, color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(start = 6.dp))
+        }
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Icon(Icons.Filled.WaterDrop, contentDescription = null, tint = Color.White, modifier = Modifier.size(14.dp))
+            Text(humidity, color = Color.White, fontSize = 12.sp, modifier = Modifier.padding(start = 6.dp))
+        }
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Icon(Icons.Filled.Speed, contentDescription = null, tint = Color.White, modifier = Modifier.size(14.dp))
+            Text(wind, color = Color.White, fontSize = 12.sp, modifier = Modifier.padding(start = 6.dp))
+        }
+    }
+}
+
+private fun isClassOver(timeRange: String): Boolean {
+    val parts = timeRange.split("–").map { it.trim() }
+    if (parts.size != 2) return false
+    val end = parts[1]
+    val endParts = end.split(":").map { it.toIntOrNull() ?: 0 }
+    val endMinutes = endParts[0] * 60 + endParts.getOrElse(1) { 0 }
+    val now = java.time.LocalTime.now()
+    val nowMinutes = now.hour * 60 + now.minute
+    return nowMinutes > endMinutes
 }
 
