@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -81,20 +82,40 @@ private fun WeatherCard() {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(Icons.Default.Cloud, contentDescription = null, tint = Color.White, modifier = Modifier.size(64.dp))
-                    Spacer(Modifier.width(8.dp))
-                    Text("Cloudy", color = Color.White, fontSize = 32.sp, fontWeight = FontWeight.Bold)
+                    Icon(
+                        Icons.Default.Cloud,
+                        contentDescription = null,
+                        tint = Color.White,
+                        modifier = Modifier.size(72.dp)
+                    )
+                    Spacer(Modifier.width(12.dp))
+                    Text(
+                        "Cloudy",
+                        color = Color.White,
+                        fontSize = 32.sp,
+                        fontWeight = FontWeight.Bold
+                    )
                 }
                 Column(horizontalAlignment = Alignment.End) {
-                    Text("25°", color = Color.White, fontSize = 48.sp, fontWeight = FontWeight.Bold)
-                    Text("Feels like 27°", color = Color.White, fontSize = 12.sp)
+                    Text(
+                        "25°",
+                        color = Color.White,
+                        fontSize = 52.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(
+                        "Feels like 27°",
+                        color = Color.White,
+                        fontSize = 12.sp,
+                        modifier = Modifier.offset(x = (-10).dp, y = (-10).dp)
+                    )
                 }
             }
             Row(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
                     .padding(horizontal = 24.dp),
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.SpaceAround
             ) {
                 WeatherInfo("60%", "Humidity")
                 WeatherInfo("10 km/h", "Wind")
@@ -106,8 +127,16 @@ private fun WeatherCard() {
 
 @Composable
 private fun WeatherInfo(value: String, label: String) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.padding(horizontal = 12.dp)) {
-        Text(value, color = Color.White, fontWeight = FontWeight.Bold)
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.padding(horizontal = 12.dp)
+    ) {
+        Text(
+            value,
+            color = Color.White,
+            fontWeight = FontWeight.Bold,
+            fontSize = 20.sp
+        )
         Text(label, color = Color.White, fontSize = 12.sp)
     }
 }
