@@ -118,12 +118,8 @@ fun MonthlyMenuScreen(onBack: () -> Unit) {
     ) { padding ->
         LazyColumn(modifier = Modifier.padding(padding)) {
             weeks.forEach { week ->
-                stickyHeader {
-                    WeekHeader(
-                        title = week.title,
-                        color = week.color,
-                        dayColor = week.dayColor,
-                    )
+                item {
+                    WeekHeader(title = week.title, color = week.color, dayColor = week.dayColor)
                 }
                 items(week.days) { day ->
                     DayBlock(
@@ -148,7 +144,6 @@ private fun WeekHeader(title: String, color: Color, dayColor: Color) {
             .fillMaxWidth()
             .background(color)
             .padding(8.dp)
-            .animateItemPlacement()
     ) {
         Box(
             modifier = Modifier
