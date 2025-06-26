@@ -6,6 +6,7 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
+  Alert,
   Platform,
   StatusBar,
   PanResponder,
@@ -79,7 +80,17 @@ export default function Planner() {
         {...pan.panHandlers}
       >
         {classes.map((cls, idx) => (
-          <View key={idx} style={styles.classBox}>
+          <TouchableOpacity
+            key={idx}
+            style={styles.classBox}
+            activeOpacity={0.7}
+            onPress={() =>
+              Alert.alert(
+                cls.course,
+                `${cls.start} – ${cls.end} @ ${cls.room}`
+              )
+            }
+          >
             <View style={styles.classLeft}>
               <Text style={styles.courseText}>{cls.course}</Text>
               <Text style={styles.facultyText}>{cls.faculty}</Text>
@@ -90,7 +101,7 @@ export default function Planner() {
               </Text>
               <Text style={styles.roomText}>{cls.room}</Text>
             </View>
-          </View>
+          </TouchableOpacity>
         ))}
       </ScrollView>
     </SafeAreaView>
