@@ -64,7 +64,7 @@ fun BasicApp() {
         NavItem(R.string.more, Icons.Filled.MoreHoriz, Icons.Outlined.MoreHoriz)
     )
     var selectedIndex by remember { mutableIntStateOf(0) }
-    var foodScreen by remember { mutableStateOf(0) } // 0 - menu, 1 - summary
+    var foodScreen by remember { mutableStateOf(0) } // 0 - menu, 1 - summary, 2 - monthly
 
     MaterialTheme {
         Scaffold(
@@ -96,10 +96,13 @@ fun BasicApp() {
                     1 -> PlannerScreen()
                     2 -> AttendanceScreen()
                     3 -> {
-                        if (foodScreen == 0) {
-                            FoodMenuScreen(onShowSummary = { foodScreen = 1 })
-                        } else {
-                            FoodSummaryScreen(onBack = { foodScreen = 0 })
+                        when (foodScreen) {
+                            0 -> FoodMenuScreen(
+                                onShowSummary = { foodScreen = 1 },
+                                onViewMonth = { foodScreen = 2 }
+                            )
+                            1 -> FoodSummaryScreen(onBack = { foodScreen = 0 })
+                            else -> MonthlyMenuScreen(onBack = { foodScreen = 0 })
                         }
                     }
                     else -> Text(text = stringResource(id = items[selectedIndex].labelRes))
