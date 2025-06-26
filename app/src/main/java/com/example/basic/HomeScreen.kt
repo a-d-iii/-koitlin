@@ -69,15 +69,20 @@ fun HomeScreen() {
                         )
                     }
             ) { page ->
-                if (page == 0) {
-                    SummaryCard()
-                } else {
-                    ClassCard(
-                        info = baseCards[page - 1],
-                        index = page - 1,
-                        daySchedule = baseCards,
-                        locationName = "Amaravati"
-                    )
+                Box(
+                    modifier = Modifier.fillMaxWidth(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    if (page == 0) {
+                        SummaryCard()
+                    } else {
+                        ClassCard(
+                            info = baseCards[page - 1],
+                            index = page - 1,
+                            daySchedule = baseCards,
+                            locationName = "Amaravati"
+                        )
+                    }
                 }
             }
 
