@@ -6,9 +6,6 @@ import {
   SectionList,
   ActivityIndicator,
   Pressable,
-  NativeSyntheticEvent,
-  NativeScrollEvent,
-  LayoutChangeEvent,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Ionicons from '@expo/vector-icons/Ionicons';
@@ -36,7 +33,6 @@ type WeekSection = {
   color: string;
   dayColor: string;
   data: { date: string; meals: Meal[] }[];
-  index: number;
 };
 
 export default function MonthlyMenuScreen() {
@@ -49,8 +45,6 @@ export default function MonthlyMenuScreen() {
   const [likes, setLikes] = useState<Record<string, boolean>>({});
   const listRef = useRef<SectionList<any>>(null);
   const scrollTarget = useRef<{ sectionIndex: number; itemIndex: number }>();
-  const headerPositions = useRef<number[]>([]);
-  const [stickyIndex, setStickyIndex] = useState(0);
 
   useEffect(() => {
     const loadMenu = async () => {
@@ -108,26 +102,6 @@ export default function MonthlyMenuScreen() {
     }, 50);
   };
 
-  const handleHeaderLayout = (index: number) =>
-    (e: LayoutChangeEvent) => {
-      headerPositions.current[index] = e.nativeEvent.layout.y;
-    };
-
-  const handleScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
-    const offset = e.nativeEvent.contentOffset.y;
-    let active = 0;
-    for (let i = 0; i < headerPositions.current.length; i++) {
-      if (headerPositions.current[i] <= offset) {
-        active = i;
-      } else {
-        break;
-      }
-    }
-    if (active !== stickyIndex) {
-      setStickyIndex(active);
-    }
-  };
-
   const toWeeks = (): WeekSection[] => {
     if (!menu) return [];
 
@@ -141,7 +115,6 @@ export default function MonthlyMenuScreen() {
         color: WEEK_COLORS[index % WEEK_COLORS.length],
         dayColor: DAY_COLORS[index % DAY_COLORS.length],
         data: slice.map((d) => ({ date: d, meals: menu[d] })),
-        index,
       });
     }
     return weeks;
@@ -213,8 +186,6 @@ export default function MonthlyMenuScreen() {
     <SafeAreaView style={styles.safe}>
       <SectionList
         ref={listRef}
-        onScroll={handleScroll}
-        scrollEventThrottle={16}
         sections={toWeeks()}
         keyExtractor={(item) => item.date}
         renderItem={({ item, index, section }) =>
@@ -222,12 +193,7 @@ export default function MonthlyMenuScreen() {
         }
         renderSectionHeader={({ section }) => (
           <View
-            onLayout={handleHeaderLayout(section.index)}
-            style={[
-              styles.weekHeaderContainer,
-              { backgroundColor: section.dayColor },
-              stickyIndex === section.index && styles.weekHeaderSticky,
-            ]}
+            style={[styles.weekHeaderContainer, { backgroundColor: section.dayColor }]}
           >
             <View style={styles.weekLabel}>
               <Text style={styles.sectionHeader}>{section.title}</Text>
@@ -257,9 +223,6 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 12,
     overflow: 'hidden',
     alignItems: 'center',
-  },
-  weekHeaderSticky: {
-    borderRadius: 0,
   },
   weekLabel: {
     backgroundColor: '#000',
