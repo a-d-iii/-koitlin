@@ -31,9 +31,7 @@ const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const CARD_MARGIN = 12;
  
 const CARD_WIDTH = (SCREEN_WIDTH - CARD_MARGIN * 3) / 2 - 8;
-// Slightly reduce the height of each attendance card so they don't appear as
-// tall.
-const CARD_HEIGHT = 110;
+const CARD_HEIGHT = 130;
  
 
 function getBackgroundColor(p: number): string {
