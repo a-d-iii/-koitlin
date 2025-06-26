@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import {
   SafeAreaView,
   View,
@@ -6,6 +6,11 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
+  Animated,
+  useWindowDimensions,
+  LayoutAnimation,
+  Pressable,
+  UIManager,
   Platform,
   StatusBar,
   PanResponder,
@@ -16,10 +21,25 @@ import { WEEKLY_SCHEDULE, ClassEntry } from '../data/weeklySchedule';
 
 const DAYS = Object.keys(WEEKLY_SCHEDULE);
 
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
+
 export default function Planner() {
   const [index, setIndex] = useState<number>(0);
   const day = DAYS[index];
   const classes: ClassEntry[] = WEEKLY_SCHEDULE[day];
+
+  const { width: SCREEN_WIDTH } = useWindowDimensions();
+
+  const slideAnim = useRef(new Animated.Value(0)).current;
+  const dayScales = useRef(DAYS.map(() => new Animated.Value(1))).current;
+  const pressScales = useRef<Animated.Value[]>(classes.map(() => new Animated.Value(1)));
+  const prevIndex = useRef(index);
+
+  useEffect(() => {
+    if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
+      UIManager.setLayoutAnimationEnabledExperimental(true);
+    }
+  }, []);
 
   const pan = useRef(
     PanResponder.create({
@@ -44,6 +64,27 @@ export default function Planner() {
     })
   ).current;
 
+  useEffect(() => {
+    const direction = index >= prevIndex.current ? -1 : 1;
+    slideAnim.setValue(direction * SCREEN_WIDTH);
+    Animated.spring(slideAnim, {
+      toValue: 0,
+      useNativeDriver: true,
+    }).start();
+
+    dayScales.forEach((v, i) => {
+      Animated.spring(v, {
+        toValue: i === index ? 1.1 : 1,
+        useNativeDriver: true,
+      }).start();
+    });
+
+    pressScales.current = classes.map(() => new Animated.Value(1));
+
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+    prevIndex.current = index;
+  }, [index, SCREEN_WIDTH, slideAnim, dayScales, classes]);
+
   return (
     <SafeAreaView
       style={[
@@ -63,13 +104,21 @@ export default function Planner() {
           <TouchableOpacity
             key={d}
             onPress={() => setIndex(i)}
-            style={[styles.dayButton, day === d && styles.dayButtonActive]}
+            activeOpacity={0.8}
           >
-            <Text
-              style={[styles.dayText, day === d && styles.dayTextActive]}
+            <Animated.View
+              style={[
+                styles.dayButton,
+                day === d && styles.dayButtonActive,
+                { transform: [{ scale: dayScales[i] }] },
+              ]}
             >
-              {d.slice(0, 3)}
-            </Text>
+              <Text
+                style={[styles.dayText, day === d && styles.dayTextActive]}
+              >
+                {d.slice(0, 3)}
+              </Text>
+            </Animated.View>
           </TouchableOpacity>
         ))}
       </ScrollView>
@@ -78,20 +127,37 @@ export default function Planner() {
         contentContainerStyle={styles.scheduleContainer}
         {...pan.panHandlers}
       >
-        {classes.map((cls, idx) => (
-          <View key={idx} style={styles.classBox}>
-            <View style={styles.classLeft}>
-              <Text style={styles.courseText}>{cls.course}</Text>
-              <Text style={styles.facultyText}>{cls.faculty}</Text>
-            </View>
-            <View style={styles.classRight}>
-              <Text style={styles.timeText}>
-                {cls.start} – {cls.end}
-              </Text>
-              <Text style={styles.roomText}>{cls.room}</Text>
-            </View>
-          </View>
-        ))}
+        <Animated.View style={{ width: SCREEN_WIDTH, transform: [{ translateX: slideAnim }] }}>
+          {classes.map((cls, idx) => (
+            <AnimatedPressable
+              key={idx}
+              onPressIn={() =>
+                Animated.spring(pressScales.current[idx], {
+                  toValue: 0.97,
+                  useNativeDriver: true,
+                }).start()
+              }
+              onPressOut={() =>
+                Animated.spring(pressScales.current[idx], {
+                  toValue: 1,
+                  useNativeDriver: true,
+                }).start()
+              }
+              style={{ transform: [{ scale: pressScales.current[idx] }] }}
+            >
+              <View style={styles.classLeft}>
+                <Text style={styles.courseText}>{cls.course}</Text>
+                <Text style={styles.facultyText}>{cls.faculty}</Text>
+              </View>
+              <View style={styles.classRight}>
+                <Text style={styles.timeText}>
+                  {cls.start} – {cls.end}
+                </Text>
+                <Text style={styles.roomText}>{cls.room}</Text>
+              </View>
+            </AnimatedPressable>
+          ))}
+        </Animated.View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -103,7 +169,7 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: '700',
     marginVertical: 16,
-    marginHorizontal: 16,
+    textAlign: 'center',
     color: '#333',
   },
   dayRow: {
