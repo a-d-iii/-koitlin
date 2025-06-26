@@ -81,7 +81,7 @@ fun ClassCard(
             .width(cardWidth)
             .height(cardHeight)
             .padding(vertical = 16.dp)
-            .shadow(8.dp, RoundedCornerShape(20.dp), clip = false)
+            .shadow(8.dp, RoundedCornerShape(20.dp), clip = true)
             .pointerInput(Unit) { detectTapGestures(onDoubleTap = { flipped = !flipped }) }
     ) {
         // FRONT
