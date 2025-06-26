@@ -139,15 +139,6 @@ export default function CardCarousel({
                   outputRange: [1, 1.3, 1],
                   extrapolate: 'clamp',
                 });
-                const scaleCircle = scrollX.interpolate({
-                  inputRange: [
-                    (realIndex - 1) * SCREEN_WIDTH,
-                    realIndex * SCREEN_WIDTH,
-                    (realIndex + 1) * SCREEN_WIDTH,
-                  ],
-                  outputRange: [1, 1.5, 1],
-                  extrapolate: 'clamp',
-                });
                 return (
                   <TouchableOpacity
                     key={realIndex}
@@ -160,9 +151,6 @@ export default function CardCarousel({
                     }}
                     style={styles.numItem}
                   >
-                    <Animated.View
-                      style={[styles.circleBehind, { transform: [{ scale: scaleCircle }] }]}
-                    />
                     <Animated.Text
                       style={[styles.numText, { transform: [{ scale: scaleNum }] }]}
                     >
@@ -180,7 +168,11 @@ export default function CardCarousel({
   );
 }
 
-const NUMBER_TOP = (SCREEN_HEIGHT - CARD_HEIGHT) / 3 + CARD_HEIGHT + 20;
+// Position the page number row immediately below the cards. Since the
+// cards are vertically centered, we start from their top offset (half the
+// leftover height) and add the card height. A very small extra offset keeps
+// the numbers from touching the cards.
+const NUMBER_TOP = (SCREEN_HEIGHT - CARD_HEIGHT) / 2 + CARD_HEIGHT + 2;
 
 const styles = StyleSheet.create({
   container: {
@@ -204,13 +196,6 @@ const styles = StyleSheet.create({
     width: NUM_SPACING,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  circleBehind: {
-    position: 'absolute',
-    width: NUM_SIZE,
-    height: NUM_SIZE,
-    borderRadius: NUM_SIZE / 2,
-    backgroundColor: '#333',
   },
   numText: {
     fontSize: 12,
