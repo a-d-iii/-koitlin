@@ -43,7 +43,6 @@ val WEEKLY_SCHEDULE: Map<String, List<ClassEntry>> = mapOf(
     ),
     "Saturday" to listOf(
         ClassEntry("CSE1001", "Prof. Rao", "09:00", "10:30", "101"),
-        ClassEntry("LAB Project", "Staff", "10:45", "12:15", "Innovation Lab"),
-        ClassEntry("MAT1002", "Dr. Singh", "12:30", "13:20", "201")
+        ClassEntry("LAB Project", "Staff", "10:45", "12:15", "Innovation Lab")
     )
 )

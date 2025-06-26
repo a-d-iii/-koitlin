@@ -44,7 +44,6 @@ export const WEEKLY_SCHEDULE: WeeklySchedule = {
   Saturday: [
     { course: 'CSE1001', faculty: 'Prof. Rao', start: '09:00', end: '10:30', room: '101' },
     { course: 'LAB Project', faculty: 'Staff', start: '10:45', end: '12:15', room: 'Innovation Lab' },
-    { course: 'MAT1002', faculty: 'Dr. Singh', start: '12:30', end: '13:20', room: '201' },
   ],
 };
 
