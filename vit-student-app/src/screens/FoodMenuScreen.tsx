@@ -436,7 +436,7 @@ const styles = StyleSheet.create({
   },
   rateButton: {
     flexDirection: 'row',
-    backgroundColor: '#007bff',
+    backgroundColor: '#ff6347',
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 8,
@@ -454,7 +454,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 16,
     borderRadius: 8,
-    backgroundColor: '#007bff',
+    backgroundColor: '#ff6347',
     alignItems: 'center',
     flexDirection: 'row',
     alignSelf: 'center',
