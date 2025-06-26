@@ -115,8 +115,18 @@ fun ClassCard(
                     .align(Alignment.TopStart)
                     .padding(start = 24.dp, top = 20.dp)
             ) {
-                Text(weekday, color = Color.White, fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
-                Text(dateNum, color = Color.White, fontSize = 12.sp)
+                Text(
+                    weekday,
+                    color = Color.White,
+                    fontSize = 36.sp,
+                    fontWeight = FontWeight.Black
+                )
+                Text(
+                    dateNum,
+                    color = Color.White,
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold
+                )
             }
 
             // Weather badge
@@ -136,7 +146,7 @@ fun ClassCard(
                 fontWeight = FontWeight.SemiBold,
                 modifier = Modifier
                     .align(Alignment.TopEnd)
-                    .padding(top = 88.dp, end = 24.dp)
+                    .padding(top = 80.dp, end = 24.dp)
             )
 
             val parts = remember(info.title) {
