@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import kotlinx.coroutines.launch
 import kotlin.math.abs
 
@@ -134,7 +135,10 @@ private fun NumberRowAnimated(
             Box(
                 modifier = Modifier
                     .width(spacing)
-                    .clickable { onTap(idx) },
+                    .clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null
+                    ) { onTap(idx) },
                 contentAlignment = Alignment.Center
             ) {
                 Box(
