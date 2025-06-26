@@ -201,23 +201,11 @@ export default function FoodMenuScreen() {
                       outputRange: [1, 1.15],
                     }),
                   },
-                  {
-                    rotate: topIconAnim.interpolate({
-                      inputRange: [0, 1],
-                      outputRange: ['0deg', '-10deg'],
-                    }),
-                  },
+                  // keep the icon scale animation but avoid rotation/offset
                   {
                     translateY: topIconAnim.interpolate({
                       inputRange: [0, 1],
-                      outputRange: [0, -4],
-                    }),
-                  },
-                  {
-                    rotate: topIconAnim.interpolate({
-                      inputRange: [0, 1],
-                      outputRange: ['0deg', '-10deg'],
- 
+                      outputRange: [0, 0],
                     }),
                   },
                 ],
@@ -238,7 +226,8 @@ export default function FoodMenuScreen() {
               style={[
                 styles.mealBlock,
                 { backgroundColor: mealColors[idx % mealColors.length] },
-                status.ended && styles.mealBlockEnded,
+                // Keep original card color even after the meal ends
+                // status.ended && styles.mealBlockEnded,
               ]}
             >
               <View style={styles.mealHeader}>
@@ -313,6 +302,7 @@ export default function FoodMenuScreen() {
           );
         })}
         <TouchableOpacity style={styles.button} onPress={showSummary}>
+          <Ionicons name="fast-food" size={16} color="#fff" style={{ marginRight: 6 }} />
           <Text style={styles.buttonText}>Food Summary</Text>
         </TouchableOpacity>
       </ScrollView>
@@ -349,7 +339,7 @@ const styles = StyleSheet.create({
   },
   heading: {
     fontSize: 22,
-    fontWeight: '700',
+    fontWeight: 'bold',
     marginBottom: 4,
     textAlign: 'center',
   },
@@ -376,11 +366,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 2,
-  },
-  mealBlockEnded: {
-    // Use a lighter background instead of opacity so the text
-    // label doesn't show a white halo when the card is dimmed.
-    backgroundColor: '#ddd',
   },
   mealHeader: {
     flexDirection: 'row',
@@ -466,13 +451,16 @@ const styles = StyleSheet.create({
   },
   button: {
     marginTop: 20,
-    padding: 12,
+    paddingVertical: 10,
+    paddingHorizontal: 16,
     borderRadius: 8,
-    backgroundColor: '#ccc',
+    backgroundColor: '#007bff',
     alignItems: 'center',
+    flexDirection: 'row',
+    alignSelf: 'center',
   },
   buttonText: {
-    color: '#000',
+    color: '#fff',
     fontWeight: '600',
   },
   message: {
