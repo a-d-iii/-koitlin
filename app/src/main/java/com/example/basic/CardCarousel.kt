@@ -68,7 +68,8 @@ fun CardCarousel(
             state = pagerState,
             modifier = Modifier
                 .fillMaxSize()
-                .graphicsLayer { clip = false }
+                .graphicsLayer { clip = false },
+            beyondBoundsPageCount = 1
         ) { page ->
             Box(
                 modifier = Modifier.fillMaxSize(),
