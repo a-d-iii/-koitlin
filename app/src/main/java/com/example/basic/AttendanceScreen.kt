@@ -178,12 +178,16 @@ fun AttendanceScreen() {
                 .align(Alignment.BottomEnd)
                 .padding(24.dp)
                 .graphicsLayer {
-                    rotationZ = rotate.value * 360f
                     scaleX = scale.value
                     scaleY = scale.value
                 }
         ) {
-            Icon(imageVector = Icons.Default.Refresh, contentDescription = "Refresh", tint = Color(0xFF212121))
+            Icon(
+                imageVector = Icons.Default.Refresh,
+                contentDescription = "Refresh",
+                tint = Color(0xFF212121),
+                modifier = Modifier.graphicsLayer { rotationZ = rotate.value * 360f }
+            )
         }
     }
 }
