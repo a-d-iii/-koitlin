@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import {
   SafeAreaView,
   View,
@@ -8,6 +8,11 @@ import {
   TouchableOpacity,
   Platform,
   StatusBar,
+  Animated,
+  LayoutAnimation,
+  Dimensions,
+  UIManager,
+  Pressable,
   PanResponder,
   GestureResponderEvent,
   PanResponderGestureState,
@@ -16,10 +21,51 @@ import { WEEKLY_SCHEDULE, ClassEntry } from '../data/weeklySchedule';
 
 const DAYS = Object.keys(WEEKLY_SCHEDULE);
 
+const { width: SCREEN_WIDTH } = Dimensions.get('window');
+
+const AnimatedScrollView = Animated.createAnimatedComponent(ScrollView);
+
 export default function Planner() {
   const [index, setIndex] = useState<number>(0);
   const day = DAYS[index];
   const classes: ClassEntry[] = WEEKLY_SCHEDULE[day];
+
+  const slideAnim = useRef(new Animated.Value(0)).current;
+  const dayScale = useRef(new Animated.Value(1)).current;
+  const prevIndex = useRef(index);
+
+  useEffect(() => {
+    if (
+      Platform.OS === 'android' &&
+      UIManager.setLayoutAnimationEnabledExperimental
+    ) {
+      UIManager.setLayoutAnimationEnabledExperimental(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+    const dir = index > prevIndex.current ? 1 : -1;
+    slideAnim.setValue(dir * SCREEN_WIDTH);
+    Animated.timing(slideAnim, {
+      toValue: 0,
+      duration: 250,
+      useNativeDriver: true,
+    }).start();
+    Animated.sequence([
+      Animated.timing(dayScale, {
+        toValue: 1.15,
+        duration: 150,
+        useNativeDriver: true,
+      }),
+      Animated.spring(dayScale, {
+        toValue: 1,
+        friction: 3,
+        useNativeDriver: true,
+      }),
+    ]).start();
+    prevIndex.current = index;
+  }, [index]);
 
   const pan = useRef(
     PanResponder.create({
@@ -63,23 +109,32 @@ export default function Planner() {
           <TouchableOpacity
             key={d}
             onPress={() => setIndex(i)}
-            style={[styles.dayButton, day === d && styles.dayButtonActive]}
+            style={styles.dayButtonWrapper}
           >
-            <Text
-              style={[styles.dayText, day === d && styles.dayTextActive]}
+            <Animated.View
+              style={[
+                styles.dayButton,
+                day === d && styles.dayButtonActive,
+                day === d && { transform: [{ scale: dayScale }] },
+              ]}
             >
-              {d.slice(0, 3)}
-            </Text>
+              <Text
+                style={[styles.dayText, day === d && styles.dayTextActive]}
+              >
+                {d.slice(0, 3)}
+              </Text>
+            </Animated.View>
           </TouchableOpacity>
         ))}
       </ScrollView>
 
-      <ScrollView
+      <AnimatedScrollView
         contentContainerStyle={styles.scheduleContainer}
         {...pan.panHandlers}
+        style={{ transform: [{ translateX: slideAnim }] }}
       >
         {classes.map((cls, idx) => (
-          <View key={idx} style={styles.classBox}>
+          <Pressable key={idx} style={({ pressed }) => [styles.classBox, pressed && styles.classBoxPressed]}>
             <View style={styles.classLeft}>
               <Text style={styles.courseText}>{cls.course}</Text>
               <Text style={styles.facultyText}>{cls.faculty}</Text>
@@ -90,9 +145,9 @@ export default function Planner() {
               </Text>
               <Text style={styles.roomText}>{cls.room}</Text>
             </View>
-          </View>
+          </Pressable>
         ))}
-      </ScrollView>
+      </AnimatedScrollView>
     </SafeAreaView>
   );
 }
@@ -104,16 +159,17 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     marginVertical: 16,
     marginHorizontal: 16,
+    textAlign: 'center',
     color: '#333',
   },
   dayRow: {
     flexGrow: 0,
   },
+  dayButtonWrapper: { marginRight: 8 },
   dayButton: {
     paddingHorizontal: 12,
     paddingVertical: 8,
     borderRadius: 20,
-    marginRight: 8,
     backgroundColor: '#e0e0e0',
   },
   dayButtonActive: {
@@ -135,6 +191,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 0.5 },
     shadowRadius: 2,
   },
+  classBoxPressed: { opacity: 0.7 },
   classLeft: { flex: 1 },
   courseText: { fontSize: 14, fontWeight: '600', color: '#333' },
   facultyText: { fontSize: 12, color: '#666', marginTop: 2 },
