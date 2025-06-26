@@ -210,7 +210,14 @@ export default function FoodMenuScreen() {
                   {
                     translateY: topIconAnim.interpolate({
                       inputRange: [0, 1],
-                      outputRange: [0, 0], // keep icon vertically aligned
+                      outputRange: [0, -4],
+                    }),
+                  },
+                  {
+                    rotate: topIconAnim.interpolate({
+                      inputRange: [0, 1],
+                      outputRange: ['0deg', '-10deg'],
+ 
                     }),
                   },
                 ],
@@ -231,8 +238,7 @@ export default function FoodMenuScreen() {
               style={[
                 styles.mealBlock,
                 { backgroundColor: mealColors[idx % mealColors.length] },
-                // Keep original card color even after the meal ends
-                // status.ended && styles.mealBlockEnded,
+                status.ended && styles.mealBlockEnded,
               ]}
             >
               <View style={styles.mealHeader}>
@@ -343,7 +349,7 @@ const styles = StyleSheet.create({
   },
   heading: {
     fontSize: 22,
-    fontWeight: 'bold',
+    fontWeight: '700',
     marginBottom: 4,
     textAlign: 'center',
   },
@@ -370,6 +376,11 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 2,
+  },
+  mealBlockEnded: {
+    // Use a lighter background instead of opacity so the text
+    // label doesn't show a white halo when the card is dimmed.
+    backgroundColor: '#ddd',
   },
   mealHeader: {
     flexDirection: 'row',
@@ -455,16 +466,13 @@ const styles = StyleSheet.create({
   },
   button: {
     marginTop: 20,
-    paddingVertical: 10,
-    paddingHorizontal: 16,
+    padding: 12,
     borderRadius: 8,
-    backgroundColor: '#007bff',
+    backgroundColor: '#ccc',
     alignItems: 'center',
-    flexDirection: 'row',
-    alignSelf: 'center',
   },
   buttonText: {
-    color: '#fff',
+    color: '#000',
     fontWeight: '600',
   },
   message: {
