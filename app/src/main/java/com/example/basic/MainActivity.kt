@@ -86,7 +86,11 @@ fun BasicApp() {
                     .fillMaxSize(),
                 contentAlignment = Alignment.Center
             ) {
-                Text(text = stringResource(id = items[selectedIndex].labelRes))
+                if (selectedIndex == 2) {
+                    AttendanceScreen()
+                } else {
+                    Text(text = stringResource(id = items[selectedIndex].labelRes))
+                }
             }
         }
     }
