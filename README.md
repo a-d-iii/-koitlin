@@ -13,5 +13,9 @@ available on your system and then execute:
 ./gradlew assembleDebug
 ```
 
+The project now uses the Gradle plugin DSL and a modern plugin management
+configuration. This removes deprecation warnings that appeared with newer
+versions of Gradle.
+
 You can also open the project directory directly in Android Studio and run the
 app on an emulator from there.
