@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import {
   SafeAreaView,
   View,
@@ -6,6 +6,10 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
+  Animated,
+  useWindowDimensions,
+  LayoutAnimation,
+  Pressable,
   Platform,
   StatusBar,
   PanResponder,
@@ -20,6 +24,12 @@ export default function Planner() {
   const [index, setIndex] = useState<number>(0);
   const day = DAYS[index];
   const classes: ClassEntry[] = WEEKLY_SCHEDULE[day];
+
+  const { width: SCREEN_WIDTH } = useWindowDimensions();
+
+  const slideAnim = useRef(new Animated.Value(0)).current;
+  const dayScales = useRef(DAYS.map(() => new Animated.Value(1))).current;
+  const prevIndex = useRef(index);
 
   const pan = useRef(
     PanResponder.create({
@@ -44,6 +54,27 @@ export default function Planner() {
     })
   ).current;
 
+  useEffect(() => {
+    const direction = index >= prevIndex.current ? -1 : 1;
+    slideAnim.setValue(direction * SCREEN_WIDTH);
+    Animated.timing(slideAnim, {
+      toValue: 0,
+      duration: 250,
+      useNativeDriver: true,
+    }).start();
+
+    dayScales.forEach((v, i) => {
+      Animated.timing(v, {
+        toValue: i === index ? 1.1 : 1,
+        duration: 200,
+        useNativeDriver: true,
+      }).start();
+    });
+
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+    prevIndex.current = index;
+  }, [index, SCREEN_WIDTH, slideAnim, dayScales]);
+
   return (
     <SafeAreaView
       style={[
@@ -63,13 +94,21 @@ export default function Planner() {
           <TouchableOpacity
             key={d}
             onPress={() => setIndex(i)}
-            style={[styles.dayButton, day === d && styles.dayButtonActive]}
+            activeOpacity={0.8}
           >
-            <Text
-              style={[styles.dayText, day === d && styles.dayTextActive]}
+            <Animated.View
+              style={[
+                styles.dayButton,
+                day === d && styles.dayButtonActive,
+                { transform: [{ scale: dayScales[i] }] },
+              ]}
             >
-              {d.slice(0, 3)}
-            </Text>
+              <Text
+                style={[styles.dayText, day === d && styles.dayTextActive]}
+              >
+                {d.slice(0, 3)}
+              </Text>
+            </Animated.View>
           </TouchableOpacity>
         ))}
       </ScrollView>
@@ -78,20 +117,28 @@ export default function Planner() {
         contentContainerStyle={styles.scheduleContainer}
         {...pan.panHandlers}
       >
-        {classes.map((cls, idx) => (
-          <View key={idx} style={styles.classBox}>
-            <View style={styles.classLeft}>
-              <Text style={styles.courseText}>{cls.course}</Text>
-              <Text style={styles.facultyText}>{cls.faculty}</Text>
-            </View>
-            <View style={styles.classRight}>
-              <Text style={styles.timeText}>
-                {cls.start} – {cls.end}
-              </Text>
-              <Text style={styles.roomText}>{cls.room}</Text>
-            </View>
-          </View>
-        ))}
+        <Animated.View style={{ transform: [{ translateX: slideAnim }] }}>
+          {classes.map((cls, idx) => (
+            <Pressable
+              key={idx}
+              style={({ pressed }) => [
+                styles.classBox,
+                pressed && { opacity: 0.7, transform: [{ scale: 0.97 }] },
+              ]}
+            >
+              <View style={styles.classLeft}>
+                <Text style={styles.courseText}>{cls.course}</Text>
+                <Text style={styles.facultyText}>{cls.faculty}</Text>
+              </View>
+              <View style={styles.classRight}>
+                <Text style={styles.timeText}>
+                  {cls.start} – {cls.end}
+                </Text>
+                <Text style={styles.roomText}>{cls.room}</Text>
+              </View>
+            </Pressable>
+          ))}
+        </Animated.View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -103,7 +150,7 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: '700',
     marginVertical: 16,
-    marginHorizontal: 16,
+    textAlign: 'center',
     color: '#333',
   },
   dayRow: {
