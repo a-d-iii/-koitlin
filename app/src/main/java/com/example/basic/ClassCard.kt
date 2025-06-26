@@ -92,13 +92,13 @@ fun ClassCard(
                     cameraDistance = 8 * density.density
                     alpha = if (rotation <= 90f) 1f else 0f
                 }
+                .clip(RoundedCornerShape(20.dp))
                 .background(
                     Brush.linearGradient(
                         colors = gradientColors,
                         start = Offset.Zero,
                         end = Offset(cardW, cardH)
-                    ),
-                    shape = RoundedCornerShape(20.dp)
+                    )
                 )
         ) {
             BlobPattern(cardWidth, cardHeight)
@@ -197,13 +197,13 @@ fun ClassCard(
                     cameraDistance = 8 * density.density
                     alpha = if (rotation > 90f) 1f else 0f
                 }
+                .clip(RoundedCornerShape(20.dp))
                 .background(
                     Brush.linearGradient(
                         colors = gradientColors,
                         start = Offset.Zero,
                         end = Offset(cardW, cardH)
-                    ),
-                    shape = RoundedCornerShape(20.dp)
+                    )
                 )
         ) {
             BlobPattern(cardWidth, cardHeight)
