@@ -180,7 +180,12 @@ export default function CardCarousel({
   );
 }
 
-const NUMBER_TOP = (SCREEN_HEIGHT - CARD_HEIGHT) / 3 + CARD_HEIGHT + 20;
+// Position the page number row directly below the card carousel
+// Previously the row was pushed further down the screen using a
+// calculation based on the remaining screen height. To keep the
+// numbers visible but still underneath the cards, position it a
+// small offset below the card height.
+const NUMBER_TOP = CARD_HEIGHT + 20;
 
 const styles = StyleSheet.create({
   container: {
