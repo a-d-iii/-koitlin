@@ -27,10 +27,6 @@ export const CARD_HEIGHT = SCREEN_HEIGHT * 0.7;
 
 /** Number of raindrops */
 const RAINDROP_COUNT = 12;
-/** Base duration for extremely slow raindrops */
-const RAINDROP_BASE_DURATION = 30000; // 30 seconds
-/** Additional random duration variance */
-const RAINDROP_DURATION_VARIANCE = 20000; // up to 20s slower
 
 function isClassOver(timeRange: string) {
   const parts = timeRange.split('–').map((s) => s.trim());
@@ -319,8 +315,7 @@ function Raindrops() {
       anim: new Animated.Value(-Math.random() * CARD_HEIGHT),
       xPos: Math.random() * (CARD_WIDTH - 2) + 1,
       delay: Math.random() * 2000,
-      speed:
-        RAINDROP_BASE_DURATION + Math.random() * RAINDROP_DURATION_VARIANCE,
+      speed: 6000 + Math.random() * 4000,
     }))
   ).current;
 
@@ -336,9 +331,7 @@ function Raindrops() {
           useNativeDriver: true,
         }).start(({ finished }) => {
           if (finished) {
-            const newSpeed =
-              RAINDROP_BASE_DURATION +
-              Math.random() * RAINDROP_DURATION_VARIANCE;
+            const newSpeed = 6000 + Math.random() * 4000;
             const newDelay = Math.random() * 1200;
             anim.setValue(-20);
             Animated.timing(anim, {
