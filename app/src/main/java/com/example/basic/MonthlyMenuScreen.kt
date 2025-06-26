@@ -117,6 +117,8 @@ fun MonthlyMenuScreen(onBack: () -> Unit) {
 
     val weeks = remember(menu) { toWeeks(menu!!) }
     val today = remember { java.text.SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date()) }
+    var showWishlist by remember { mutableStateOf(false) }
+    val wishlistItems = likes.filter { it.value }.keys.toList()
 
     val listState = rememberLazyListState()
 
@@ -153,6 +155,15 @@ fun MonthlyMenuScreen(onBack: () -> Unit) {
                 },
                 navigationIcon = {
                     IconButton(onClick = onBack) { Icon(Icons.Default.ArrowBack, contentDescription = "Back") }
+                },
+                actions = {
+                    IconButton(onClick = { showWishlist = true }) {
+                        Icon(
+                            imageVector = Icons.Default.Favorite,
+                            contentDescription = "Wishlist",
+                            tint = if (wishlistItems.isNotEmpty()) Color.Red else LocalContentColor.current
+                        )
+                    }
                 }
             )
         }
@@ -188,6 +199,27 @@ fun MonthlyMenuScreen(onBack: () -> Unit) {
                 }
             }
         }
+    }
+
+    if (showWishlist) {
+        AlertDialog(
+            onDismissRequest = { showWishlist = false },
+            confirmButton = {
+                TextButton(onClick = { showWishlist = false }) { Text("Close") }
+            },
+            title = { Text("Wishlist") },
+            text = {
+                if (wishlistItems.isEmpty()) {
+                    Text("No favourites yet.")
+                } else {
+                    LazyColumn {
+                        items(wishlistItems) { item ->
+                            Text(item)
+                        }
+                    }
+                }
+            }
+        )
     }
 }
 
