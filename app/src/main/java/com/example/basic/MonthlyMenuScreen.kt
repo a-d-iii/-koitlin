@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
@@ -18,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.zIndex
 import androidx.compose.ui.unit.dp
 import org.json.JSONObject
 import java.util.*
@@ -116,31 +118,58 @@ fun MonthlyMenuScreen(onBack: () -> Unit) {
             )
         }
     ) { padding ->
-        LazyColumn(modifier = Modifier.padding(padding)) {
-            weeks.forEach { week ->
-                item {
-                    WeekHeader(title = week.title, color = week.color, dayColor = week.dayColor)
+        val listState = rememberLazyListState()
+        val currentWeek by remember(listState.firstVisibleItemIndex) {
+            derivedStateOf {
+                var index = 0
+                for (week in weeks) {
+                    val end = index + 1 + week.days.size
+                    if (listState.firstVisibleItemIndex < end) return@derivedStateOf week
+                    index = end
                 }
-                items(week.days) { day ->
-                    DayBlock(
-                        day = day,
-                        color = week.dayColor,
-                        isPast = day.date < today,
-                        first = day == week.days.first(),
-                        last = day == week.days.last(),
-                        likes = likes,
-                        toggleLike = { key -> likes[key] = !(likes[key] ?: false) }
-                    )
+                weeks.last()
+            }
+        }
+        Box {
+            LazyColumn(state = listState, modifier = Modifier.padding(padding)) {
+                weeks.forEach { week ->
+                    item {
+                        WeekHeader(title = week.title, color = week.color, dayColor = week.dayColor)
+                    }
+                    items(week.days) { day ->
+                        DayBlock(
+                            day = day,
+                            color = week.dayColor,
+                            isPast = day.date < today,
+                            first = day == week.days.first(),
+                            last = day == week.days.last(),
+                            likes = likes,
+                            toggleLike = { key -> likes[key] = !(likes[key] ?: false) }
+                        )
+                    }
                 }
             }
+            WeekHeader(
+                title = currentWeek.title,
+                color = currentWeek.color,
+                dayColor = currentWeek.dayColor,
+                modifier = Modifier
+                    .align(Alignment.TopCenter)
+                    .zIndex(1f)
+            )
         }
     }
 }
 
 @Composable
-private fun WeekHeader(title: String, color: Color, dayColor: Color) {
+private fun WeekHeader(
+    title: String,
+    color: Color,
+    dayColor: Color,
+    modifier: Modifier = Modifier
+) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .background(color)
             .padding(8.dp)
