@@ -174,7 +174,6 @@ const styles = StyleSheet.create({
   },
   carouselRegion: {
     flex: 1,
-    alignItems: 'center',
   },
   overlay: {
     ...StyleSheet.absoluteFillObject,

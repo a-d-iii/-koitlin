@@ -23,7 +23,7 @@ import useWeather from '../hooks/useWeather';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 export const CARD_WIDTH = SCREEN_WIDTH * 0.85;
-export const CARD_HEIGHT = SCREEN_HEIGHT * 0.75;
+export const CARD_HEIGHT = SCREEN_HEIGHT * 0.60;
 
 /** Number of raindrops */
 const RAINDROP_COUNT = 12;
@@ -315,7 +315,7 @@ function Raindrops() {
       anim: new Animated.Value(-Math.random() * CARD_HEIGHT),
       xPos: Math.random() * (CARD_WIDTH - 2) + 1,
       delay: Math.random() * 2000,
-      speed: 6000 + Math.random() * 4000,
+      speed: 1800 + Math.random() * 800,
     }))
   ).current;
 
@@ -331,7 +331,7 @@ function Raindrops() {
           useNativeDriver: true,
         }).start(({ finished }) => {
           if (finished) {
-            const newSpeed = 6000 + Math.random() * 4000;
+            const newSpeed = 1800 + Math.random() * 800;
             const newDelay = Math.random() * 1200;
             anim.setValue(-20);
             Animated.timing(anim, {
@@ -490,7 +490,6 @@ const styles = StyleSheet.create({
   contentContainer: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'flex-start',
     paddingHorizontal: 24,
     zIndex: 3,
   },
