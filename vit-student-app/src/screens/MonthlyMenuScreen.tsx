@@ -202,7 +202,7 @@ export default function MonthlyMenuScreen() {
         )}
         onScrollToIndexFailed={handleScrollToIndexFailed}
         SectionSeparatorComponent={() => <View style={{ height: 12 }} />}
-        stickySectionHeadersEnabled
+        stickySectionHeadersEnabled={false}
         contentContainerStyle={styles.listContent}
       />
     </SafeAreaView>
