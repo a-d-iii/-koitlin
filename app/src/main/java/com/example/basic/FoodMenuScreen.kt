@@ -217,15 +217,15 @@ private fun MealCard(
         else -> "Upcoming"
     }
     val ended = now.after(end.time)
+    val containerColor = if (ended) Color(0xFFDADADA) else background
     Card(
         shape = RoundedCornerShape(8.dp),
-        colors = CardDefaults.cardColors(containerColor = background),
+        colors = CardDefaults.cardColors(containerColor = containerColor),
         elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
         modifier = Modifier
             .fillMaxWidth()
             .height(110.dp)
             .shadow(6.dp, RoundedCornerShape(8.dp))
-            .graphicsLayer { this.alpha = if (ended) 0.6f else 1f }
     ) {
         Column(modifier = Modifier.padding(12.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
