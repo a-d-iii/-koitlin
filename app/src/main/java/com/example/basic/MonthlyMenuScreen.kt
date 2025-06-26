@@ -1,6 +1,7 @@
 package com.example.basic
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -24,6 +25,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.PathEffect
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.graphics.drawscope.Stroke
 import org.json.JSONObject
 import java.util.*
 
@@ -189,6 +195,7 @@ private fun WeekHeader(title: String, color: Color, modifier: Modifier = Modifie
     Box(
         modifier = modifier
             .fillMaxWidth()
+            .zIndex(1f)
             .clip(RoundedCornerShape(12.dp))
             .background(color)
             .padding(8.dp)
@@ -262,10 +269,31 @@ private fun DayBlock(
         }
     }
     if (showDivider) {
-        Divider(
-            thickness = 0.5.dp,
-            color = Color.LightGray,
+        DottedDivider(
+            color = Color(0xFF555555),
+            thickness = 1.dp,
             modifier = Modifier.fillMaxWidth()
+        )
+    }
+}
+
+@Composable
+private fun DottedDivider(
+    color: Color,
+    thickness: Dp,
+    modifier: Modifier = Modifier
+) {
+    val strokeWidth = with(LocalDensity.current) { thickness.toPx() }
+    Canvas(
+        modifier = modifier
+            .height(thickness)
+    ) {
+        drawLine(
+            color = color,
+            start = Offset(0f, size.height / 2),
+            end = Offset(size.width, size.height / 2),
+            strokeWidth = strokeWidth,
+            pathEffect = PathEffect.dashPathEffect(floatArrayOf(strokeWidth, strokeWidth))
         )
     }
 }
