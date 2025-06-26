@@ -23,7 +23,7 @@ import useWeather from '../hooks/useWeather';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 export const CARD_WIDTH = SCREEN_WIDTH * 0.85;
-export const CARD_HEIGHT = SCREEN_HEIGHT * 0.75;
+export const CARD_HEIGHT = SCREEN_HEIGHT * 0.7;
 
 /** Number of raindrops */
 const RAINDROP_COUNT = 12;
@@ -528,9 +528,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     paddingVertical: 16,
     borderRadius: 16,
-    borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.3)',
-
     backgroundColor: 'rgba(0,0,0,0.25)',
 
     zIndex: 3,
