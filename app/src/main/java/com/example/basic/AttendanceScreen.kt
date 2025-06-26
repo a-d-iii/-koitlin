@@ -88,7 +88,8 @@ private fun SubjectCard(item: Subject, isLab: Boolean) {
     Card(
         modifier = Modifier
             .padding(6.dp)
-            .height(130.dp)
+            // Shorten the card height a bit so the boxes take up less space
+            .height(110.dp)
             .graphicsLayer(scaleX = cardScale.value, scaleY = cardScale.value)
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
@@ -106,13 +107,15 @@ private fun SubjectCard(item: Subject, isLab: Boolean) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(8.dp)
+                // use a bit less vertical padding so the header has more room
+                .padding(horizontal = 8.dp, vertical = 4.dp)
         ) {
-            Column(modifier = Modifier.weight(0.4f)) {
+            // give the header a little more space to avoid clipping the code
+            Column(modifier = Modifier.weight(0.45f)) {
                 Text(text = item.name, fontSize = 18.sp, fontWeight = FontWeight.SemiBold, color = Color(0xFF212121))
                 Text(text = item.code, fontSize = 14.sp, color = Color(0xFF212121))
             }
-            Spacer(modifier = Modifier.weight(0.1f))
+            Spacer(modifier = Modifier.weight(0.05f))
             Row(
                 modifier = Modifier
                     .weight(0.5f)

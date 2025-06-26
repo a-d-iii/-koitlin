@@ -31,7 +31,9 @@ const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const CARD_MARGIN = 12;
  
 const CARD_WIDTH = (SCREEN_WIDTH - CARD_MARGIN * 3) / 2 - 8;
-const CARD_HEIGHT = 130;
+// Slightly reduce the height of each attendance card so they don't appear as
+// tall.
+const CARD_HEIGHT = 110;
  
 
 function getBackgroundColor(p: number): string {
@@ -163,10 +165,13 @@ const styles = StyleSheet.create({
     opacity: 0.8,
   },
   header: {
-    flex: 0.4,
+    // slightly increase the flex and reduce top padding so the course code
+    // text isn't clipped when the card height is shortened
+    flex: 0.45,
     justifyContent: 'center',
     paddingHorizontal: 8,
-    paddingTop: 12,
+    paddingTop: 8,
+    paddingBottom: 4,
   },
   subject: {
     fontSize: 18,
