@@ -219,10 +219,11 @@ private fun MealCard(
     Card(
         shape = RoundedCornerShape(8.dp),
         colors = CardDefaults.cardColors(containerColor = background),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
         modifier = Modifier
             .fillMaxWidth()
-            .heightIn(min = 130.dp)
+            .height(110.dp)
+            .shadow(6.dp, RoundedCornerShape(8.dp))
             .graphicsLayer { alpha = if (ended) 0.6f else 1f }
     ) {
         Column(modifier = Modifier.padding(12.dp)) {
@@ -253,9 +254,10 @@ private fun MealCard(
                     )
                     Spacer(Modifier.width(4.dp))
                     Text(text = if (ended) "Done" else status, style = MaterialTheme.typography.labelSmall, color = Color(0xFF333333))
-                    if (!ended && status == "Upcoming") {
+                    if (!ended) {
                         Spacer(Modifier.width(8.dp))
-                        val diff = start.timeInMillis - now.time
+                        val target = if (status == "Upcoming") start.timeInMillis else end.timeInMillis
+                        val diff = (target - now.time).coerceAtLeast(0)
                         val h = diff / 3600000
                         val m = (diff % 3600000) / 60000
                         val s = (diff % 60000) / 1000
@@ -318,7 +320,10 @@ fun RatingDialog(meal: Meal, onDismiss: () -> Unit, onSubmit: (Int) -> Unit) {
                             tint = Color.Red,
                             modifier = Modifier
                                 .size(32.dp)
-                                .clickable { rating = i }
+                                .clickable(
+                                    interactionSource = remember { MutableInteractionSource() },
+                                    indication = null
+                                ) { rating = i }
                         )
                     }
                 }
