@@ -84,9 +84,10 @@ private fun SubjectCard(item: Subject, isLab: Boolean) {
     Card(
         modifier = Modifier
             .padding(6.dp)
-            .height(150.dp),
+            .height(130.dp),
         colors = CardDefaults.cardColors(containerColor = backgroundColor(item.attendance)),
-        border = if (isLab) BorderStroke(2.dp, Color(0xFF757575)) else null
+        border = if (isLab) BorderStroke(2.dp, Color(0xFF757575)) else null,
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
         Column(
             modifier = Modifier
