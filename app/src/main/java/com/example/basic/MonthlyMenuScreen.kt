@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
@@ -18,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.zIndex
 import androidx.compose.ui.unit.dp
 import org.json.JSONObject
 import java.util.*
@@ -108,39 +110,78 @@ fun MonthlyMenuScreen(onBack: () -> Unit) {
 
     Scaffold(
         topBar = {
-            SmallTopAppBar(
+            TopAppBar(
                 title = { Text("Monthly Menu") },
                 navigationIcon = {
-                    IconButton(onClick = onBack) { Icon(Icons.Default.ArrowBack, contentDescription = "Back") }
+                    IconButton(onClick = onBack) {
+                        Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+                    }
                 }
             )
         }
     ) { padding ->
-        LazyColumn(modifier = Modifier.padding(padding)) {
-            weeks.forEach { week ->
-                item {
-                    WeekHeader(title = week.title, color = week.color, dayColor = week.dayColor)
+        val listState = rememberLazyListState()
+        val currentWeekIndex by remember {
+            derivedStateOf {
+                var index = 0
+                var count = 0
+                for (w in weeks) {
+                    if (listState.firstVisibleItemIndex < count + 1 + w.days.size) break
+                    count += 1 + w.days.size
+                    index++
                 }
-                items(week.days) { day ->
-                    DayBlock(
-                        day = day,
-                        color = week.dayColor,
-                        isPast = day.date < today,
-                        first = day == week.days.first(),
-                        last = day == week.days.last(),
-                        likes = likes,
-                        toggleLike = { key -> likes[key] = !(likes[key] ?: false) }
-                    )
+                index.coerceAtMost(weeks.lastIndex)
+            }
+        }
+
+        Box {
+            LazyColumn(state = listState, modifier = Modifier.padding(padding)) {
+                weeks.forEach { week ->
+                    item {
+                        WeekHeader(title = week.title, color = week.color)
+                    }
+                    items(week.days) { day ->
+                        DayBlock(
+                            day = day,
+                            color = week.dayColor,
+                            isPast = day.date < today,
+                            first = day == week.days.first(),
+                            last = day == week.days.last(),
+                            likes = likes,
+                            toggleLike = { key -> likes[key] = !(likes[key] ?: false) }
+                        )
+                    }
                 }
+            }
+
+            val visibleWeek = weeks[currentWeekIndex]
+            val showOverlay by remember {
+                derivedStateOf {
+                    listState.firstVisibleItemIndex > 0 || listState.firstVisibleItemScrollOffset > 0
+                }
+            }
+
+            if (showOverlay) {
+                WeekHeader(
+                    title = visibleWeek.title,
+                    color = visibleWeek.color,
+                    modifier = Modifier
+                        .align(Alignment.TopCenter)
+                        .zIndex(1f)
+                )
             }
         }
     }
 }
 
 @Composable
-private fun WeekHeader(title: String, color: Color, dayColor: Color) {
+private fun WeekHeader(
+    title: String,
+    color: Color,
+    modifier: Modifier = Modifier
+) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .background(color)
             .padding(8.dp)
