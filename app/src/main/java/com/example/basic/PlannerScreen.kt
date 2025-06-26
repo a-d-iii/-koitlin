@@ -39,7 +39,6 @@ fun PlannerScreen() {
     val days = WEEKLY_SCHEDULE.keys.toList()
     var dayIndex by remember { mutableStateOf(0) }
     var dragAmount by remember { mutableStateOf(0f) }
-    val classes by remember(dayIndex) { derivedStateOf { WEEKLY_SCHEDULE[days[dayIndex]].orEmpty() } }
 
     Column(
         modifier = Modifier
@@ -116,7 +115,8 @@ fun PlannerScreen() {
                 }
             },
             label = "classes"
-        ) {
+        ) { index ->
+            val classes = WEEKLY_SCHEDULE[days[index]].orEmpty()
             LazyColumn(
                 contentPadding = PaddingValues(horizontal = 16.dp, vertical = 4.dp)
             ) {
