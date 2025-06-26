@@ -31,7 +31,7 @@ android {
         compose true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion '1.5.10'
+        kotlinCompilerExtensionVersion '1.5.11'
     }
 }
 
@@ -45,7 +45,8 @@ dependencies {
     implementation 'androidx.compose.foundation:foundation'
     implementation 'androidx.compose.material3:material3'
     implementation 'androidx.compose.material:material-icons-extended'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'androidx.viewpager2:viewpager2:1.0.0'
+    implementation 'androidx.constraintlayout:constraintlayout-compose:1.0.1'
+    implementation 'com.google.accompanist:accompanist-pager:0.34.0'
+    implementation 'io.coil-kt:coil-compose:2.4.0'
     implementation 'com.google.android.material:material:1.11.0'
 }
