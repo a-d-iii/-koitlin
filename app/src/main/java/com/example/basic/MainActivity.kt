@@ -3,120 +3,16 @@ package com.example.basic
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material.icons.filled.CalendarToday
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.MoreHoriz
-import androidx.compose.material.icons.filled.Fastfood
-import androidx.compose.material.icons.outlined.CheckCircle
-import androidx.compose.material.icons.outlined.CalendarToday
-import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.MoreHoriz
-import androidx.compose.material.icons.outlined.Fastfood
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Icon
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.graphics.vector.ImageVector
-
-import com.example.basic.FoodMenuScreen
-import com.example.basic.FoodSummaryScreen
-import com.example.basic.PlannerScreen
-import com.example.basic.HomeScreen
-import com.example.basic.MonthlyMenuScreen
+import com.example.basic.navigation.AppNavHost
+import com.example.basic.ui.theme.VitStudentAppTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            BasicApp()
-        }
-    }
-}
-
-data class NavItem(
-    val labelRes: Int,
-    val selectedIcon: ImageVector,
-    val unselectedIcon: ImageVector
-)
-
-@Composable
-fun BasicApp() {
-    val items = listOf(
-        NavItem(R.string.home, Icons.Filled.Home, Icons.Outlined.Home),
-        NavItem(R.string.planner, Icons.Filled.CalendarToday, Icons.Outlined.CalendarToday),
-        NavItem(R.string.attendance, Icons.Filled.CheckCircle, Icons.Outlined.CheckCircle),
-        NavItem(R.string.food, Icons.Filled.Fastfood, Icons.Outlined.Fastfood),
-        NavItem(R.string.more, Icons.Filled.MoreHoriz, Icons.Outlined.MoreHoriz)
-    )
-    var selectedIndex by remember { mutableIntStateOf(0) }
-    var foodScreen by remember { mutableIntStateOf(0) } // 0 - menu, 1 - summary, 2 - month
-
-    MaterialTheme {
-        Scaffold(
-            bottomBar = {
-                NavigationBar {
-                    items.forEachIndexed { index, item ->
-                        NavigationBarItem(
-                            icon = {
-                                Icon(
-                                    imageVector = if (index == selectedIndex) item.selectedIcon else item.unselectedIcon,
-                                    contentDescription = stringResource(id = item.labelRes)
-                                )
-                            },
-                            label = { Text(stringResource(id = item.labelRes)) },
-                            selected = selectedIndex == index,
-                            onClick = { selectedIndex = index }
-                        )
-                    }
-                }
-            }
-        ) { innerPadding ->
-            Box(
-                modifier = Modifier
-                    .padding(innerPadding)
-                    .fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                when (selectedIndex) {
-                    0 -> HomeScreen()
-                    1 -> PlannerScreen()
-                    2 -> AttendanceScreen()
-                    3 -> {
-                        when (foodScreen) {
-                            0 -> FoodMenuScreen(
-                                onShowSummary = { foodScreen = 1 },
-                                onViewMonth = { foodScreen = 2 }
-                            )
-                            1 -> FoodSummaryScreen(onBack = { foodScreen = 0 })
-                            2 -> MonthlyMenuScreen(onBack = { foodScreen = 0 })
-                        }
-                    }
-                    else -> Text(text = stringResource(id = items[selectedIndex].labelRes))
-                }
+            VitStudentAppTheme {
+                AppNavHost()
             }
         }
     }
-}
-
-@Preview
-@Composable
-fun PreviewBasicApp() {
-    BasicApp()
 }
