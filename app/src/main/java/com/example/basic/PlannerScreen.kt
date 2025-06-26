@@ -4,8 +4,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -19,17 +20,36 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.input.pointer.pointerInput
 
 @Composable
 fun PlannerScreen() {
     val days = WEEKLY_SCHEDULE.keys.toList()
-    var day by remember { mutableStateOf(days.first()) }
+    var dayIndex by remember { mutableStateOf(0) }
+    val day = days[dayIndex]
     val classes = WEEKLY_SCHEDULE[day].orEmpty()
+    var dragAmount by remember { mutableStateOf(0f) }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(Color(0xFFF0F2F5))
+            .pointerInput(dayIndex) {
+                detectHorizontalDragGestures(
+                    onHorizontalDrag = { _, delta ->
+                        dragAmount += delta
+                    },
+                    onDragEnd = {
+                        if (dragAmount < -100 && dayIndex < days.lastIndex) {
+                            dayIndex++
+                        } else if (dragAmount > 100 && dayIndex > 0) {
+                            dayIndex--
+                        }
+                        dragAmount = 0f
+                    },
+                    onDragCancel = { dragAmount = 0f }
+                )
+            }
     ) {
         Text(
             text = "Weekly Timetable",
@@ -44,8 +64,8 @@ fun PlannerScreen() {
             modifier = Modifier.padding(bottom = 8.dp),
             contentPadding = PaddingValues(horizontal = 16.dp)
         ) {
-            items(days) { d ->
-                val selected = d == day
+            itemsIndexed(days) { i, d ->
+                val selected = i == dayIndex
                 Text(
                     text = d.take(3),
                     fontSize = 14.sp,
@@ -55,7 +75,7 @@ fun PlannerScreen() {
                         .padding(end = 8.dp)
                         .clip(RoundedCornerShape(20.dp))
                         .background(if (selected) Color(0xFF6C5CE7) else Color(0xFFE0E0E0))
-                        .clickable { day = d }
+                        .clickable { dayIndex = i }
                         .padding(horizontal = 12.dp, vertical = 8.dp)
                 )
             }
@@ -70,7 +90,7 @@ fun PlannerScreen() {
                         .fillMaxWidth()
                         .padding(vertical = 6.dp),
                     colors = CardDefaults.cardColors(containerColor = Color.White),
-                    elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
                     shape = RoundedCornerShape(12.dp)
                 ) {
                     Row(
