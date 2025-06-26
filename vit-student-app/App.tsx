@@ -91,9 +91,7 @@ function MainTabs() {
               : 'ellipsis-horizontal-outline';
           }
 
-          // Slightly enlarge the Home icon so it stands out on the main tab
-          const iconSize = route.name === 'Home' ? size + 4 : size;
-          return <Ionicons name={iconName} size={iconSize} color={color} />;
+          return <Ionicons name={iconName} size={size} color={color} />;
         },
         tabBarActiveTintColor: '#000000',
         tabBarInactiveTintColor: '#555555',
