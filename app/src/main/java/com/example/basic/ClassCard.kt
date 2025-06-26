@@ -19,7 +19,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -81,7 +80,7 @@ fun ClassCard(
             .width(cardWidth)
             .height(cardHeight)
             .padding(vertical = 16.dp)
-            .shadow(8.dp, RoundedCornerShape(20.dp), clip = true)
+ 
             .pointerInput(Unit) { detectTapGestures(onDoubleTap = { flipped = !flipped }) }
     ) {
         // FRONT
@@ -93,13 +92,13 @@ fun ClassCard(
                     cameraDistance = 8 * density.density
                     alpha = if (rotation <= 90f) 1f else 0f
                 }
-                .clip(RoundedCornerShape(20.dp))
                 .background(
                     Brush.linearGradient(
                         colors = gradientColors,
                         start = Offset.Zero,
                         end = Offset(cardW, cardH)
-                    )
+                    ),
+                    shape = RoundedCornerShape(20.dp)
                 )
         ) {
             BlobPattern(cardWidth, cardHeight)
@@ -198,13 +197,13 @@ fun ClassCard(
                     cameraDistance = 8 * density.density
                     alpha = if (rotation > 90f) 1f else 0f
                 }
-                .clip(RoundedCornerShape(20.dp))
                 .background(
                     Brush.linearGradient(
                         colors = gradientColors,
                         start = Offset.Zero,
                         end = Offset(cardW, cardH)
-                    )
+                    ),
+                    shape = RoundedCornerShape(20.dp)
                 )
         ) {
             BlobPattern(cardWidth, cardHeight)
