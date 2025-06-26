@@ -8,20 +8,11 @@ import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.items
-import androidx.compose.animation.*
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.animation.core.updateTransition
-import androidx.compose.animation.core.animateDp
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ScrollableTabRow
-import androidx.compose.material3.Tab
-import androidx.compose.material3.TabPosition
-import androidx.compose.material3.TabRowDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,11 +24,13 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.pointer.pointerInput
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PlannerScreen() {
     val days = WEEKLY_SCHEDULE.keys.toList()
     var dayIndex by remember { mutableStateOf(0) }
+    val day = days[dayIndex]
+    val classes = WEEKLY_SCHEDULE[day].orEmpty()
     var dragAmount by remember { mutableStateOf(0f) }
 
     Column(
@@ -70,62 +63,31 @@ fun PlannerScreen() {
                 .padding(vertical = 16.dp, horizontal = 16.dp)
         )
 
-        ScrollableTabRow(
-            selectedTabIndex = dayIndex,
+        LazyRow(
             modifier = Modifier.padding(bottom = 8.dp),
-            edgePadding = 16.dp,
-            containerColor = Color.Transparent,
-            divider = {},
-            indicator = { tabPositions ->
-                val transition = updateTransition(dayIndex, label = "day_indicator")
-                val left by transition.animateDp(label = "left") { tabPositions[it].left }
-                val right by transition.animateDp(label = "right") { tabPositions[it].right }
-
-                Box(
-                    Modifier
-                        .offset(x = left)
-                        .width(right - left)
-                        .fillMaxHeight()
-                        .padding(vertical = 4.dp)
-                        .clip(RoundedCornerShape(20.dp))
-                        .background(Color(0xFF6C5CE7))
-                )
-            }
+            contentPadding = PaddingValues(horizontal = 16.dp)
         ) {
-            days.forEachIndexed { i, d ->
-                Tab(
-                    selected = dayIndex == i,
-                    onClick = { dayIndex = i },
-                    selectedContentColor = Color.White,
-                    unselectedContentColor = Color(0xFF333333)
-                ) {
-                    Text(
-                        text = d.take(3),
-                        fontSize = 14.sp,
-                        fontWeight = if (dayIndex == i) FontWeight.Bold else FontWeight.Normal,
-                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp)
-                    )
-                }
+            itemsIndexed(days) { i, d ->
+                val selected = i == dayIndex
+                Text(
+                    text = d.take(3),
+                    fontSize = 14.sp,
+                    fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal,
+                    color = if (selected) Color.White else Color(0xFF333333),
+                    modifier = Modifier
+                        .padding(end = 8.dp)
+                        .clip(RoundedCornerShape(20.dp))
+                        .background(if (selected) Color(0xFF6C5CE7) else Color(0xFFE0E0E0))
+                        .clickable { dayIndex = i }
+                        .padding(horizontal = 12.dp, vertical = 8.dp)
+                )
             }
         }
 
-        AnimatedContent(
-            targetState = dayIndex,
-            transitionSpec = {
-                if (targetState > initialState) {
-                    slideInHorizontally(initialOffsetX = { it }) + fadeIn() with
-                            slideOutHorizontally(targetOffsetX = { -it }) + fadeOut()
-                } else {
-                    slideInHorizontally(initialOffsetX = { -it }) + fadeIn() with
-                            slideOutHorizontally(targetOffsetX = { it }) + fadeOut()
-                }
-            }
-        ) { index ->
-            val classes = WEEKLY_SCHEDULE[days[index]].orEmpty()
-            LazyColumn(
-                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 4.dp)
-            ) {
-                items(classes) { cls ->
+        LazyColumn(
+            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 4.dp)
+        ) {
+            items(classes) { cls ->
                 Card(
                     onClick = {},
                     modifier = Modifier
@@ -169,7 +131,6 @@ fun PlannerScreen() {
                             )
                         }
                     }
-                }
                 }
             }
         }
