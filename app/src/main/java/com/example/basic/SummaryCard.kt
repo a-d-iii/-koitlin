@@ -26,11 +26,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
-import androidx.compose.material3.Checkbox
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
@@ -80,19 +76,6 @@ private fun SectionHeader(title: String) {
         fontWeight = FontWeight.Bold,
         modifier = Modifier.padding(bottom = 8.dp)
     )
-}
-
-private enum class Priority(val label: String) { LOW("Low Priority"), MEDIUM("Medium Priority"), HIGH("High Priority") }
-
-private data class Task(
-    val title: String,
-    val details: String,
-    val priority: Priority,
-    val color: Color
-)
-
-private fun Color.darken(factor: Float = 0.8f): Color {
-    return Color(red * factor, green * factor, blue * factor, alpha)
 }
 
 @Composable
@@ -283,77 +266,21 @@ private fun MenuSection() {
 private fun TasksSection() {
     SectionHeader("Tasks & Reminders")
     val tasks = listOf(
-        Task(
-            title = "Finish report",
-            details = "Complete Q3 analysis",
-            priority = Priority.HIGH,
-            color = Color(0xFFFFCDD2)
-        ),
-        Task(
-            title = "Grocery shopping",
-            details = "Buy veggies and milk",
-            priority = Priority.LOW,
-            color = Color(0xFFC8E6C9)
-        ),
-        Task(
-            title = "Call plumber",
-            details = "Fix kitchen sink leak",
-            priority = Priority.MEDIUM,
-            color = Color(0xFFBBDEFB)
-        )
+        "Finish report" to "Complete Q3 analysis",
+        "Grocery shopping" to "Buy veggies and milk",
+        "Call plumber" to "Fix kitchen sink leak"
     )
-
-    tasks.forEach { task ->
-        var checked by remember { mutableStateOf(false) }
+    tasks.forEach { (title, details) ->
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 4.dp)
-                .height(72.dp),
-            colors = CardDefaults.cardColors(containerColor = task.color),
+                .padding(vertical = 4.dp),
+            colors = CardDefaults.cardColors(containerColor = Color.White),
             elevation = CardDefaults.cardElevation(1.dp)
         ) {
-            Box(Modifier.fillMaxSize()) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .padding(start = 8.dp, end = 8.dp)
-                ) {
-                    Checkbox(
-                        checked = checked,
-                        onCheckedChange = { checked = it }
-                    )
-                    Column(
-                        modifier = Modifier
-                            .weight(1f)
-                            .padding(start = 8.dp)
-                    ) {
-                        Text(
-                            task.title,
-                            fontWeight = FontWeight.SemiBold,
-                            textDecoration = if (checked) TextDecoration.LineThrough else TextDecoration.None
-                        )
-                        Text(
-                            task.details,
-                            fontSize = 12.sp,
-                            color = Color(0xFF666666),
-                            textDecoration = if (checked) TextDecoration.LineThrough else TextDecoration.None
-                        )
-                    }
-                }
-                Text(
-                    task.priority.label,
-                    fontSize = 10.sp,
-                    modifier = Modifier
-                        .align(Alignment.BottomStart)
-                        .padding(8.dp)
-                        .background(
-                            task.color.darken().copy(alpha = 0.6f),
-                            RoundedCornerShape(8.dp)
-                        )
-                        .padding(horizontal = 6.dp, vertical = 2.dp)
-                )
+            Column(modifier = Modifier.padding(12.dp)) {
+                Text(title, fontWeight = FontWeight.SemiBold)
+                Text(details, fontSize = 12.sp, color = Color(0xFF666666))
             }
         }
     }
