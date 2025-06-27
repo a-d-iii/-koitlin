@@ -27,6 +27,7 @@ import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Button
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -140,7 +141,7 @@ private fun SubjectCard(item: Subject, isLab: Boolean) {
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun AttendanceScreen() {
+fun AttendanceScreen(onShowDetails: () -> Unit = {}) {
     val rotate = remember { Animatable(0f) }
     val scale = remember { Animatable(1f) }
     val scope = rememberCoroutineScope()
@@ -162,6 +163,14 @@ fun AttendanceScreen() {
                     SubjectCard(item = item, isLab = index >= subjects.size - 4)
                 }
             }
+        }
+        Button(
+            onClick = onShowDetails,
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(bottom = 24.dp)
+        ) {
+            Text("More Details")
         }
         FloatingActionButton(
             onClick = {
