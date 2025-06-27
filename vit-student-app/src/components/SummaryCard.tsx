@@ -195,14 +195,12 @@ export default function SummaryCard() {
           />
           <View style={styles.topRow}>
             <View style={styles.iconDesc}>
-              <Ionicons name="cloud-outline" size={72} color="#fff"/>
-              <Text style={styles.descText}>Cloudy</Text>
+              <Ionicons name="cloudy-outline" size={64} color="#fff" />
+              <Text style={[styles.descText, styles.cloudyShift]}>Cloudy</Text>
             </View>
             <View style={styles.tempContainer}>
-              <Text style={styles.tempText}>25°</Text>
-              <Text style={[styles.feelsText,{transform:[{translateX:-10},{translateY:-10}]}]}>
-                Feels like 27°
-              </Text>
+              <Text style={[styles.tempText, styles.tempShift]}>25°</Text>
+              <Text style={[styles.feelsText, styles.feelsShift]}>Feels like 27°</Text>
             </View>
           </View>
           <View style={styles.bottomRow}>
@@ -409,6 +407,9 @@ const styles = StyleSheet.create({
   tempContainer: { alignItems:'flex-end' },
   tempText:      { color:'#fff', fontSize:52, fontWeight:'700' },
   feelsText:     { color:'#fff', fontSize:12, fontWeight:'700' },
+  tempShift:     { transform:[{translateX:10},{translateY:-10}] },
+  feelsShift:    { transform:[{translateX:10},{translateY:-10}] },
+  cloudyShift:   { transform:[{translateX:-8},{translateY:-10}] },
 
   bottomRow:     { flexDirection:'row', justifyContent:'space-around', paddingHorizontal:24 },
   infoBox:       { alignItems:'center' },
