@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -44,7 +44,9 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.sp
 
 @Composable
@@ -70,7 +72,7 @@ fun SummaryCard() {
             Spacer(Modifier.height(16.dp))
             TimetableSection()
             Spacer(Modifier.height(16.dp))
-            MenuSection()
+            MenuSection(contentPadding = 16.dp)
             Spacer(Modifier.height(16.dp))
             TasksSection()
             Spacer(Modifier.height(16.dp))
@@ -230,8 +232,13 @@ private fun TimetableSection() {
 }
 
 @Composable
-private fun MenuSection() {
+private fun MenuSection(contentPadding: Dp) {
     SectionHeader("Today's Menu")
+    val screenWidth = LocalConfiguration.current.screenWidthDp.dp
+    val cardWidth = screenWidth * 0.42f
+    val cardHeight = 120.dp
+    val spacing = (screenWidth - cardWidth * 2) / 3f
+    val rowPadding = (spacing - contentPadding).coerceAtLeast(0.dp)
     val meals = listOf(
         "Breakfast" to "Pancakes & Juice",
         "Lunch" to "Chicken Salad",
@@ -241,20 +248,25 @@ private fun MenuSection() {
     Column {
         meals.chunked(2).forEach { rowItems ->
             Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = rowPadding),
+                horizontalArrangement = Arrangement.spacedBy(spacing)
             ) {
                 rowItems.forEach { (label, menu) ->
                     Card(
                         modifier = Modifier
-                            .widthIn(max = 160.dp)
-                            .weight(1f, fill = false)
-                            .padding(4.dp),
+                            .width(cardWidth)
+                            .height(cardHeight)
+                            .padding(vertical = 8.dp),
+                        border = BorderStroke(1.dp, Color(0xFFE0E0E0)),
                         colors = CardDefaults.cardColors(containerColor = Color.White),
                         elevation = CardDefaults.cardElevation(1.dp)
                     ) {
                         Column(
-                            modifier = Modifier.padding(12.dp),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(12.dp),
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             Icon(
@@ -265,21 +277,23 @@ private fun MenuSection() {
                             Text(
                                 label,
                                 fontWeight = FontWeight.SemiBold,
-                                modifier = Modifier.padding(top = 4.dp)
+                                modifier = Modifier.padding(top = 4.dp),
+                                textAlign = TextAlign.Center
                             )
                             Text(
                                 menu,
                                 fontSize = 12.sp,
-                                modifier = Modifier.padding(top = 4.dp)
+                                modifier = Modifier.padding(top = 4.dp),
+                                textAlign = TextAlign.Center
                             )
                         }
                     }
                 }
                 if (rowItems.size == 1) Spacer(
                     modifier = Modifier
-                        .widthIn(max = 160.dp)
-                        .weight(1f, fill = false)
-                        .padding(4.dp)
+                        .width(cardWidth)
+                        .height(cardHeight)
+                        .padding(vertical = 8.dp)
                 )
             }
         }
