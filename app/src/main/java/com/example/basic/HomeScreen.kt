@@ -13,7 +13,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -36,22 +35,11 @@ fun HomeScreen() {
     var panel by remember { mutableStateOf(PanelState.None) }
     var activeIndex by remember { mutableStateOf(0) }
 
-    val config = LocalConfiguration.current
-    val headerHeight = config.screenHeightDp.dp * 0.1f
-
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(Color(0xFFF0F0F0))
     ) {
-        AnimatedVisibility(visible = activeIndex == 0) {
-            HomeHeader(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(headerHeight)
-            )
-        }
-
         Box(modifier = Modifier.weight(1f)) {
 
             CardCarousel(
@@ -207,7 +195,7 @@ private fun BottomPanel(onDismiss: () -> Unit) {
 }
 
 @Composable
-private fun HomeHeader(modifier: Modifier = Modifier) {
+fun HomeHeader(modifier: Modifier = Modifier) {
     val date = remember {
         LocalDate.now().format(DateTimeFormatter.ofPattern("EEEE, MMMM d, yyyy"))
     }
