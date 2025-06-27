@@ -218,15 +218,19 @@ private fun DaySelector(
                 val textColor = if (isSelected) Color.White else Color.LightGray
                 val bgColor = if (isSelected) Color(0xFF1E88E5) else Color.Transparent
                 val shape = RoundedCornerShape(topStart = 0.dp, topEnd = 0.dp, bottomStart = 12.dp, bottomEnd = 12.dp)
+ 
                 // Offset the highlight downward so it extends below the bar
                 val highlightOverlap = if (isSelected) 16.dp else 0.dp
+ 
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier
                         .padding(bottom = highlightOverlap)
+ 
                         .shadow(if (isSelected) 8.dp else 0.dp, shape)
                         .clip(shape)
                         .background(bgColor, shape)
+ 
                         .clickable { onSelect(index) }
                         .padding(horizontal = 12.dp, vertical = 4.dp)
                         .align(Alignment.Top)
