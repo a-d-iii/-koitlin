@@ -218,17 +218,14 @@ private fun DaySelector(
                 val textColor = if (isSelected) Color.White else Color.LightGray
                 val bgColor = if (isSelected) Color(0xFF1E88E5) else Color.Transparent
                 val shape = RoundedCornerShape(12.dp)
-                val highlightOffset = if (isSelected) 6.dp else 0.dp
                 Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier
-                        .offset(y = highlightOffset)
-                        .clip(shape)
-                        .clickable { onSelect(index) }
-                        .background(bgColor)
-                        .padding(horizontal = 12.dp, vertical = 4.dp)
-                        .padding(bottom = highlightOffset)
-                        .shadow(if (isSelected) 4.dp else 0.dp, shape)
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .clip(shape)
+                    .clickable { onSelect(index) }
+                    .background(bgColor)
+                    .padding(horizontal = 12.dp, vertical = 4.dp)
+                    .shadow(if (isSelected) 4.dp else 0.dp, shape)
             ) {
                 Text(
                     day.date.dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.getDefault()),
@@ -347,8 +344,7 @@ private fun EventCard(event: ClassEvent) {
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp)
-            .height(80.dp)
+            .padding(vertical = 4.dp)
     ) {
         Row(
             modifier = Modifier
