@@ -15,6 +15,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.border
+import androidx.compose.foundation.indication
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -26,7 +30,14 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
@@ -76,6 +87,19 @@ private fun SectionHeader(title: String) {
         fontWeight = FontWeight.Bold,
         modifier = Modifier.padding(bottom = 8.dp)
     )
+}
+
+private enum class Priority(val label: String) { LOW("Low Priority"), MEDIUM("Medium Priority"), HIGH("High Priority") }
+
+private data class Task(
+    val title: String,
+    val details: String,
+    val priority: Priority,
+    val color: Color
+)
+
+private fun Color.darken(factor: Float = 0.8f): Color {
+    return Color(red * factor, green * factor, blue * factor, alpha)
 }
 
 @Composable
@@ -266,21 +290,97 @@ private fun MenuSection() {
 private fun TasksSection() {
     SectionHeader("Tasks & Reminders")
     val tasks = listOf(
-        "Finish report" to "Complete Q3 analysis",
-        "Grocery shopping" to "Buy veggies and milk",
-        "Call plumber" to "Fix kitchen sink leak"
+        Task(
+            title = "Finish report",
+            details = "Complete Q3 analysis",
+            priority = Priority.HIGH,
+            color = Color(0xFFFFCDD2)
+        ),
+        Task(
+            title = "Grocery shopping",
+            details = "Buy veggies and milk",
+            priority = Priority.LOW,
+            color = Color(0xFFC8E6C9)
+        ),
+        Task(
+            title = "Call plumber",
+            details = "Fix kitchen sink leak",
+            priority = Priority.MEDIUM,
+            color = Color(0xFFBBDEFB)
+        )
     )
-    tasks.forEach { (title, details) ->
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 4.dp),
-            colors = CardDefaults.cardColors(containerColor = Color.White),
-            elevation = CardDefaults.cardElevation(1.dp)
-        ) {
-            Column(modifier = Modifier.padding(12.dp)) {
-                Text(title, fontWeight = FontWeight.SemiBold)
-                Text(details, fontSize = 12.sp, color = Color(0xFF666666))
+
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        tasks.forEach { task ->
+            var checked by remember { mutableStateOf(false) }
+            val accent = task.color.darken()
+            val interaction = remember { MutableInteractionSource() }
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth(0.9f)
+                    .align(Alignment.CenterHorizontally)
+                    .padding(vertical = 4.dp)
+                    .height(96.dp),
+                colors = CardDefaults.cardColors(containerColor = task.color),
+                elevation = CardDefaults.cardElevation(4.dp)
+            ) {
+                Box(Modifier.fillMaxSize()) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .width(6.dp)
+                            .background(accent)
+                            .align(Alignment.CenterStart)
+                    )
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .padding(start = 14.dp, end = 8.dp)
+                    ) {
+                        Checkbox(
+                            checked = checked,
+                            onCheckedChange = { checked = it },
+                            interactionSource = interaction,
+                            modifier = Modifier.indication(interaction, null),
+                            colors = CheckboxDefaults.colors(
+                                checkedColor = accent,
+                                uncheckedColor = accent,
+                                checkmarkColor = Color.White
+                            )
+                        )
+                        Column(
+                            modifier = Modifier
+                                .weight(1f)
+                                .padding(start = 8.dp)
+                        ) {
+                            Text(
+                                task.title,
+                                fontWeight = FontWeight.SemiBold,
+                                textDecoration = if (checked) TextDecoration.LineThrough else TextDecoration.None
+                            )
+                            Text(
+                                task.details,
+                                fontSize = 12.sp,
+                                color = Color(0xFF666666),
+                                textDecoration = if (checked) TextDecoration.LineThrough else TextDecoration.None
+                            )
+                        }
+                    }
+                    Text(
+                        task.priority.label,
+                        fontSize = 10.sp,
+                        color = accent,
+                        modifier = Modifier
+                            .align(Alignment.BottomEnd)
+                            .padding(8.dp)
+                            .border(1.dp, accent, RoundedCornerShape(8.dp))
+                            .padding(horizontal = 6.dp, vertical = 2.dp)
+                    )
+                }
             }
         }
     }
