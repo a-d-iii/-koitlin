@@ -229,7 +229,7 @@ private fun DaySelector(
         ) {
             itemsIndexed(days) { index, day ->
                 val isSelected = index == selected
-                val textColor = if (isSelected) Color.White else Color.LightGray
+                val textColor = if (isSelected) Color.White else Color.Black
                 val bgColor = if (isSelected) Color(0xFF1E88E5) else Color.Transparent
                 val shape = RoundedCornerShape(topStart = 0.dp, topEnd = 0.dp, bottomStart = 12.dp, bottomEnd = 12.dp)
  
