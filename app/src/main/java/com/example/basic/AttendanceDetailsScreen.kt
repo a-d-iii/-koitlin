@@ -216,10 +216,10 @@ private fun DaySelector(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(52.dp + extraSpace)
+                .height(52.dp)
                 .padding(start = 16.dp, end = 16.dp)
                 .align(Alignment.TopStart),
-            verticalAlignment = Alignment.Top
+            verticalAlignment = Alignment.CenterVertically
         ) {
         Text(
             month,
@@ -251,7 +251,7 @@ private fun DaySelector(
  
                         .clickable { onSelect(index) }
                         .padding(horizontal = 12.dp, vertical = 4.dp)
-                        .align(Alignment.Top)
+                        .align(Alignment.CenterVertically)
                 ) {
                 Text(
                     day.date.dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.getDefault()),
@@ -262,7 +262,8 @@ private fun DaySelector(
                 Text(
                     day.date.dayOfMonth.toString(),
                     color = textColor,
-                    fontSize = 12.sp
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Bold
                 )
             }
         }
