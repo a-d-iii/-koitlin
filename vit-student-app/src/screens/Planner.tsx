@@ -1,4 +1,5 @@
 import React, { useRef, useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
 import {
   SafeAreaView,
   View,
@@ -20,6 +21,7 @@ export default function Planner() {
   const [index, setIndex] = useState<number>(0);
   const day = DAYS[index];
   const classes: ClassEntry[] = WEEKLY_SCHEDULE[day];
+  const navigation = useNavigation();
 
   const pan = useRef(
     PanResponder.create({
@@ -97,6 +99,13 @@ export default function Planner() {
           </TouchableOpacity>
         ))}
       </ScrollView>
+
+      <TouchableOpacity
+        style={styles.calenderButton}
+        onPress={() => navigation.navigate('CalenderScreen' as never)}
+      >
+        <Text style={styles.calenderButtonText}>Open Calender</Text>
+      </TouchableOpacity>
     </SafeAreaView>
   );
 }
@@ -146,4 +155,12 @@ const styles = StyleSheet.create({
   classRight: { justifyContent: 'space-between', alignItems: 'flex-end' },
   timeText: { fontSize: 12, color: '#333' },
   roomText: { fontSize: 10, color: '#666', marginTop: 2 },
+  calenderButton: {
+    margin: 16,
+    paddingVertical: 12,
+    borderRadius: 8,
+    backgroundColor: '#6C5CE7',
+    alignItems: 'center',
+  },
+  calenderButtonText: { color: '#fff', fontWeight: '600' },
 });
