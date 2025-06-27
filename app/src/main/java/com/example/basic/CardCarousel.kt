@@ -41,10 +41,11 @@ fun CardCarousel(
     // Calculate vertical offset for the number row so it sits just under the cards
     val config = LocalConfiguration.current
     val screenHeight = config.screenHeightDp.dp
+    val headerHeight = screenHeight * 0.1f
+    val carouselHeight = screenHeight - headerHeight
     val cardHeight = screenHeight * 0.7f
-    // Position the number row closer to the cards and above the navigation bar
-    val bottomBarHeight = 80.dp
-    val numberTop = (screenHeight - cardHeight) / 3f + cardHeight - bottomBarHeight - 10.dp
+    // Position the number row just below the cards when they are centered.
+    val numberTop = (carouselHeight - cardHeight) / 2f + cardHeight + 4.dp
 
     LaunchedEffect(pagerState.currentPage) {
         onIndexChange?.invoke(pagerState.currentPage)
