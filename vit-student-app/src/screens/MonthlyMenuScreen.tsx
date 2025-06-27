@@ -266,14 +266,7 @@ const styles = StyleSheet.create({
   },
   mealActions: { flexDirection: 'row' },
   iconButton: { marginLeft: 8 },
-  mealTitle: {
-    fontWeight: '600',
-    color: '#fff',
-    backgroundColor: '#333',
-    paddingHorizontal: 8,
-    paddingVertical: 2,
-    borderRadius: 12,
-  },
+  mealTitle: { fontWeight: '600' },
   mealItems: { color: '#555' },
   pastDay: { opacity: 0.5 },
 });
