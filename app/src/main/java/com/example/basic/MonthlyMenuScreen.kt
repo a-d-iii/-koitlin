@@ -137,6 +137,21 @@ fun MonthlyMenuScreen(onBack: () -> Unit) {
     val weeks = remember(menu) { toWeeks(menu!!) }
     val listState = rememberLazyListState()
 
+    LaunchedEffect(weeks) {
+        val today = LocalDate.now().format(dateFormatter)
+        var index = 0
+        for (week in weeks) {
+            index += 1 // account for header
+            val dayIdx = week.days.indexOfFirst { it.date == today }
+            if (dayIdx >= 0) {
+                index += dayIdx
+                listState.scrollToItem(index)
+                break
+            }
+            index += week.days.size
+        }
+    }
+
 
     Scaffold(
         topBar = {
