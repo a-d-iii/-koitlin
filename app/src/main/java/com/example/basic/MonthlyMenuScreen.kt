@@ -3,11 +3,15 @@ package com.example.basic
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -22,6 +26,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import org.json.JSONObject
 import java.util.*
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.format.TextStyle
 
 
 typealias MonthlyMenu = Map<String, List<Meal>>
@@ -80,11 +87,21 @@ private fun toWeeks(menu: MonthlyMenu): List<WeekSection> {
     return weeks
 }
 
+private val dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+
+private fun dayLabel(date: String): String {
+    val ld = LocalDate.parse(date, dateFormatter)
+    val day = ld.dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.getDefault())
+    return "$day, $date"
+}
+
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun MonthlyMenuScreen(onBack: () -> Unit) {
     val context = LocalContext.current
     var menu by remember { mutableStateOf<MonthlyMenu?>(null) }
+    var wishlist by remember { mutableStateOf(setOf<String>()) }
+    var showWishlist by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         val res = context.resources
@@ -116,6 +133,15 @@ fun MonthlyMenuScreen(onBack: () -> Unit) {
                 },
                 navigationIcon = {
                     IconButton(onClick = onBack) { Icon(Icons.Default.ArrowBack, contentDescription = "Back") }
+                },
+                actions = {
+                    IconButton(onClick = { showWishlist = true }) {
+                        Icon(
+                            imageVector = Icons.Default.Favorite,
+                            contentDescription = "Wishlist",
+                            tint = Color.Red
+                        )
+                    }
                 }
             )
         }
@@ -131,10 +157,34 @@ fun MonthlyMenuScreen(onBack: () -> Unit) {
             weeks.forEach { week ->
                 stickyHeader { WeekHeader(week.title) }
                 items(week.days) { day ->
-                    DayCard(day)
+                    DayCard(
+                        day = day,
+                        liked = wishlist.contains(day.date),
+                        onLike = {
+                            wishlist = if (wishlist.contains(day.date)) wishlist - day.date else wishlist + day.date
+                        },
+                        onAdd = {}
+                    )
                 }
             }
         }
+    }
+
+    if (showWishlist) {
+        AlertDialog(
+            onDismissRequest = { showWishlist = false },
+            confirmButton = {
+                TextButton(onClick = { showWishlist = false }) { Text("Close") }
+            },
+            title = { Text("Wishlist") },
+            text = {
+                if (wishlist.isEmpty()) {
+                    Text("No items yet")
+                } else {
+                    Column { wishlist.forEach { Text(it) } }
+                }
+            }
+        )
     }
 }
 
@@ -160,7 +210,12 @@ private fun WeekHeader(title: String) {
 }
 
 @Composable
-private fun DayCard(day: DayData) {
+private fun DayCard(
+    day: DayData,
+    liked: Boolean,
+    onLike: () -> Unit,
+    onAdd: () -> Unit
+) {
     Card(
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
@@ -169,7 +224,33 @@ private fun DayCard(day: DayData) {
             .padding(vertical = 8.dp)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Text(day.date, fontWeight = FontWeight.Bold)
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(
+                    dayLabel(day.date),
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White,
+                    modifier = Modifier
+                        .background(Color(0xFF333333), RoundedCornerShape(12.dp))
+                        .padding(horizontal = 8.dp, vertical = 4.dp)
+                )
+                Spacer(Modifier.weight(1f))
+                Icon(
+                    imageVector = if (liked) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
+                    contentDescription = "Wishlist",
+                    tint = if (liked) Color.Red else Color.Black,
+                    modifier = Modifier
+                        .size(20.dp)
+                        .clickable { onLike() }
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = "Add",
+                    modifier = Modifier
+                        .size(20.dp)
+                        .clickable { onAdd() }
+                )
+            }
             Spacer(Modifier.height(8.dp))
             day.meals.forEachIndexed { index, meal ->
                 Text(meal.name, fontWeight = FontWeight.SemiBold)
