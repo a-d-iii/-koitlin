@@ -195,7 +195,7 @@ export default function SummaryCard() {
           />
           <View style={styles.topRow}>
             <View style={styles.iconDesc}>
-              <Ionicons name="cloudy-outline" size={64} color="#fff" />
+              <Ionicons name="cloudy" size={64} color="#fff" />
               <Text style={[styles.descText, styles.cloudyShift]}>Cloudy</Text>
             </View>
             <View style={styles.tempContainer}>
@@ -407,9 +407,9 @@ const styles = StyleSheet.create({
   tempContainer: { alignItems:'flex-end' },
   tempText:      { color:'#fff', fontSize:52, fontWeight:'700' },
   feelsText:     { color:'#fff', fontSize:12, fontWeight:'700' },
-  tempShift:     { transform:[{translateX:10},{translateY:-10}] },
-  feelsShift:    { transform:[{translateX:10},{translateY:-10}] },
-  cloudyShift:   { transform:[{translateX:-8},{translateY:-10}] },
+  tempShift:     { transform:[{translateX:10},{translateY:-15}] },
+  feelsShift:    { transform:[{translateX:10},{translateY:-15}] },
+  cloudyShift:   { transform:[{translateX:-8},{translateY:-15}] },
 
   bottomRow:     { flexDirection:'row', justifyContent:'space-around', paddingHorizontal:24 },
   infoBox:       { alignItems:'center' },
