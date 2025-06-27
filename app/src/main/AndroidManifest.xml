@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.basic">
-    <!-- Allow the app to make network requests for APIs and images -->
+    <!-- Permission required for network access -->
     <uses-permission android:name="android.permission.INTERNET" />
     <application
         android:allowBackup="true"
