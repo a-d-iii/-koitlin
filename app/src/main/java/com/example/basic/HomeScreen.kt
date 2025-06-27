@@ -44,16 +44,12 @@ fun HomeScreen() {
             .fillMaxSize()
             .background(Color(0xFFF0F0F0))
     ) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(headerHeight)
-        ) {
-            androidx.compose.animation.AnimatedVisibility(visible = activeIndex == 0) {
-                HomeHeader(
-                    modifier = Modifier.fillMaxSize()
-                )
-            }
+        AnimatedVisibility(visible = activeIndex == 0) {
+            HomeHeader(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(headerHeight)
+            )
         }
 
         Box(modifier = Modifier.weight(1f)) {
