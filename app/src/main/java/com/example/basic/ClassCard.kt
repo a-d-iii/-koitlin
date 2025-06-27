@@ -147,7 +147,9 @@ fun ClassCard(
                 fontWeight = FontWeight.SemiBold,
                 modifier = Modifier
                     .align(Alignment.TopEnd)
-                    .padding(top = 68.dp, end = 24.dp)
+                    // Shift the location text slightly down so it doesn't
+                    // overlap with the weather information
+                    .padding(top = 84.dp, end = 24.dp)
             )
 
             val parts by remember(info.title) {

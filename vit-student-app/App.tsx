@@ -84,7 +84,8 @@ function MainTabs() {
           } else if (route.name === 'Attendance') {
             iconName = focused ? 'checkmark-circle' : 'checkmark-circle-outline';
           } else if (route.name === 'Food') {
-            iconName = focused ? 'fast-food' : 'fast-food-outline';
+            // Use a pizza icon which fills when focused
+            iconName = focused ? 'pizza' : 'pizza-outline';
           } else if (route.name === 'More') {
             iconName = focused
               ? 'ellipsis-horizontal-sharp'
