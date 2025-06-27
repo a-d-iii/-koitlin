@@ -2,6 +2,7 @@ package com.example.basic
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.lazy.LazyColumn
@@ -36,6 +37,20 @@ typealias MonthlyMenu = Map<String, List<Meal>>
 data class DayData(val date: String, val meals: List<Meal>)
 
 data class WeekSection(val title: String, val color: Color, val dayColor: Color, val days: List<DayData>)
+
+private val WEEK_COLORS = listOf(
+    Color(0xFFF0E4D7),
+    Color(0xFFE7F0D7),
+    Color(0xFFD7E8F0),
+    Color(0xFFF0D7E8)
+)
+
+private val DAY_COLORS = listOf(
+    Color(0xFFE5D7CB),
+    Color(0xFFDCE5CB),
+    Color(0xFFCBDCE5),
+    Color(0xFFE5CBDC)
+)
 
 private fun parseMonthlyMenu(json: String): MonthlyMenu {
     val obj = JSONObject(json)
@@ -74,11 +89,12 @@ private fun toWeeks(menu: MonthlyMenu): List<WeekSection> {
     var i = 0
     while (i < dates.size) {
         val slice = dates.subList(i, kotlin.math.min(i + 7, dates.size))
+        val index = weeks.size
         weeks.add(
             WeekSection(
-                title = "Week ${weeks.size + 1}",
-                color = Color.White,
-                dayColor = Color.White,
+                title = "Week ${index + 1}",
+                color = WEEK_COLORS[index % WEEK_COLORS.size],
+                dayColor = DAY_COLORS[index % DAY_COLORS.size],
                 days = slice.map { DayData(it, menu[it]!!) }
             )
         )
@@ -100,6 +116,7 @@ private fun dayLabel(date: String): String {
 fun MonthlyMenuScreen(onBack: () -> Unit) {
     val context = LocalContext.current
     var menu by remember { mutableStateOf<MonthlyMenu?>(null) }
+    // Store wishlist entries by unique meal key "date-name"
     var wishlist by remember { mutableStateOf(setOf<String>()) }
     var showWishlist by remember { mutableStateOf(false) }
 
@@ -119,6 +136,7 @@ fun MonthlyMenuScreen(onBack: () -> Unit) {
 
     val weeks = remember(menu) { toWeeks(menu!!) }
     val listState = rememberLazyListState()
+
 
     Scaffold(
         topBar = {
@@ -150,18 +168,24 @@ fun MonthlyMenuScreen(onBack: () -> Unit) {
             state = listState,
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color(0xFFFFEDEE))
+                .background(Color.White)
                 .padding(padding),
             contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
         ) {
             weeks.forEach { week ->
-                stickyHeader { WeekHeader(week.title) }
+                stickyHeader {
+                    WeekHeader(
+                        title = week.title,
+                        color = week.dayColor
+                    )
+                }
                 items(week.days) { day ->
                     DayCard(
                         day = day,
-                        liked = wishlist.contains(day.date),
-                        onLike = {
-                            wishlist = if (wishlist.contains(day.date)) wishlist - day.date else wishlist + day.date
+                        wishlist = wishlist,
+                        background = week.dayColor,
+                        onToggleLike = { key ->
+                            wishlist = if (wishlist.contains(key)) wishlist - key else wishlist + key
                         },
                         onAdd = {}
                     )
@@ -189,18 +213,22 @@ fun MonthlyMenuScreen(onBack: () -> Unit) {
 }
 
 @Composable
-private fun WeekHeader(title: String) {
+private fun WeekHeader(
+    title: String,
+    color: Color
+) {
+    val shape = RoundedCornerShape(50.dp)
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .background(Color(0xFFFFEDEE))
             .padding(vertical = 8.dp)
             .zIndex(1f)
     ) {
         Box(
             modifier = Modifier
                 .align(Alignment.Center)
-                .clip(RoundedCornerShape(50))
+                .clip(shape)
+                .border(2.dp, color, shape)
                 .background(Color.White)
                 .padding(horizontal = 24.dp, vertical = 8.dp)
         ) {
@@ -212,13 +240,14 @@ private fun WeekHeader(title: String) {
 @Composable
 private fun DayCard(
     day: DayData,
-    liked: Boolean,
-    onLike: () -> Unit,
-    onAdd: () -> Unit
+    wishlist: Set<String>,
+    background: Color,
+    onToggleLike: (String) -> Unit,
+    onAdd: (String) -> Unit
 ) {
     Card(
         shape = RoundedCornerShape(12.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
+        colors = CardDefaults.cardColors(containerColor = background),
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp)
@@ -233,27 +262,31 @@ private fun DayCard(
                         .background(Color(0xFF333333), RoundedCornerShape(12.dp))
                         .padding(horizontal = 8.dp, vertical = 4.dp)
                 )
-                Spacer(Modifier.weight(1f))
-                Icon(
-                    imageVector = if (liked) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
-                    contentDescription = "Wishlist",
-                    tint = if (liked) Color.Red else Color.Black,
-                    modifier = Modifier
-                        .size(20.dp)
-                        .clickable { onLike() }
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                Icon(
-                    imageVector = Icons.Default.Add,
-                    contentDescription = "Add",
-                    modifier = Modifier
-                        .size(20.dp)
-                        .clickable { onAdd() }
-                )
             }
             Spacer(Modifier.height(8.dp))
             day.meals.forEachIndexed { index, meal ->
-                Text(meal.name, fontWeight = FontWeight.SemiBold)
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(meal.name, fontWeight = FontWeight.SemiBold)
+                    Spacer(Modifier.weight(1f))
+                    val key = "${day.date}-${meal.name}"
+                    val liked = wishlist.contains(key)
+                    Icon(
+                        imageVector = if (liked) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
+                        contentDescription = "Wishlist",
+                        tint = if (liked) Color.Red else Color.Black,
+                        modifier = Modifier
+                            .size(20.dp)
+                            .clickable { onToggleLike(key) }
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Icon(
+                        imageVector = Icons.Default.Add,
+                        contentDescription = "Add",
+                        modifier = Modifier
+                            .size(20.dp)
+                            .clickable { onAdd(key) }
+                    )
+                }
                 Text(meal.items.joinToString(", "), style = MaterialTheme.typography.bodySmall)
                 if (index != day.meals.lastIndex) Spacer(Modifier.height(8.dp))
             }
