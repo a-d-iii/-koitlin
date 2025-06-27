@@ -30,6 +30,7 @@ import com.example.basic.AttendanceScreen
 import com.example.basic.FoodMenuScreen
 import com.example.basic.FoodSummaryScreen
 import com.example.basic.MonthlyMenuScreen
+import com.example.basic.AttendanceDetailsScreen
 import com.example.basic.HomeScreen
 import com.example.basic.MoreScreen
 import com.example.basic.PlannerScreen
@@ -88,6 +89,13 @@ sealed class Screen(
         Icons.Outlined.Fastfood
     )
 
+    object AttendanceDetails : Screen(
+        "attendanceDetails",
+        "Attendance Details",
+        Icons.Filled.CheckCircle,
+        Icons.Outlined.CheckCircle
+    )
+
 }
 
 @Composable
@@ -129,7 +137,9 @@ fun AppNavHost() {
         ) {
             composable(Screen.Home.route) { HomeScreen() }
             composable(Screen.Planner.route) { PlannerScreen() }
-            composable(Screen.Attendance.route) { AttendanceScreen() }
+            composable(Screen.Attendance.route) {
+                AttendanceScreen(onShowDetails = { navController.navigate(Screen.AttendanceDetails.route) })
+            }
             composable(Screen.Food.route) {
                 FoodMenuScreen(
                     onShowSummary = { navController.navigate(Screen.FoodSummary.route) },
@@ -141,6 +151,9 @@ fun AppNavHost() {
             }
             composable(Screen.MonthlyMenu.route) {
                 MonthlyMenuScreen(onBack = { navController.popBackStack() })
+            }
+            composable(Screen.AttendanceDetails.route) {
+                AttendanceDetailsScreen(onBack = { navController.popBackStack() })
             }
             composable(Screen.More.route) { MoreScreen() }
         }
