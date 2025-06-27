@@ -191,7 +191,7 @@ export default function SummaryCard() {
           <AnimatedLinearGradient
             colors={[bgStart, bgEnd]}
             start={[0,0]} end={[1,1]}
-            style={StyleSheet.absoluteFill}
+            style={[StyleSheet.absoluteFill, styles.gradientBg]}
           />
           <View style={styles.topRow}>
             <View style={styles.iconDesc}>
@@ -391,9 +391,9 @@ const styles = StyleSheet.create({
     marginTop:12,
     marginBottom:24,
     borderRadius:50,
-    overflow:'hidden',
     padding:16,
-    justifyContent:'space-between',
+    // allow content to shift freely
+    justifyContent:'flex-start',
     // floating shadow
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
@@ -401,17 +401,20 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     elevation: 8,
   },
-  topRow:        { flexDirection:'row', justifyContent:'space-between', alignItems:'center' },
+  gradientBg: {
+    borderRadius:50,
+  },
+  topRow:        { flexDirection:'row', justifyContent:'space-between', alignItems:'center', marginTop:-16 },
   iconDesc:      { flexDirection:'row', alignItems:'center' },
   descText:      { color:'#fff', fontSize:32, marginLeft:12, fontWeight:'700' },
   tempContainer: { alignItems:'flex-end' },
   tempText:      { color:'#fff', fontSize:52, fontWeight:'700' },
   feelsText:     { color:'#fff', fontSize:12, fontWeight:'700' },
-  tempShift:     { transform:[{translateX:10},{translateY:-25}] },
-  feelsShift:    { transform:[{translateX:10},{translateY:-25}] },
-  cloudyShift:   { transform:[{translateX:-8},{translateY:-25}] },
+  tempShift:     { transform:[{translateX:10},{translateY:-60}] },
+  feelsShift:    { transform:[{translateX:10},{translateY:-60}] },
+  cloudyShift:   { transform:[{translateX:-8},{translateY:-45}] },
 
-  bottomRow:     { flexDirection:'row', justifyContent:'space-around', paddingHorizontal:24 },
+  bottomRow:     { flexDirection:'row', justifyContent:'space-around', paddingHorizontal:24, marginTop:'auto' },
   infoBox:       { alignItems:'center' },
   infoValue:     { color:'#fff', fontSize:20, fontWeight:'700' },
   infoLabel:     { color:'#fff', fontSize:12, fontWeight:'700', marginTop:2 },
