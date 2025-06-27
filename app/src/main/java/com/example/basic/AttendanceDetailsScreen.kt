@@ -223,13 +223,13 @@ private fun DaySelector(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier
                         .padding(bottom = highlightOverlap)
-                        .offset(y = highlightOverlap)
                         .clip(shape)
                         .background(bgColor)
                         .shadow(if (isSelected) 8.dp else 0.dp, shape)
                         .clickable { onSelect(index) }
                         .padding(horizontal = 12.dp, vertical = 4.dp)
-            ) {
+                        .align(Alignment.Top)
+                ) {
                 Text(
                     day.date.dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.getDefault()),
                     color = textColor,
