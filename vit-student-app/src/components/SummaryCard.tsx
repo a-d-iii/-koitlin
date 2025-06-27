@@ -191,7 +191,7 @@ export default function SummaryCard() {
           <AnimatedLinearGradient
             colors={[bgStart, bgEnd]}
             start={[0,0]} end={[1,1]}
-            style={StyleSheet.absoluteFill}
+            style={[StyleSheet.absoluteFill, styles.gradientBg]}
           />
           <View style={styles.topRow}>
             <View style={styles.iconDesc}>
@@ -391,7 +391,6 @@ const styles = StyleSheet.create({
     marginTop:12,
     marginBottom:24,
     borderRadius:50,
-    overflow:'hidden',
     padding:16,
     justifyContent:'space-between',
     // floating shadow
@@ -401,15 +400,18 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     elevation: 8,
   },
+  gradientBg: {
+    borderRadius:50,
+  },
   topRow:        { flexDirection:'row', justifyContent:'space-between', alignItems:'center' },
   iconDesc:      { flexDirection:'row', alignItems:'center' },
   descText:      { color:'#fff', fontSize:32, marginLeft:12, fontWeight:'700' },
   tempContainer: { alignItems:'flex-end' },
   tempText:      { color:'#fff', fontSize:52, fontWeight:'700' },
   feelsText:     { color:'#fff', fontSize:12, fontWeight:'700' },
-  tempShift:     { transform:[{translateX:10},{translateY:-25}] },
-  feelsShift:    { transform:[{translateX:10},{translateY:-25}] },
-  cloudyShift:   { transform:[{translateX:-8},{translateY:-25}] },
+  tempShift:     { transform:[{translateX:10},{translateY:-40}] },
+  feelsShift:    { transform:[{translateX:10},{translateY:-40}] },
+  cloudyShift:   { transform:[{translateX:-8},{translateY:-30}] },
 
   bottomRow:     { flexDirection:'row', justifyContent:'space-around', paddingHorizontal:24 },
   infoBox:       { alignItems:'center' },
