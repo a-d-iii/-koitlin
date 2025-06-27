@@ -196,7 +196,7 @@ private fun DaySelector(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .background(Color(0xFFF7F7F7))
+            .background(Color(0xFFE0E0E0))
             .height(52.dp)
             .padding(start = 16.dp, end = 16.dp),
         verticalAlignment = Alignment.CenterVertically
@@ -217,16 +217,20 @@ private fun DaySelector(
                 val isSelected = index == selected
                 val textColor = if (isSelected) Color.White else Color.LightGray
                 val bgColor = if (isSelected) Color(0xFF1E88E5) else Color.Transparent
-                val shape = RoundedCornerShape(12.dp)
+                val shape = RoundedCornerShape(topStart = 0.dp, topEnd = 0.dp, bottomStart = 12.dp, bottomEnd = 12.dp)
+                // Offset the highlight downward so it extends below the bar
+                val highlightOverlap = if (isSelected) 16.dp else 0.dp
                 Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier
-                    .clip(shape)
-                    .clickable { onSelect(index) }
-                    .background(bgColor)
-                    .padding(horizontal = 12.dp, vertical = 4.dp)
-                    .shadow(if (isSelected) 4.dp else 0.dp, shape)
-            ) {
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier
+                        .padding(bottom = highlightOverlap)
+                        .shadow(if (isSelected) 8.dp else 0.dp, shape)
+                        .clip(shape)
+                        .background(bgColor, shape)
+                        .clickable { onSelect(index) }
+                        .padding(horizontal = 12.dp, vertical = 4.dp)
+                        .align(Alignment.Top)
+                ) {
                 Text(
                     day.date.dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.getDefault()),
                     color = textColor,
@@ -344,7 +348,8 @@ private fun EventCard(event: ClassEvent) {
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 4.dp)
+            .padding(vertical = 8.dp)
+            .height(80.dp)
     ) {
         Row(
             modifier = Modifier
