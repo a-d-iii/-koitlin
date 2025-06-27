@@ -96,6 +96,16 @@ private object PlannerRepository {
     }
 }
 
+private fun Color.lighten(factor: Float): Color {
+    val f = factor.coerceIn(0f, 1f)
+    return Color(
+        red + (1 - red) * f,
+        green + (1 - green) * f,
+        blue + (1 - blue) * f,
+        alpha
+    )
+}
+
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
 @Composable
@@ -343,7 +353,15 @@ private fun ScheduleList(date: LocalDate, events: List<ClassEvent>) {
                 ) {
                     // Display only the start time on the timeline in 12 hour format
                     val displayTime = LocalTime.parse(event.start).format(java.time.format.DateTimeFormatter.ofPattern("h:mm a"))
-                    Text(displayTime, color = Color.Gray, fontSize = 12.sp)
+                    val timeColor = event.category.color
+                    Text(
+                        displayTime,
+                        color = timeColor,
+                        fontSize = 12.sp,
+                        modifier = Modifier
+                            .background(timeColor.lighten(0.5f), RoundedCornerShape(4.dp))
+                            .padding(horizontal = 6.dp, vertical = 2.dp)
+                    )
                     val fillColor = when {
                         isCurrent -> Color(0xFF1E88E5)
                         isPast -> Color(0xFFD32F2F)
