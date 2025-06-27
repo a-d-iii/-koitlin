@@ -28,6 +28,13 @@ const GRADIENT_RATIO = 0.16;
 const GRADIENT_HEIGHT = height * GRADIENT_RATIO + STATUS_BAR_HEIGHT;
 const GRADIENT_WIDTH = width * 0.9;
 
+// Menu card sizing
+const CONTENT_PADDING = 24;
+const CARD_WIDTH = width * 0.37;
+const CARD_HEIGHT = 120;
+const MENU_SPACING = (width - CARD_WIDTH * 2) / 3;
+const MENU_GRID_PADDING = Math.max(MENU_SPACING - CONTENT_PADDING, 0);
+
 const AnimatedLinearGradient = Animated.createAnimatedComponent(LinearGradient);
 const AnimatedScrollView     = Animated.createAnimatedComponent(ScrollView);
 
@@ -461,16 +468,23 @@ const styles = StyleSheet.create({
   hoursText:   { fontSize:12, fontWeight:'600', color:'#333' },
   roomText:    { fontSize:10, color:'#999', marginTop:2 },
 
-  menuGrid: { flexDirection:'row', flexWrap:'wrap', justifyContent:'space-between' },
+  menuGrid: {
+    flexDirection:'row',
+    flexWrap:'wrap',
+    justifyContent:'space-between',
+    paddingHorizontal: MENU_GRID_PADDING,
+  },
   menuBox:  {
-    // adjust width so two menu items fit side‑by‑side
-    width: '46%',
+    width: CARD_WIDTH,
+    height: CARD_HEIGHT,
     backgroundColor:'#fff',
     borderRadius:12,
+    borderWidth:1,
+    borderColor:'#ddd',
     padding:12,
     marginVertical:8,
-    marginHorizontal:4,
     alignItems:'center',
+    justifyContent:'center',
     elevation:1,
     shadowColor:'#000',
     shadowOpacity:0.05,
