@@ -218,8 +218,8 @@ private fun DaySelector(
                 .fillMaxWidth()
                 .height(52.dp + extraSpace)
                 .padding(start = 16.dp, end = 16.dp)
-                .align(Alignment.CenterStart),
-            verticalAlignment = Alignment.CenterVertically
+                .align(Alignment.TopStart),
+            verticalAlignment = Alignment.Top
         ) {
         Text(
             month,
@@ -262,8 +262,7 @@ private fun DaySelector(
                 Text(
                     day.date.dayOfMonth.toString(),
                     color = textColor,
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight.Bold
+                    fontSize = 12.sp
                 )
             }
         }
