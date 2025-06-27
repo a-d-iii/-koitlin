@@ -196,11 +196,11 @@ export default function SummaryCard() {
           <View style={styles.topRow}>
             <View style={styles.iconDesc}>
               <Ionicons name="cloudy" size={64} color="#fff" />
-              <Text style={[styles.descText, styles.cloudyShift]}>Cloudy</Text>
+              <Text style={styles.descText}>Cloudy</Text>
             </View>
             <View style={styles.tempContainer}>
-              <Text style={[styles.tempText, styles.tempShift]}>25°</Text>
-              <Text style={[styles.feelsText, styles.feelsShift]}>Feels like 27°</Text>
+              <Text style={styles.tempText}>25°</Text>
+              <Text style={styles.feelsText}>Feels like 27°</Text>
             </View>
           </View>
           <View style={styles.bottomRow}>
@@ -406,13 +406,31 @@ const styles = StyleSheet.create({
   },
   topRow:        { flexDirection:'row', justifyContent:'space-between', alignItems:'center', marginTop:-16 },
   iconDesc:      { flexDirection:'row', alignItems:'center' },
-  descText:      { color:'#fff', fontSize:32, marginLeft:12, fontWeight:'700' },
-  tempContainer: { alignItems:'flex-end' },
-  tempText:      { color:'#fff', fontSize:52, fontWeight:'700' },
-  feelsText:     { color:'#fff', fontSize:12, fontWeight:'700' },
-  tempShift:     { transform:[{translateX:10},{translateY:-60}] },
-  feelsShift:    { transform:[{translateX:10},{translateY:-60}] },
-  cloudyShift:   { transform:[{translateX:-8},{translateY:-45}] },
+  descText:      {
+    color:'#fff',
+    fontSize:32,
+    marginLeft:12,
+    fontWeight:'700',
+    // pull the "Cloudy" label slightly upward
+    marginTop:-12,
+  },
+  tempContainer: {
+    alignItems:'flex-end',
+    // lift the temperature block
+    marginTop:-16,
+  },
+  tempText:  { color:'#fff', fontSize:52, fontWeight:'700' },
+  feelsText: {
+    color:'#fff',
+    fontSize:12,
+    fontWeight:'700',
+    // keep "Feels like" closer to the temperature
+    marginTop:-4,
+  },
+  // Removed fixed translation offsets so the text can be freely positioned
+  tempShift:     {},
+  feelsShift:    {},
+  cloudyShift:   {},
 
   bottomRow:     { flexDirection:'row', justifyContent:'space-around', paddingHorizontal:24, marginTop:'auto' },
   infoBox:       { alignItems:'center' },
