@@ -49,21 +49,25 @@ fun CardCarousel(
         onIndexChange?.invoke(pagerState.currentPage)
     }
 
+    val dragModifier = if (pagerState.currentPage > 0) {
+        Modifier.pointerInput(pagerState.currentPage) {
+            detectDragGestures(
+                onDrag = { _, drag ->
+                    dragAmount += drag.y
+                },
+                onDragEnd = {
+                    if (dragAmount > 40f) onSwipeDown() else if (dragAmount < -40f) onSwipeUp()
+                    dragAmount = 0f
+                }
+            )
+        }
+    } else Modifier
+
     Box(
         modifier = modifier
             .fillMaxSize()
             .graphicsLayer { clip = false }
-            .pointerInput(Unit) {
-                detectDragGestures(
-                    onDrag = { _, drag ->
-                        dragAmount += drag.y
-                    },
-                    onDragEnd = {
-                        if (dragAmount > 40f) onSwipeDown() else if (dragAmount < -40f) onSwipeUp()
-                        dragAmount = 0f
-                    }
-                )
-            }
+            .then(dragModifier)
     ) {
         HorizontalPager(
             state = pagerState,
