@@ -34,6 +34,7 @@ fun HomeScreen() {
     )
     val cards = listOf(ClassInfo("overview", "", "")) + baseCards
     var panel by remember { mutableStateOf(PanelState.None) }
+    var activeIndex by remember { mutableStateOf(0) }
 
     val config = LocalConfiguration.current
     val headerHeight = config.screenHeightDp.dp * 0.1f
@@ -43,11 +44,13 @@ fun HomeScreen() {
             .fillMaxSize()
             .background(Color(0xFFF0F0F0))
     ) {
-        HomeHeader(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(headerHeight)
-        )
+        AnimatedVisibility(visible = activeIndex == 0) {
+            HomeHeader(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(headerHeight)
+            )
+        }
 
         Box(modifier = Modifier.weight(1f)) {
 
@@ -61,6 +64,7 @@ fun HomeScreen() {
                     if (panel == PanelState.None) panel = PanelState.Bottom
                     else if (panel == PanelState.Top) panel = PanelState.None
                 },
+                onIndexChange = { activeIndex = it },
                 locationName = "Amaravati"
             )
  
