@@ -30,7 +30,6 @@ import AttendanceScreen from './src/screens/Attendance';
 import MoreRootScreen from './src/screens/MoreRootScreen';
 import GalleryScreen from './src/screens/GalleryScreen';
 import Profile from './src/screens/Profile';
-import Attendance2 from './src/screens/Attendance2';
 import { UserProvider } from './src/context/UserContext';
 
 type RootStackParamList = {
@@ -39,7 +38,6 @@ type RootStackParamList = {
   MonthlyMenuScreen: undefined;
   FoodSummaryScreen: undefined;
   Profile: undefined;
-  Attendance2: undefined;
 };
 
 type TabParamList = {
@@ -141,7 +139,6 @@ export default function App() {
             name="FoodSummaryScreen"
             component={FoodSummaryScreen}
           />
-          <RootStack.Screen name="Attendance2" component={Attendance2} />
           <RootStack.Screen name="Profile" component={Profile} />
           </RootStack.Navigator>
         </NavigationContainer>
