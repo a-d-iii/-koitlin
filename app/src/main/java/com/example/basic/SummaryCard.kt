@@ -31,6 +31,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -39,21 +40,33 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun SummaryCard() {
+    val headerHeight = LocalConfiguration.current.screenHeightDp.dp * 0.1f
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .verticalScroll(rememberScrollState())
-            .padding(16.dp)
     ) {
-        WeatherCard()
+        HomeHeader(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(headerHeight)
+        )
         Spacer(Modifier.height(16.dp))
-        TimetableSection()
-        Spacer(Modifier.height(16.dp))
-        MenuSection()
-        Spacer(Modifier.height(16.dp))
-        TasksSection()
-        Spacer(Modifier.height(16.dp))
-        InsightsSection()
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+        ) {
+            WeatherCard()
+            Spacer(Modifier.height(16.dp))
+            TimetableSection()
+            Spacer(Modifier.height(16.dp))
+            MenuSection()
+            Spacer(Modifier.height(16.dp))
+            TasksSection()
+            Spacer(Modifier.height(16.dp))
+            InsightsSection()
+        }
     }
 }
 
