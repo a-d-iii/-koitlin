@@ -116,6 +116,7 @@ private fun dayLabel(date: String): String {
 fun MonthlyMenuScreen(onBack: () -> Unit) {
     val context = LocalContext.current
     var menu by remember { mutableStateOf<MonthlyMenu?>(null) }
+    // Store wishlist entries by unique meal key "date-name"
     var wishlist by remember { mutableStateOf(setOf<String>()) }
     var showWishlist by remember { mutableStateOf(false) }
 
@@ -181,10 +182,10 @@ fun MonthlyMenuScreen(onBack: () -> Unit) {
                 items(week.days) { day ->
                     DayCard(
                         day = day,
-                        liked = wishlist.contains(day.date),
+                        wishlist = wishlist,
                         background = week.dayColor,
-                        onLike = {
-                            wishlist = if (wishlist.contains(day.date)) wishlist - day.date else wishlist + day.date
+                        onToggleLike = { key ->
+                            wishlist = if (wishlist.contains(key)) wishlist - key else wishlist + key
                         },
                         onAdd = {}
                     )
@@ -239,10 +240,10 @@ private fun WeekHeader(
 @Composable
 private fun DayCard(
     day: DayData,
-    liked: Boolean,
+    wishlist: Set<String>,
     background: Color,
-    onLike: () -> Unit,
-    onAdd: () -> Unit
+    onToggleLike: (String) -> Unit,
+    onAdd: (String) -> Unit
 ) {
     Card(
         shape = RoundedCornerShape(12.dp),
@@ -261,27 +262,31 @@ private fun DayCard(
                         .background(Color(0xFF333333), RoundedCornerShape(12.dp))
                         .padding(horizontal = 8.dp, vertical = 4.dp)
                 )
-                Spacer(Modifier.weight(1f))
-                Icon(
-                    imageVector = if (liked) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
-                    contentDescription = "Wishlist",
-                    tint = if (liked) Color.Red else Color.Black,
-                    modifier = Modifier
-                        .size(20.dp)
-                        .clickable { onLike() }
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                Icon(
-                    imageVector = Icons.Default.Add,
-                    contentDescription = "Add",
-                    modifier = Modifier
-                        .size(20.dp)
-                        .clickable { onAdd() }
-                )
             }
             Spacer(Modifier.height(8.dp))
             day.meals.forEachIndexed { index, meal ->
-                Text(meal.name, fontWeight = FontWeight.SemiBold)
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(meal.name, fontWeight = FontWeight.SemiBold)
+                    Spacer(Modifier.weight(1f))
+                    val key = "${day.date}-${meal.name}"
+                    val liked = wishlist.contains(key)
+                    Icon(
+                        imageVector = if (liked) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
+                        contentDescription = "Wishlist",
+                        tint = if (liked) Color.Red else Color.Black,
+                        modifier = Modifier
+                            .size(20.dp)
+                            .clickable { onToggleLike(key) }
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Icon(
+                        imageVector = Icons.Default.Add,
+                        contentDescription = "Add",
+                        modifier = Modifier
+                            .size(20.dp)
+                            .clickable { onAdd(key) }
+                    )
+                }
                 Text(meal.items.joinToString(", "), style = MaterialTheme.typography.bodySmall)
                 if (index != day.meals.lastIndex) Spacer(Modifier.height(8.dp))
             }
