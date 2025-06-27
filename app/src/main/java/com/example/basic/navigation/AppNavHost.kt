@@ -111,17 +111,10 @@ fun AppNavHost() {
                         label = { Text(screen.label) },
                         selected = selected,
                         onClick = {
-                            if (screen == Screen.Food) {
-                                navController.navigate(Screen.Food.route) {
-                                    launchSingleTop = true
-                                    popUpTo(Screen.Food.route) { inclusive = true }
-                                }
-                            } else {
-                                navController.navigate(screen.route) {
-                                    launchSingleTop = true
-                                    restoreState = true
-                                    popUpTo(navController.graph.startDestinationId) { saveState = true }
-                                }
+                            navController.navigate(screen.route) {
+                                launchSingleTop = true
+                                restoreState = true
+                                popUpTo(navController.graph.startDestinationId) { saveState = true }
                             }
                         }
                     )
