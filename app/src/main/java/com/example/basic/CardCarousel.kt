@@ -42,8 +42,9 @@ fun CardCarousel(
     val config = LocalConfiguration.current
     val screenHeight = config.screenHeightDp.dp
     val cardHeight = screenHeight * 0.7f
-    // Position the number row closer to the cards
-    val numberTop = (screenHeight - cardHeight) / 3f + cardHeight - 10.dp
+    // Position the number row closer to the cards and above the navigation bar
+    val bottomBarHeight = 80.dp
+    val numberTop = (screenHeight - cardHeight) / 3f + cardHeight - bottomBarHeight - 10.dp
 
     LaunchedEffect(pagerState.currentPage) {
         onIndexChange?.invoke(pagerState.currentPage)
