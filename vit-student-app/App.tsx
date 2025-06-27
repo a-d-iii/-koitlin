@@ -10,6 +10,7 @@ import {
 } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 
 // Your existing screens:
 import Home from './src/screens/Home';
@@ -74,12 +75,20 @@ function MainTabs() {
       screenOptions={({ route }) => ({
         headerShown: false,
         tabBarIcon: ({ focused, color, size }) => {
+          if (route.name === 'Home') {
+            const name = focused ? 'home-variant' : 'home-variant-outline';
+            return (
+              <MaterialCommunityIcons
+                name={name}
+                size={size}
+                color={color}
+              />
+            );
+          }
+
           let iconName = '';
 
-          if (route.name === 'Home') {
-            // Use filled style icons when focused for a bolder look
-            iconName = focused ? 'home-sharp' : 'home-outline';
-          } else if (route.name === 'Planner') {
+          if (route.name === 'Planner') {
             iconName = focused ? 'calendar-sharp' : 'calendar-outline';
           } else if (route.name === 'Attendance') {
             iconName = focused ? 'checkmark-circle' : 'checkmark-circle-outline';
