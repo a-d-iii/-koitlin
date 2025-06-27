@@ -315,11 +315,17 @@ private fun TemperatureBadge(
         modifier = modifier.padding(horizontal = 8.dp, vertical = 4.dp),
         horizontalAlignment = Alignment.End
     ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.padding(bottom = 2.dp)
+        ) {
             Icon(Icons.Filled.DeviceThermostat, contentDescription = null, tint = Color.White, modifier = Modifier.size(18.dp))
             Text(value, color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(start = 6.dp))
         }
-        Row(verticalAlignment = Alignment.CenterVertically) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.padding(bottom = 2.dp)
+        ) {
             Icon(Icons.Filled.WaterDrop, contentDescription = null, tint = Color.White, modifier = Modifier.size(14.dp))
             Text(humidity, color = Color.White, fontSize = 12.sp, modifier = Modifier.padding(start = 6.dp))
         }
