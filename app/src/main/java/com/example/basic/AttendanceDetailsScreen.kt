@@ -24,7 +24,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.offset
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -247,9 +246,6 @@ private fun DaySelector(
                     verticalArrangement = Arrangement.Center,
                     modifier = Modifier
                         .height(itemHeight)
-                        // keep the top aligned while letting the highlight
-                        // extend below the bottom border
-                        .offset(y = -highlightOverlap / 2)
                         .shadow(if (isSelected) 12.dp else 0.dp, shape, clip = false)
                         .clip(shape)
                         .background(bgColor, shape)
@@ -262,7 +258,7 @@ private fun DaySelector(
                     day.date.dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.getDefault()),
                     color = textColor,
                     fontSize = 12.sp,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
                 )
                 Text(
                     day.date.dayOfMonth.toString(),
