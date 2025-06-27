@@ -149,7 +149,9 @@ export default function MonthlyMenuScreen() {
           return (
             <View key={key} style={styles.mealItem}>
               <View style={styles.mealHeader}>
-                <Text style={styles.mealTitle}>{m.name}</Text>
+                <View style={styles.mealTitleContainer}>
+                  <Text style={styles.mealTitle}>{m.name}</Text>
+                </View>
                 <View style={styles.mealActions}>
                   <Pressable
                     onPress={() => toggleLike(key)}
@@ -264,9 +266,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 2,
   },
+  mealTitleContainer: {
+    backgroundColor: '#333',
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    borderRadius: 12,
+  },
   mealActions: { flexDirection: 'row' },
   iconButton: { marginLeft: 8 },
-  mealTitle: { fontWeight: '600' },
+  mealTitle: {
+    fontWeight: '600',
+    color: '#fff',
+  },
   mealItems: { color: '#555' },
   pastDay: { opacity: 0.5 },
 });
