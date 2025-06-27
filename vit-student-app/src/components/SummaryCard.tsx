@@ -461,16 +461,18 @@ const styles = StyleSheet.create({
   hoursText:   { fontSize:12, fontWeight:'600', color:'#333' },
   roomText:    { fontSize:10, color:'#999', marginTop:2 },
 
-  menuGrid: { flexDirection:'row', flexWrap:'wrap', justifyContent:'space-between' },
+  menuGrid: { flexDirection:'row', flexWrap:'wrap', justifyContent:'space-between', paddingHorizontal:'8.7%' },
   menuBox:  {
-    // adjust width so two menu items fit side‑by‑side
-    width: '46%',
+    width: '37%',
+    height: 120,
     backgroundColor:'#fff',
     borderRadius:12,
+    borderWidth:1,
+    borderColor:'#ddd',
     padding:12,
     marginVertical:8,
-    marginHorizontal:4,
     alignItems:'center',
+    justifyContent:'center',
     elevation:1,
     shadowColor:'#000',
     shadowOpacity:0.05,
