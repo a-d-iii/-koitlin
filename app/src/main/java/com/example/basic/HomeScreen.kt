@@ -7,13 +7,18 @@ import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import kotlinx.coroutines.launch
 
 enum class PanelState { None, Top, Bottom }
@@ -30,24 +35,34 @@ fun HomeScreen() {
     val cards = listOf(ClassInfo("overview", "", "")) + baseCards
     var panel by remember { mutableStateOf(PanelState.None) }
 
-    Box(
+    val config = LocalConfiguration.current
+    val headerHeight = config.screenHeightDp.dp * 0.1f
+
+    Column(
         modifier = Modifier
             .fillMaxSize()
             .background(Color(0xFFF0F0F0))
     ) {
- 
-        CardCarousel(
-            cards = cards,
-            onSwipeDown = {
-                if (panel == PanelState.None) panel = PanelState.Top
-                else if (panel == PanelState.Bottom) panel = PanelState.None
-            },
-            onSwipeUp = {
-                if (panel == PanelState.None) panel = PanelState.Bottom
-                else if (panel == PanelState.Top) panel = PanelState.None
-            },
-            locationName = "Amaravati"
+        HomeHeader(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(headerHeight)
         )
+
+        Box(modifier = Modifier.weight(1f)) {
+
+            CardCarousel(
+                cards = cards,
+                onSwipeDown = {
+                    if (panel == PanelState.None) panel = PanelState.Top
+                    else if (panel == PanelState.Bottom) panel = PanelState.None
+                },
+                onSwipeUp = {
+                    if (panel == PanelState.None) panel = PanelState.Bottom
+                    else if (panel == PanelState.Top) panel = PanelState.None
+                },
+                locationName = "Amaravati"
+            )
  
 
         if (panel != PanelState.None) {
@@ -182,6 +197,37 @@ private fun BottomPanel(onDismiss: () -> Unit) {
                 modifier = Modifier.align(Alignment.End)
             ) { Text("Close") }
         }
+    }
+}
+
+@Composable
+private fun HomeHeader(modifier: Modifier = Modifier) {
+    val date = remember {
+        LocalDate.now().format(DateTimeFormatter.ofPattern("EEEE, MMMM d, yyyy"))
+    }
+    Row(
+        modifier = modifier
+            .background(Color.White)
+            .padding(horizontal = 16.dp, vertical = 8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Column {
+            Text(
+                "Hello user",
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.Bold
+            )
+            Text(
+                date,
+                style = MaterialTheme.typography.bodySmall
+            )
+        }
+        Box(
+            modifier = Modifier
+                .size(56.dp)
+                .background(Color(0xFFCCCCCC), CircleShape)
+        )
     }
 }
 
