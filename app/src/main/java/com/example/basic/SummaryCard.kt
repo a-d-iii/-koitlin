@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -208,6 +208,8 @@ private fun TimetableSection() {
 @Composable
 private fun MenuSection() {
     SectionHeader("Today's Menu")
+    val screenWidth = LocalConfiguration.current.screenWidthDp.dp
+    val cardWidth = screenWidth * 0.37f
     val meals = listOf(
         "Breakfast" to "Pancakes & Juice",
         "Lunch" to "Chicken Salad",
@@ -218,14 +220,14 @@ private fun MenuSection() {
         meals.chunked(2).forEach { rowItems ->
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally)
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 rowItems.forEach { (label, menu) ->
                     Card(
                         modifier = Modifier
-                            .widthIn(max = 160.dp)
-                            .weight(1f, fill = false)
+                            .width(cardWidth)
                             .padding(4.dp),
+                        border = BorderStroke(1.dp, Color(0xFFE0E0E0)),
                         colors = CardDefaults.cardColors(containerColor = Color.White),
                         elevation = CardDefaults.cardElevation(1.dp)
                     ) {
@@ -253,8 +255,7 @@ private fun MenuSection() {
                 }
                 if (rowItems.size == 1) Spacer(
                     modifier = Modifier
-                        .widthIn(max = 160.dp)
-                        .weight(1f, fill = false)
+                        .width(cardWidth)
                         .padding(4.dp)
                 )
             }
