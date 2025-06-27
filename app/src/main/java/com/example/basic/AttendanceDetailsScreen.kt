@@ -193,14 +193,28 @@ private fun DaySelector(
 ) {
     val month = days[selected].date.month.getDisplayName(TextStyle.SHORT, Locale.getDefault())
 
-    Row(
+    val extraSpace = 16.dp
+    Box(
         modifier = Modifier
             .fillMaxWidth()
-            .background(Color(0xFFE0E0E0))
-            .height(52.dp)
-            .padding(start = 16.dp, end = 16.dp),
-        verticalAlignment = Alignment.CenterVertically
+ 
+            .height(52.dp + extraSpace)
+ 
     ) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(52.dp)
+                .background(Color(0xFFCCCCCC))
+        )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(52.dp + extraSpace)
+                .padding(start = 16.dp, end = 16.dp)
+                .align(Alignment.TopStart),
+            verticalAlignment = Alignment.Top
+        ) {
         Text(
             month,
             fontWeight = FontWeight.Bold,
@@ -218,14 +232,17 @@ private fun DaySelector(
                 val textColor = if (isSelected) Color.White else Color.LightGray
                 val bgColor = if (isSelected) Color(0xFF1E88E5) else Color.Transparent
                 val shape = RoundedCornerShape(topStart = 0.dp, topEnd = 0.dp, bottomStart = 12.dp, bottomEnd = 12.dp)
-                val highlightOverlap = if (isSelected) 12.dp else 0.dp
+ 
+                val highlightOverlap = if (isSelected) 16.dp else 0.dp
+                val itemHeight = 52.dp + highlightOverlap
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier
-                        .padding(bottom = highlightOverlap)
+                        .height(itemHeight)
+                        .shadow(if (isSelected) 12.dp else 0.dp, shape, clip = false)
                         .clip(shape)
-                        .background(bgColor)
-                        .shadow(if (isSelected) 8.dp else 0.dp, shape)
+                        .background(bgColor, shape)
+ 
                         .clickable { onSelect(index) }
                         .padding(horizontal = 12.dp, vertical = 4.dp)
                         .align(Alignment.Top)
@@ -246,7 +263,7 @@ private fun DaySelector(
     }
 }
 }
-
+}
 @Composable
 private fun CurrentDayHeader(date: LocalDate) {
     Text(
