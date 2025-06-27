@@ -206,7 +206,12 @@ private fun DaySelector(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(52.dp)
-                .background(Color(0xFFCCCCCC))
+                .background(Color(0xFFF5F5F5))
+                .drawBehind {
+                    val stroke = 1.dp.toPx()
+                    drawLine(Color(0xFFBDBDBD), Offset(0f, 0f), Offset(size.width, 0f), strokeWidth = stroke)
+                    drawLine(Color(0xFFBDBDBD), Offset(0f, size.height), Offset(size.width, size.height), strokeWidth = stroke)
+                }
         )
         Row(
             modifier = Modifier
@@ -219,7 +224,7 @@ private fun DaySelector(
         Text(
             month,
             fontWeight = FontWeight.Bold,
-            color = Color.Gray,
+            color = Color.DarkGray,
             modifier = Modifier.padding(end = 8.dp)
         )
         LazyRow(
@@ -267,15 +272,23 @@ private fun DaySelector(
 }
 @Composable
 private fun CurrentDayHeader(date: LocalDate) {
-    Text(
-        text = date.format(java.time.format.DateTimeFormatter.ofPattern("EEEE d")),
-        fontSize = 20.sp,
-        fontWeight = FontWeight.Medium,
-        color = Color(0xFF757575),
+    Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(start = 16.dp, top = 16.dp)
-    )
+    ) {
+        Text(
+            text = date.dayOfWeek.getDisplayName(TextStyle.FULL, Locale.getDefault()),
+            fontSize = 20.sp,
+            fontWeight = FontWeight.Medium,
+            color = Color(0xFF757575)
+        )
+        Text(
+            text = date.format(java.time.format.DateTimeFormatter.ofPattern("dd MMMM yyyy")),
+            fontSize = 14.sp,
+            color = Color(0xFF757575)
+        )
+    }
 }
 
 @Composable
@@ -324,8 +337,9 @@ private fun ScheduleList(date: LocalDate, events: List<ClassEvent>) {
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier.width(64.dp)
                 ) {
-                    // Display only the start time on the timeline
-                    Text(event.start, color = Color.Gray, fontSize = 12.sp)
+                    // Display only the start time on the timeline in 12 hour format
+                    val displayTime = LocalTime.parse(event.start).format(java.time.format.DateTimeFormatter.ofPattern("h:mm a"))
+                    Text(displayTime, color = Color.Gray, fontSize = 12.sp)
                     val fillColor = when {
                         isCurrent -> Color(0xFF1E88E5)
                         isPast -> Color(0xFFD32F2F)
@@ -339,15 +353,16 @@ private fun ScheduleList(date: LocalDate, events: List<ClassEvent>) {
                     Box(
                         contentAlignment = Alignment.Center,
                         modifier = Modifier
-                            .size(14.dp)
+                            .size(18.dp)
                             .graphicsLayer {
                                 if (isCurrent) {
                                     scaleX = pulse
                                     scaleY = pulse
                                 }
                             }
+                            .shadow(if (isPast) 4.dp else 0.dp, CircleShape, clip = false)
                             .clip(CircleShape)
-                            .background(fillColor)
+                            .background(if (fillColor == Color.Transparent) MaterialTheme.colorScheme.background else fillColor)
                             .border(2.dp, borderColor, CircleShape)
                     ) {
                         if (isPast) {
@@ -361,20 +376,20 @@ private fun ScheduleList(date: LocalDate, events: List<ClassEvent>) {
                     }
                 }
                 Spacer(modifier = Modifier.width(8.dp))
-                EventCard(event)
+                val widthFraction = if (index % 2 == 0) 0.9f else 1f
+                EventCard(event, Modifier.fillMaxWidth(widthFraction))
             }
         }
     }
 }
 
 @Composable
-private fun EventCard(event: ClassEvent) {
+private fun EventCard(event: ClassEvent, modifier: Modifier = Modifier) {
     Card(
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(containerColor = event.category.color),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-        modifier = Modifier
-            .fillMaxWidth()
+        modifier = modifier
             .padding(vertical = 8.dp)
             .height(80.dp)
     ) {
