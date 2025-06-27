@@ -19,6 +19,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -73,14 +74,14 @@ private data class DaySchedule(val date: LocalDate, val events: List<ClassEvent>
 private fun plannerSchedules(): List<DaySchedule> {
     val start = LocalDate.now().with(java.time.DayOfWeek.MONDAY)
     return WEEKLY_SCHEDULE.entries.mapIndexed { index, entry ->
-        val events = entry.value.map {
+        val events = entry.value.mapIndexed { i, it ->
             ClassEvent(
                 start = it.start,
                 end = it.end,
                 course = it.course,
                 code = it.course,
                 room = it.room,
-                category = EventCategory.Personal
+                category = EventCategory.values()[i % EventCategory.values().size]
             )
         }
         DaySchedule(start.plusDays(index.toLong()), events)
@@ -230,7 +231,7 @@ private fun DaySelector(
             itemsIndexed(days) { index, day ->
                 val isSelected = index == selected
                 val textColor = if (isSelected) Color.White else Color.Black
-                val bgColor = if (isSelected) Color(0xFF1E88E5) else Color.Transparent
+                val bgColor = if (isSelected) Color(0xFFB388FF) else Color.Transparent
                 val shape = RoundedCornerShape(topStart = 0.dp, topEnd = 0.dp, bottomStart = 12.dp, bottomEnd = 12.dp)
  
                 val highlightOverlap = if (isSelected) 16.dp else 0.dp
@@ -336,8 +337,9 @@ private fun ScheduleList(date: LocalDate, events: List<ClassEvent>) {
                         else -> Color.LightGray
                     }
                     Box(
+                        contentAlignment = Alignment.Center,
                         modifier = Modifier
-                            .size(10.dp)
+                            .size(14.dp)
                             .graphicsLayer {
                                 if (isCurrent) {
                                     scaleX = pulse
@@ -347,7 +349,16 @@ private fun ScheduleList(date: LocalDate, events: List<ClassEvent>) {
                             .clip(CircleShape)
                             .background(fillColor)
                             .border(2.dp, borderColor, CircleShape)
-                    )
+                    ) {
+                        if (isPast) {
+                            Icon(
+                                imageVector = Icons.Default.Check,
+                                contentDescription = "Done",
+                                tint = Color.White,
+                                modifier = Modifier.size(10.dp)
+                            )
+                        }
+                    }
                 }
                 Spacer(modifier = Modifier.width(8.dp))
                 EventCard(event)
