@@ -32,6 +32,7 @@ type WeekSection = {
   title: string;
   color: string;
   dayColor: string;
+  index: number;
   data: { date: string; meals: Meal[] }[];
 };
 
@@ -43,6 +44,7 @@ export default function MonthlyMenuScreen() {
 
   const [loading, setLoading] = useState(true);
   const [likes, setLikes] = useState<Record<string, boolean>>({});
+  const [weekIndex, setWeekIndex] = useState(0);
   const listRef = useRef<SectionList<any>>(null);
   const scrollTarget = useRef<{ sectionIndex: number; itemIndex: number }>();
 
@@ -102,6 +104,16 @@ export default function MonthlyMenuScreen() {
     }, 50);
   };
 
+  const viewabilityConfig = useRef({ itemVisiblePercentThreshold: 50 }).current;
+  const onViewableItemsChanged = useRef(({ viewableItems }: any) => {
+    const first = viewableItems.find(
+      (v: any) => v.section && typeof v.section.index === 'number'
+    );
+    if (first) {
+      setWeekIndex(first.section.index);
+    }
+  }).current;
+
   const toWeeks = (): WeekSection[] => {
     if (!menu) return [];
 
@@ -114,6 +126,7 @@ export default function MonthlyMenuScreen() {
         title: `Week ${index + 1}`,
         color: WEEK_COLORS[index % WEEK_COLORS.length],
         dayColor: DAY_COLORS[index % DAY_COLORS.length],
+        index,
         data: slice.map((d) => ({ date: d, meals: menu[d] })),
       });
     }
@@ -182,11 +195,12 @@ export default function MonthlyMenuScreen() {
     );
   }
 
+  const weeks = toWeeks();
   return (
-    <SafeAreaView style={styles.safe}>
+    <SafeAreaView style={[styles.safe, { backgroundColor: weeks[weekIndex]?.color || '#f2f2f2' }]}>
       <SectionList
         ref={listRef}
-        sections={toWeeks()}
+        sections={weeks}
         keyExtractor={(item) => item.date}
         renderItem={({ item, index, section }) =>
           renderDay(item, index, section as WeekSection)
@@ -201,6 +215,8 @@ export default function MonthlyMenuScreen() {
           </View>
         )}
         onScrollToIndexFailed={handleScrollToIndexFailed}
+        onViewableItemsChanged={onViewableItemsChanged}
+        viewabilityConfig={viewabilityConfig}
         SectionSeparatorComponent={() => <View style={{ height: 12 }} />}
         stickySectionHeadersEnabled
         contentContainerStyle={styles.listContent}
