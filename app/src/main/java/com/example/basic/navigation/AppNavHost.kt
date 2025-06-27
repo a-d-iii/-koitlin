@@ -7,12 +7,12 @@ import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.MoreHoriz
-import androidx.compose.material.icons.filled.Restaurant
+import androidx.compose.material.icons.filled.Fastfood
 import androidx.compose.material.icons.outlined.CalendarToday
 import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.MoreHoriz
-import androidx.compose.material.icons.outlined.Restaurant
+import androidx.compose.material.icons.outlined.Fastfood
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -62,8 +62,8 @@ sealed class Screen(
     object Food : Screen(
         "food",
         "Food",
-        Icons.Filled.Restaurant,
-        Icons.Outlined.Restaurant
+        Icons.Filled.Fastfood,
+        Icons.Outlined.Fastfood
     )
     object More : Screen(
         "more",
@@ -77,15 +77,15 @@ sealed class Screen(
     object FoodSummary : Screen(
         "foodSummary",
         "Food Summary",
-        Icons.Filled.Restaurant,
-        Icons.Outlined.Restaurant
+        Icons.Filled.Fastfood,
+        Icons.Outlined.Fastfood
     )
 
     object MonthlyMenu : Screen(
         "monthlyMenu",
         "Monthly Menu",
-        Icons.Filled.Restaurant,
-        Icons.Outlined.Restaurant
+        Icons.Filled.Fastfood,
+        Icons.Outlined.Fastfood
     )
 
 }
