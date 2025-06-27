@@ -354,6 +354,7 @@ private fun MonthBar(onClick: () -> Unit, modifier: Modifier = Modifier) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
+                .clickable(onClick = onClick)
                 .padding(vertical = 8.dp, horizontal = 16.dp),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
@@ -368,8 +369,7 @@ private fun MonthBar(onClick: () -> Unit, modifier: Modifier = Modifier) {
             Text(
                 text = "View Full Month",
                 color = Color.White,
-                style = MaterialTheme.typography.labelLarge,
-                modifier = Modifier.clickable(onClick = onClick)
+                style = MaterialTheme.typography.labelLarge
             )
         }
     }
