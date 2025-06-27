@@ -69,7 +69,23 @@ sealed class Screen(
         Icons.Filled.MoreHoriz,
         Icons.Outlined.MoreHoriz
     )
- 
+
+    // Additional screens that are not part of the bottom navigation bar
+    // but still need a route entry for navigation.
+    object FoodSummary : Screen(
+        "foodSummary",
+        "Food Summary",
+        Icons.Filled.Restaurant,
+        Icons.Outlined.Restaurant
+    )
+
+    object MonthlyMenu : Screen(
+        "monthlyMenu",
+        "Monthly Menu",
+        Icons.Filled.Restaurant,
+        Icons.Outlined.Restaurant
+    )
+
 }
 
 @Composable
