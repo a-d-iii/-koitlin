@@ -33,9 +33,17 @@ import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.animation.with
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.runtime.rememberCoroutineScope
+import com.example.basic.WEEKLY_SCHEDULE
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -62,22 +70,25 @@ private data class ClassEvent(
 
 private data class DaySchedule(val date: LocalDate, val events: List<ClassEvent>)
 
-private fun sampleSchedules(): List<DaySchedule> {
-    // Generate sample data starting from Monday 28 August 2017 so the
-    // schedule looks consistent across devices.
-    val start = LocalDate.of(2017, 8, 28)
-    val events = listOf(
-        ClassEvent("08:00", "08:50", "Mathematics", "MATH101", "201", EventCategory.Personal),
-        ClassEvent("09:00", "09:50", "Physics", "PHY102", "202", EventCategory.Shopping),
-        ClassEvent("11:00", "12:20", "Literature", "LIT201", "303", EventCategory.Todo),
-        ClassEvent("14:00", "15:00", "Computer Science", "CSE301", "Lab", EventCategory.Event),
-        ClassEvent("15:10", "16:00", "Chemistry", "CHE202", "204", EventCategory.Birthday)
-    )
-    return (0..6).map { DaySchedule(start.plusDays(it.toLong()), events) }
+private fun plannerSchedules(): List<DaySchedule> {
+    val start = LocalDate.now().with(java.time.DayOfWeek.MONDAY)
+    return WEEKLY_SCHEDULE.entries.mapIndexed { index, entry ->
+        val events = entry.value.map {
+            ClassEvent(
+                start = it.start,
+                end = it.end,
+                course = it.course,
+                code = it.course,
+                room = it.room,
+                category = EventCategory.Personal
+            )
+        }
+        DaySchedule(start.plusDays(index.toLong()), events)
+    }
 }
 
 private object PlannerRepository {
-    private val schedules = sampleSchedules()
+    private val schedules = plannerSchedules()
     fun getTodayClasses(date: LocalDate): List<ClassEvent> {
         return schedules.firstOrNull { it.date.dayOfWeek == date.dayOfWeek }?.events ?: emptyList()
 
@@ -85,10 +96,10 @@ private object PlannerRepository {
 }
 
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
 @Composable
 fun AttendanceDetailsScreen(onBack: () -> Unit) {
-    val days = remember { sampleSchedules() }
+    val days = remember { plannerSchedules() }
     var selected by remember { mutableStateOf(0) }
     val coroutineScope = rememberCoroutineScope()
     val listState = rememberLazyListState()
@@ -143,10 +154,30 @@ fun AttendanceDetailsScreen(onBack: () -> Unit) {
                 },
                 listState = listState
             )
-            val selectedDate = days[selected].date
-            val classes = PlannerRepository.getTodayClasses(selectedDate)
-            CurrentDayHeader(selectedDate)
-            ScheduleList(date = selectedDate, events = classes)
+            AnimatedContent(
+                targetState = selected,
+                transitionSpec = {
+                    if (targetState > initialState) {
+                        (slideInVertically(initialOffsetY = { it }, animationSpec = tween(300)) +
+                                fadeIn(animationSpec = tween(300))) with
+                                (slideOutVertically(targetOffsetY = { -it }, animationSpec = tween(300)) +
+                                fadeOut(animationSpec = tween(300)))
+                    } else {
+                        (slideInVertically(initialOffsetY = { -it }, animationSpec = tween(300)) +
+                                fadeIn(animationSpec = tween(300))) with
+                                (slideOutVertically(targetOffsetY = { it }, animationSpec = tween(300)) +
+                                fadeOut(animationSpec = tween(300)))
+                    }
+                },
+                label = "schedule"
+            ) { index ->
+                val selectedDate = days[index].date
+                val classes = PlannerRepository.getTodayClasses(selectedDate)
+                Column {
+                    CurrentDayHeader(selectedDate)
+                    ScheduleList(date = selectedDate, events = classes)
+                }
+            }
 
         }
     }
