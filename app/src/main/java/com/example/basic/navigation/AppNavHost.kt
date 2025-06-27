@@ -13,8 +13,6 @@ import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.MoreHoriz
 import androidx.compose.material.icons.outlined.Restaurant
-import androidx.compose.material.icons.filled.ToggleOn
-import androidx.compose.material.icons.outlined.ToggleOn
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -35,7 +33,6 @@ import com.example.basic.MonthlyMenuScreen
 import com.example.basic.HomeScreen
 import com.example.basic.MoreScreen
 import com.example.basic.PlannerScreen
-import com.example.basic.EmptyScreen
 
  
 sealed class Screen(
@@ -91,13 +88,6 @@ sealed class Screen(
         Icons.Outlined.Restaurant
     )
 
-    object Empty : Screen(
-        "empty",
-        "Empty",
-        Icons.Filled.ToggleOn,
-        Icons.Outlined.ToggleOn
-    )
-
 }
 
 @Composable
@@ -138,7 +128,7 @@ fun AppNavHost() {
             modifier = Modifier.padding(innerPadding)
         ) {
             composable(Screen.Home.route) { HomeScreen() }
-            composable(Screen.Planner.route) { PlannerScreen(navController) }
+            composable(Screen.Planner.route) { PlannerScreen() }
             composable(Screen.Attendance.route) { AttendanceScreen() }
             composable(Screen.Food.route) {
                 FoodMenuScreen(
@@ -153,7 +143,6 @@ fun AppNavHost() {
                 MonthlyMenuScreen(onBack = { navController.popBackStack() })
             }
             composable(Screen.More.route) { MoreScreen() }
-            composable(Screen.Empty.route) { EmptyScreen() }
         }
     }
 }
