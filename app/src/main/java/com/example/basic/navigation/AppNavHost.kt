@@ -21,6 +21,8 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.basic.AttendanceScreen
 import com.example.basic.FoodMenuScreen
+import com.example.basic.FoodSummaryScreen
+import com.example.basic.MonthlyMenuScreen
 import com.example.basic.HomeScreen
 import com.example.basic.MoreScreen
 import com.example.basic.PlannerScreen
@@ -31,6 +33,8 @@ sealed class Screen(val route: String, val label: String, val icon: androidx.com
     object Attendance : Screen("attendance", "Attendance", Icons.Filled.CheckCircle)
     object Food : Screen("food", "Food", Icons.Filled.Restaurant)
     object More : Screen("more", "More", Icons.Filled.MoreHoriz)
+    object FoodSummary : Screen("food_summary", "Food Summary", Icons.Filled.Restaurant)
+    object MonthlyMenu : Screen("monthly_menu", "Monthly Menu", Icons.Filled.CalendarToday)
 }
 
 @Composable
@@ -69,7 +73,16 @@ fun AppNavHost() {
             composable(Screen.Planner.route) { PlannerScreen() }
             composable(Screen.Attendance.route) { AttendanceScreen() }
             composable(Screen.Food.route) {
-                FoodMenuScreen(onShowSummary = {}, onViewMonth = {})
+                FoodMenuScreen(
+                    onShowSummary = { navController.navigate(Screen.FoodSummary.route) },
+                    onViewMonth = { navController.navigate(Screen.MonthlyMenu.route) }
+                )
+            }
+            composable(Screen.FoodSummary.route) {
+                FoodSummaryScreen(onBack = { navController.popBackStack() })
+            }
+            composable(Screen.MonthlyMenu.route) {
+                MonthlyMenuScreen(onBack = { navController.popBackStack() })
             }
             composable(Screen.More.route) { MoreScreen() }
         }
