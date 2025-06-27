@@ -196,8 +196,9 @@ private fun DaySelector(
     val extraSpace = 16.dp
     Box(
         modifier = Modifier
-            .fillMaxWidth()
+            .fillMaxWidth() 
             .height(52.dp + extraSpace)
+ 
     ) {
         Box(
             modifier = Modifier
@@ -230,6 +231,7 @@ private fun DaySelector(
                 val textColor = if (isSelected) Color.White else Color.LightGray
                 val bgColor = if (isSelected) Color(0xFF1E88E5) else Color.Transparent
                 val shape = RoundedCornerShape(topStart = 0.dp, topEnd = 0.dp, bottomStart = 12.dp, bottomEnd = 12.dp)
+ 
                 val highlightOverlap = if (isSelected) 16.dp else 0.dp
                 val itemHeight = 52.dp + highlightOverlap
                 Column(
@@ -239,6 +241,7 @@ private fun DaySelector(
                         .shadow(if (isSelected) 12.dp else 0.dp, shape, clip = false)
                         .clip(shape)
                         .background(bgColor, shape)
+ 
                         .clickable { onSelect(index) }
                         .padding(horizontal = 12.dp, vertical = 4.dp)
                         .align(Alignment.Top)

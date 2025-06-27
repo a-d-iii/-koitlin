@@ -206,10 +206,8 @@ export default function MonthlyMenuScreen() {
           renderDay(item, index, section as WeekSection)
         }
         renderSectionHeader={({ section }) => (
-          <View
-            style={[styles.weekHeaderContainer, { backgroundColor: section.dayColor }]}
-          >
-            <View style={styles.weekLabel}>
+          <View style={styles.weekHeaderContainer}>
+            <View style={[styles.weekLabel, { backgroundColor: section.dayColor }]}>
               <Text style={styles.sectionHeader}>{section.title}</Text>
             </View>
           </View>
@@ -233,18 +231,13 @@ const styles = StyleSheet.create({
     marginHorizontal: 4,
     marginBottom: 4,
     padding: 8,
-    borderTopLeftRadius: 12,
-    borderTopRightRadius: 12,
-    borderBottomLeftRadius: 12,
-    borderBottomRightRadius: 12,
-    overflow: 'hidden',
     alignItems: 'center',
   },
   weekLabel: {
     backgroundColor: '#000',
     paddingHorizontal: 12,
     paddingVertical: 4,
-    borderRadius: 20,
+    borderRadius: 50,
   },
   sectionHeader: {
     fontWeight: '600',
