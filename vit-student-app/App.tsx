@@ -18,7 +18,6 @@ import FoodMenuScreen from './src/screens/FoodMenuScreen';
 import MonthlyMenuScreen from './src/screens/MonthlyMenuScreen';
 import FoodSummaryScreen from './src/screens/FoodSummaryScreen';
 import PlannerScreen from './src/screens/Planner';
-import PlannerDetailScreen from './src/screens/PlannerDetailScreen';
 
 // Component for the Attendance tab
 import AttendanceScreen from './src/screens/Attendance';
@@ -39,7 +38,6 @@ type RootStackParamList = {
   MonthlyMenuScreen: undefined;
   FoodSummaryScreen: undefined;
   Profile: undefined;
-  PlannerDetailScreen: undefined;
 };
 
 type TabParamList = {
@@ -142,10 +140,6 @@ export default function App() {
             component={FoodSummaryScreen}
           />
           <RootStack.Screen name="Profile" component={Profile} />
-          <RootStack.Screen
-            name="PlannerDetailScreen"
-            component={PlannerDetailScreen}
-          />
           </RootStack.Navigator>
         </NavigationContainer>
       </UserProvider>

@@ -1,5 +1,4 @@
 import React, { useRef, useState } from 'react';
-import { useNavigation } from '@react-navigation/native';
 import {
   SafeAreaView,
   View,
@@ -18,7 +17,6 @@ import { WEEKLY_SCHEDULE, ClassEntry } from '../data/weeklySchedule';
 const DAYS = Object.keys(WEEKLY_SCHEDULE);
 
 export default function Planner() {
-  const navigation = useNavigation();
   const [index, setIndex] = useState<number>(0);
   const day = DAYS[index];
   const classes: ClassEntry[] = WEEKLY_SCHEDULE[day];
@@ -99,13 +97,6 @@ export default function Planner() {
           </TouchableOpacity>
         ))}
       </ScrollView>
-
-      <TouchableOpacity
-        style={styles.detailButton}
-        onPress={() => navigation.navigate('PlannerDetailScreen' as never)}
-      >
-        <Text style={styles.detailButtonText}>Open Planner Details</Text>
-      </TouchableOpacity>
     </SafeAreaView>
   );
 }
@@ -155,12 +146,4 @@ const styles = StyleSheet.create({
   classRight: { justifyContent: 'space-between', alignItems: 'flex-end' },
   timeText: { fontSize: 12, color: '#333' },
   roomText: { fontSize: 10, color: '#666', marginTop: 2 },
-  detailButton: {
-    margin: 16,
-    paddingVertical: 12,
-    borderRadius: 8,
-    backgroundColor: '#6C5CE7',
-    alignItems: 'center',
-  },
-  detailButtonText: { color: '#fff', fontWeight: '600' },
 });
