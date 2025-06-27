@@ -196,11 +196,11 @@ export default function SummaryCard() {
           <View style={styles.topRow}>
             <View style={styles.iconDesc}>
               <Ionicons name="cloudy" size={64} color="#fff" />
-              <Text style={[styles.descText, styles.cloudyShift]}>Cloudy</Text>
+              <Text style={styles.descText}>Cloudy</Text>
             </View>
             <View style={styles.tempContainer}>
-              <Text style={[styles.tempText, styles.tempShift]}>25°</Text>
-              <Text style={[styles.feelsText, styles.feelsShift]}>Feels like 27°</Text>
+              <Text style={styles.tempText}>25°</Text>
+              <Text style={styles.feelsText}>Feels like 27°</Text>
             </View>
           </View>
           <View style={styles.bottomRow}>
@@ -404,15 +404,30 @@ const styles = StyleSheet.create({
   gradientBg: {
     borderRadius:50,
   },
-  topRow:        { flexDirection:'row', justifyContent:'space-between', alignItems:'center', marginTop:-16 },
+  topRow:        { flexDirection:'row', justifyContent:'space-between', alignItems:'center' },
   iconDesc:      { flexDirection:'row', alignItems:'center' },
-  descText:      { color:'#fff', fontSize:32, marginLeft:12, fontWeight:'700' },
-  tempContainer: { alignItems:'flex-end' },
-  tempText:      { color:'#fff', fontSize:52, fontWeight:'700' },
-  feelsText:     { color:'#fff', fontSize:12, fontWeight:'700' },
-  tempShift:     { transform:[{translateX:10},{translateY:-60}] },
-  feelsShift:    { transform:[{translateX:10},{translateY:-60}] },
-  cloudyShift:   { transform:[{translateX:-8},{translateY:-45}] },
+  descText:      {
+    color:'#fff',
+    fontSize:32,
+    marginLeft:12,
+    fontWeight:'700',
+    // allow caller to control vertical placement
+    marginTop:0,
+  },
+  tempContainer: {
+    alignItems:'flex-end',
+    // let temperature position be customized
+    marginTop:0,
+  },
+  tempText:  { color:'#fff', fontSize:52, fontWeight:'700' },
+  feelsText: {
+    color:'#fff',
+    fontSize:12,
+    fontWeight:'700',
+    // no default offset
+    marginTop:0,
+  },
+  // Removed fixed translation offsets so the text can be freely positioned
 
   bottomRow:     { flexDirection:'row', justifyContent:'space-around', paddingHorizontal:24, marginTop:'auto' },
   infoBox:       { alignItems:'center' },
