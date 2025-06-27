@@ -243,12 +243,13 @@ private fun DaySelector(
                 val itemHeight = 52.dp + highlightOverlap
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center,
                     modifier = Modifier
                         .height(itemHeight)
                         .shadow(if (isSelected) 12.dp else 0.dp, shape, clip = false)
                         .clip(shape)
                         .background(bgColor, shape)
- 
+
                         .clickable { onSelect(index) }
                         .padding(horizontal = 12.dp, vertical = 4.dp)
                         .align(Alignment.CenterVertically)
