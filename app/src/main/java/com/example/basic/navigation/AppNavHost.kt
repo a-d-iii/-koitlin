@@ -7,6 +7,11 @@ import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.MoreHoriz
 import androidx.compose.material.icons.filled.Restaurant
+import androidx.compose.material.icons.outlined.CalendarToday
+import androidx.compose.material.icons.outlined.CheckCircle
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.MoreHoriz
+import androidx.compose.material.icons.outlined.Restaurant
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -25,12 +30,42 @@ import com.example.basic.HomeScreen
 import com.example.basic.MoreScreen
 import com.example.basic.PlannerScreen
 
-sealed class Screen(val route: String, val label: String, val icon: androidx.compose.ui.graphics.vector.ImageVector) {
-    object Home : Screen("home", "Home", Icons.Filled.Home)
-    object Planner : Screen("planner", "Planner", Icons.Filled.CalendarToday)
-    object Attendance : Screen("attendance", "Attendance", Icons.Filled.CheckCircle)
-    object Food : Screen("food", "Food", Icons.Filled.Restaurant)
-    object More : Screen("more", "More", Icons.Filled.MoreHoriz)
+sealed class Screen(
+    val route: String,
+    val label: String,
+    val filledIcon: androidx.compose.ui.graphics.vector.ImageVector,
+    val outlinedIcon: androidx.compose.ui.graphics.vector.ImageVector
+) {
+    object Home : Screen(
+        "home",
+        "Home",
+        Icons.Filled.Home,
+        Icons.Outlined.Home
+    )
+    object Planner : Screen(
+        "planner",
+        "Planner",
+        Icons.Filled.CalendarToday,
+        Icons.Outlined.CalendarToday
+    )
+    object Attendance : Screen(
+        "attendance",
+        "Attendance",
+        Icons.Filled.CheckCircle,
+        Icons.Outlined.CheckCircle
+    )
+    object Food : Screen(
+        "food",
+        "Food",
+        Icons.Filled.Restaurant,
+        Icons.Outlined.Restaurant
+    )
+    object More : Screen(
+        "more",
+        "More",
+        Icons.Filled.MoreHoriz,
+        Icons.Outlined.MoreHoriz
+    )
 }
 
 @Composable
@@ -44,10 +79,14 @@ fun AppNavHost() {
             val currentRoute = navBackStackEntry?.destination?.route
             NavigationBar {
                 items.forEach { screen ->
+                    val selected = currentRoute == screen.route
                     NavigationBarItem(
-                        icon = { Icon(screen.icon, contentDescription = screen.label) },
+                        icon = {
+                            val iconImage = if (selected) screen.filledIcon else screen.outlinedIcon
+                            Icon(iconImage, contentDescription = screen.label)
+                        },
                         label = { Text(screen.label) },
-                        selected = currentRoute == screen.route,
+                        selected = selected,
                         onClick = {
                             navController.navigate(screen.route) {
                                 launchSingleTop = true
