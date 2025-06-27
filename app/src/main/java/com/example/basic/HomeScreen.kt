@@ -44,12 +44,16 @@ fun HomeScreen() {
             .fillMaxSize()
             .background(Color(0xFFF0F0F0))
     ) {
-        AnimatedVisibility(visible = activeIndex == 0) {
-            HomeHeader(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(headerHeight)
-            )
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(headerHeight)
+        ) {
+            AnimatedVisibility(visible = activeIndex == 0) {
+                HomeHeader(
+                    modifier = Modifier.fillMaxSize()
+                )
+            }
         }
 
         Box(modifier = Modifier.weight(1f)) {
