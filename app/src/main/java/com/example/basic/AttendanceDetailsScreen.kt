@@ -251,7 +251,7 @@ private fun DaySelector(
  
                         .clickable { onSelect(index) }
                         .padding(horizontal = 12.dp, vertical = 4.dp)
-                        .align(Alignment.Top)
+                        .align(Alignment.CenterVertically)
                 ) {
                 Text(
                     day.date.dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.getDefault()),
