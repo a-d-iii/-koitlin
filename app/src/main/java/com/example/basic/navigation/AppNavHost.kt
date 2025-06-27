@@ -119,10 +119,36 @@ fun AppNavHost() {
                         label = { Text(screen.label) },
                         selected = selected,
                         onClick = {
-                            navController.navigate(screen.route) {
-                                launchSingleTop = true
-                                restoreState = true
-                                popUpTo(navController.graph.startDestinationId) { saveState = true }
+                            when (screen) {
+                                Screen.Food -> {
+                                    if (currentRoute == Screen.MonthlyMenu.route || currentRoute == Screen.FoodSummary.route) {
+                                        navController.popBackStack(Screen.Food.route, false)
+                                    } else {
+                                        navController.navigate(Screen.Food.route) {
+                                            launchSingleTop = true
+                                            restoreState = true
+                                            popUpTo(navController.graph.startDestinationId) { saveState = true }
+                                        }
+                                    }
+                                }
+                                Screen.Attendance -> {
+                                    if (currentRoute == Screen.AttendanceDetails.route) {
+                                        navController.popBackStack(Screen.Attendance.route, false)
+                                    } else {
+                                        navController.navigate(Screen.Attendance.route) {
+                                            launchSingleTop = true
+                                            restoreState = true
+                                            popUpTo(navController.graph.startDestinationId) { saveState = true }
+                                        }
+                                    }
+                                }
+                                else -> {
+                                    navController.navigate(screen.route) {
+                                        launchSingleTop = true
+                                        restoreState = true
+                                        popUpTo(navController.graph.startDestinationId) { saveState = true }
+                                    }
+                                }
                             }
                         }
                     )
