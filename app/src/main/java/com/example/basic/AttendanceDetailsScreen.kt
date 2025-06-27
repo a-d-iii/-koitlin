@@ -375,7 +375,8 @@ private fun EventCard(event: ClassEvent) {
         ) {
             Column(modifier = Modifier.weight(1f)) {
                 Text(event.course, color = Color.White, fontWeight = FontWeight.Bold)
-                Text(event.category.label, color = Color.White.copy(alpha = 0.9f), fontSize = 12.sp)
+                Text("${event.start} - ${event.end} | ${event.room}",
+                    color = Color.White.copy(alpha = 0.9f), fontSize = 12.sp)
             }
         }
     }
