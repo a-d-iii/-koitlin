@@ -1,6 +1,7 @@
 package com.example.basic.navigation
 
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material.icons.filled.CheckCircle
@@ -20,6 +21,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -103,7 +105,8 @@ fun AppNavHost() {
                     NavigationBarItem(
                         icon = {
                             val iconImage = if (selected) screen.filledIcon else screen.outlinedIcon
-                            Icon(iconImage, contentDescription = screen.label)
+                            val iconModifier = if (screen == Screen.Home) Modifier.size(32.dp) else Modifier
+                            Icon(iconImage, contentDescription = screen.label, modifier = iconModifier)
                         },
                         label = { Text(screen.label) },
                         selected = selected,
