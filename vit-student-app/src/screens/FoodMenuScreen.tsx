@@ -335,7 +335,9 @@ const styles = StyleSheet.create({
   },
   container: {
     padding: 16,
+ 
     paddingBottom: 58,
+ 
   },
   heading: {
     fontSize: 22,
