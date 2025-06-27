@@ -21,6 +21,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.*
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -94,6 +95,16 @@ private object PlannerRepository {
         return schedules.firstOrNull { it.date.dayOfWeek == date.dayOfWeek }?.events ?: emptyList()
 
     }
+}
+
+private fun Color.lighten(factor: Float): Color {
+    val f = factor.coerceIn(0f, 1f)
+    return Color(
+        red + (1 - red) * f,
+        green + (1 - green) * f,
+        blue + (1 - blue) * f,
+        alpha
+    )
 }
 
 
@@ -343,7 +354,23 @@ private fun ScheduleList(date: LocalDate, events: List<ClassEvent>) {
                 ) {
                     // Display only the start time on the timeline in 12 hour format
                     val displayTime = LocalTime.parse(event.start).format(java.time.format.DateTimeFormatter.ofPattern("h:mm a"))
-                    Text(displayTime, color = Color.Gray, fontSize = 12.sp)
+                    val timeColor = event.category.color
+                    val timeBorder = timeColor.lighten(0.4f)
+                    Surface(
+                        color = MaterialTheme.colorScheme.background,
+                        shape = RoundedCornerShape(4.dp),
+                        border = BorderStroke(1.dp, timeBorder),
+                        modifier = Modifier
+                            .padding(bottom = 4.dp)
+                    ) {
+                        Text(
+                            displayTime,
+                            color = timeColor,
+                            fontSize = 12.sp,
+                            maxLines = 1,
+                            modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
+                        )
+                    }
                     val fillColor = when {
                         isCurrent -> Color(0xFF1E88E5)
                         isPast -> Color(0xFFD32F2F)
