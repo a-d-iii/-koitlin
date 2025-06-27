@@ -158,23 +158,40 @@ private fun WeatherInfo(value: String, label: String) {
 }
 
 @Composable
+private fun RowScope.InfoBox(value: String, label: String) {
+    Card(
+        modifier = Modifier
+            .weight(1f)
+            .height(100.dp)
+            .padding(horizontal = 4.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White),
+        elevation = CardDefaults.cardElevation(1.dp)
+    ) {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = value,
+                style = MaterialTheme.typography.headlineMedium,
+                fontWeight = FontWeight.Bold
+            )
+            Text(label, style = MaterialTheme.typography.bodyMedium)
+        }
+    }
+}
+
+@Composable
 private fun TimetableSection() {
     SectionHeader("Today's Timetable")
-    val classes = listOf(
-        ClassInfo("1", "DSA @ 301", "08:00 – 09:00"),
-        ClassInfo("2", "Algorithms @ 204", "09:15 – 10:15"),
-        ClassInfo("3", "Networks @ Lab 2", "10:30 – 11:30")
-    )
-    classes.forEach {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 4.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text(it.title, style = MaterialTheme.typography.bodyMedium)
-            Text(it.time, style = MaterialTheme.typography.bodyMedium)
-        }
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        InfoBox(value = "6", label = "classes today")
+        InfoBox(value = "2", label = "labs")
+        InfoBox(value = "1", label = "project")
     }
 }
 
