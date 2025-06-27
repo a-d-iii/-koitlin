@@ -19,3 +19,10 @@ versions of Gradle.
 
 You can also open the project directory directly in Android Studio and run the
 app on an emulator from there.
+
+## Permissions
+
+The app requires network access to fetch data. The `INTERNET` permission is
+declared in `app/src/main/AndroidManifest.xml`. If you encounter crashes related
+to network requests, verify that this permission is included when merging
+manifests in your build process.
