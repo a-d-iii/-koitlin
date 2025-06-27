@@ -246,6 +246,8 @@ private fun DaySelector(
                     verticalArrangement = Arrangement.Center,
                     modifier = Modifier
                         .height(itemHeight)
+                        // keep the top flush with the bar while the highlight
+                        // extends only downward
                         .shadow(if (isSelected) 12.dp else 0.dp, shape, clip = false)
                         .clip(shape)
                         .background(bgColor, shape)
@@ -258,7 +260,7 @@ private fun DaySelector(
                     day.date.dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.getDefault()),
                     color = textColor,
                     fontSize = 12.sp,
-                    fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
+                    fontWeight = FontWeight.Bold
                 )
                 Text(
                     day.date.dayOfMonth.toString(),
