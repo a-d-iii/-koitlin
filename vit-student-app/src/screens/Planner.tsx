@@ -12,6 +12,7 @@ import {
   GestureResponderEvent,
   PanResponderGestureState,
 } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { WEEKLY_SCHEDULE, ClassEntry } from '../data/weeklySchedule';
 
 const DAYS = Object.keys(WEEKLY_SCHEDULE);
@@ -20,6 +21,7 @@ export default function Planner() {
   const [index, setIndex] = useState<number>(0);
   const day = DAYS[index];
   const classes: ClassEntry[] = WEEKLY_SCHEDULE[day];
+  const navigation = useNavigation();
 
   const pan = useRef(
     PanResponder.create({
@@ -97,6 +99,12 @@ export default function Planner() {
           </TouchableOpacity>
         ))}
       </ScrollView>
+      <TouchableOpacity
+        style={styles.attendanceBtn}
+        onPress={() => navigation.navigate('Attendance2' as never)}
+      >
+        <Text style={styles.attendanceBtnText}>Attendance 2</Text>
+      </TouchableOpacity>
     </SafeAreaView>
   );
 }
@@ -146,4 +154,14 @@ const styles = StyleSheet.create({
   classRight: { justifyContent: 'space-between', alignItems: 'flex-end' },
   timeText: { fontSize: 12, color: '#333' },
   roomText: { fontSize: 10, color: '#666', marginTop: 2 },
+  attendanceBtn: {
+    position: 'absolute',
+    bottom: 24,
+    left: 24,
+    backgroundColor: '#6C5CE7',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 24,
+  },
+  attendanceBtnText: { color: '#fff', fontWeight: '600' },
 });
