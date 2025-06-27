@@ -107,6 +107,15 @@ function MainTabs() {
         tabBarInactiveTintColor: '#555555',
         tabBarStyle: {
           backgroundColor: '#FFFFFF',
+          height: 50,
+          paddingBottom: 4,
+          paddingTop: 4,
+          borderTopWidth: 0,
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: -2 },
+          shadowOpacity: 0.1,
+          shadowRadius: 4,
+          elevation: 8,
         },
       })}
     >
