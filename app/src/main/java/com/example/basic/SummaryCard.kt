@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -224,23 +225,47 @@ private fun MenuSection() {
     )
     Column {
         meals.chunked(2).forEach { rowItems ->
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally)
+            ) {
                 rowItems.forEach { (label, menu) ->
                     Card(
                         modifier = Modifier
-                            .weight(1f)
+                            .widthIn(max = 160.dp)
+                            .weight(1f, fill = false)
                             .padding(4.dp),
                         colors = CardDefaults.cardColors(containerColor = Color.White),
                         elevation = CardDefaults.cardElevation(1.dp)
                     ) {
-                        Column(modifier = Modifier.padding(12.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-                            Icon(Icons.Default.Fastfood, contentDescription = null, tint = Color(0xFFFF6A00))
-                            Text(label, fontWeight = FontWeight.SemiBold, modifier = Modifier.padding(top = 4.dp))
-                            Text(menu, fontSize = 12.sp, modifier = Modifier.padding(top = 4.dp))
+                        Column(
+                            modifier = Modifier.padding(12.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Icon(
+                                Icons.Default.Fastfood,
+                                contentDescription = null,
+                                tint = Color(0xFFFF6A00)
+                            )
+                            Text(
+                                label,
+                                fontWeight = FontWeight.SemiBold,
+                                modifier = Modifier.padding(top = 4.dp)
+                            )
+                            Text(
+                                menu,
+                                fontSize = 12.sp,
+                                modifier = Modifier.padding(top = 4.dp)
+                            )
                         }
                     }
                 }
-                if (rowItems.size == 1) Spacer(Modifier.weight(1f))
+                if (rowItems.size == 1) Spacer(
+                    modifier = Modifier
+                        .widthIn(max = 160.dp)
+                        .weight(1f, fill = false)
+                        .padding(4.dp)
+                )
             }
         }
     }
