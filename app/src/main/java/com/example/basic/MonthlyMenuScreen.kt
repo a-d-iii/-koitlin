@@ -2,7 +2,6 @@ package com.example.basic
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.lazy.LazyColumn
@@ -37,20 +36,6 @@ typealias MonthlyMenu = Map<String, List<Meal>>
 data class DayData(val date: String, val meals: List<Meal>)
 
 data class WeekSection(val title: String, val color: Color, val dayColor: Color, val days: List<DayData>)
-
-private val WEEK_COLORS = listOf(
-    Color(0xFFF0E4D7),
-    Color(0xFFE7F0D7),
-    Color(0xFFD7E8F0),
-    Color(0xFFF0D7E8)
-)
-
-private val DAY_COLORS = listOf(
-    Color(0xFFE5D7CB),
-    Color(0xFFDCE5CB),
-    Color(0xFFCBDCE5),
-    Color(0xFFE5CBDC)
-)
 
 private fun parseMonthlyMenu(json: String): MonthlyMenu {
     val obj = JSONObject(json)
@@ -89,12 +74,11 @@ private fun toWeeks(menu: MonthlyMenu): List<WeekSection> {
     var i = 0
     while (i < dates.size) {
         val slice = dates.subList(i, kotlin.math.min(i + 7, dates.size))
-        val index = weeks.size
         weeks.add(
             WeekSection(
-                title = "Week ${index + 1}",
-                color = WEEK_COLORS[index % WEEK_COLORS.size],
-                dayColor = DAY_COLORS[index % DAY_COLORS.size],
+                title = "Week ${weeks.size + 1}",
+                color = Color.White,
+                dayColor = Color.White,
                 days = slice.map { DayData(it, menu[it]!!) }
             )
         )
@@ -136,7 +120,6 @@ fun MonthlyMenuScreen(onBack: () -> Unit) {
     val weeks = remember(menu) { toWeeks(menu!!) }
     val listState = rememberLazyListState()
 
-
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -167,17 +150,16 @@ fun MonthlyMenuScreen(onBack: () -> Unit) {
             state = listState,
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.White)
+                .background(Color(0xFFFFEDEE))
                 .padding(padding),
             contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
         ) {
             weeks.forEach { week ->
-                stickyHeader { WeekHeader(week.title, week.dayColor) }
+                stickyHeader { WeekHeader(week.title) }
                 items(week.days) { day ->
                     DayCard(
                         day = day,
                         liked = wishlist.contains(day.date),
-                        background = week.dayColor,
                         onLike = {
                             wishlist = if (wishlist.contains(day.date)) wishlist - day.date else wishlist + day.date
                         },
@@ -207,11 +189,11 @@ fun MonthlyMenuScreen(onBack: () -> Unit) {
 }
 
 @Composable
-private fun WeekHeader(title: String, color: Color) {
+private fun WeekHeader(title: String) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .background(color)
+            .background(Color(0xFFFFEDEE))
             .padding(vertical = 8.dp)
             .zIndex(1f)
     ) {
@@ -219,7 +201,6 @@ private fun WeekHeader(title: String, color: Color) {
             modifier = Modifier
                 .align(Alignment.Center)
                 .clip(RoundedCornerShape(50))
-                .border(2.dp, color, RoundedCornerShape(50))
                 .background(Color.White)
                 .padding(horizontal = 24.dp, vertical = 8.dp)
         ) {
@@ -232,13 +213,12 @@ private fun WeekHeader(title: String, color: Color) {
 private fun DayCard(
     day: DayData,
     liked: Boolean,
-    background: Color,
     onLike: () -> Unit,
     onAdd: () -> Unit
 ) {
     Card(
         shape = RoundedCornerShape(12.dp),
-        colors = CardDefaults.cardColors(containerColor = background),
+        colors = CardDefaults.cardColors(containerColor = Color.White),
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp)
