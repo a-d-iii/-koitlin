@@ -463,12 +463,10 @@ const styles = StyleSheet.create({
 
   menuGrid: { flexDirection:'row', flexWrap:'wrap', justifyContent:'space-between' },
   menuBox:  {
-    // width reduced so spacing matches Android version
-    width: '37%',
+    // adjust width so two menu items fit side‑by‑side
+    width: '46%',
     backgroundColor:'#fff',
     borderRadius:12,
-    borderWidth:1,
-    borderColor:'#ddd',
     padding:12,
     marginVertical:8,
     marginHorizontal:4,
