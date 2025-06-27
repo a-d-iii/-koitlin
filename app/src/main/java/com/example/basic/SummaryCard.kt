@@ -89,44 +89,48 @@ private fun WeatherCard() {
                 .fillMaxSize()
         ) {
             Row(
-                modifier = Modifier.fillMaxSize(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .align(Alignment.TopStart)
+                    .offset(y = (-12).dp)
             ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    AsyncImage(
-                        model = coil.request.ImageRequest.Builder(LocalContext.current)
-                            .data("https://placekitten.com/128/128")
-                            .crossfade(true)
-                            .size(coil.size.Size.ORIGINAL)
-                            .build(),
-                        contentDescription = null,
-                        modifier = Modifier.size(72.dp),
-                        placeholder = painterResource(android.R.drawable.ic_menu_report_image),
-                        contentScale = ContentScale.Fit
-                    )
-                    Spacer(Modifier.width(12.dp))
-                    Text(
-                        "Cloudy",
-                        color = Color.White,
-                        fontSize = 32.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
-                Column(horizontalAlignment = Alignment.End) {
-                    Text(
-                        "25°",
-                        color = Color.White,
-                        fontSize = 52.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-                    Text(
-                        "Feels like 27°",
-                        color = Color.White,
-                        fontSize = 12.sp,
-                        modifier = Modifier.offset(x = (-10).dp, y = (-10).dp)
-                    )
-                }
+                AsyncImage(
+                    model = coil.request.ImageRequest.Builder(LocalContext.current)
+                        .data("https://placekitten.com/128/128")
+                        .crossfade(true)
+                        .size(coil.size.Size.ORIGINAL)
+                        .build(),
+                    contentDescription = null,
+                    modifier = Modifier.size(72.dp),
+                    placeholder = painterResource(android.R.drawable.ic_menu_report_image),
+                    contentScale = ContentScale.Fit
+                )
+                Spacer(Modifier.width(12.dp))
+                Text(
+                    "Cloudy",
+                    color = Color.White,
+                    fontSize = 32.sp,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+            Column(
+                horizontalAlignment = Alignment.End,
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .offset(y = (-12).dp)
+            ) {
+                Text(
+                    "25°",
+                    color = Color.White,
+                    fontSize = 52.sp,
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    "Feels like 27°",
+                    color = Color.White,
+                    fontSize = 12.sp,
+                    modifier = Modifier.offset(x = (-10).dp, y = (-10).dp)
+                )
             }
             Row(
                 modifier = Modifier
