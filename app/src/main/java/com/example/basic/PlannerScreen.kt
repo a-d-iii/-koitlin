@@ -22,7 +22,6 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Button
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,19 +35,17 @@ import androidx.compose.ui.input.pointer.pointerInput
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
 @Composable
-fun PlannerScreen(onShowDetails: () -> Unit = {}) {
+fun PlannerScreen() {
     val days = WEEKLY_SCHEDULE.keys.toList()
     var dayIndex by remember { mutableStateOf(0) }
     var dragAmount by remember { mutableStateOf(0f) }
     val classes by remember(dayIndex) { derivedStateOf { WEEKLY_SCHEDULE[days[dayIndex]].orEmpty() } }
 
-    Box(modifier = Modifier.fillMaxSize()) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color(0xFFF0F2F5))
-                .padding(bottom = 72.dp)
-                .pointerInput(dayIndex) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color(0xFFF0F2F5))
+            .pointerInput(dayIndex) {
                 detectHorizontalDragGestures(
                     onHorizontalDrag = { _, delta ->
                         dragAmount += delta
@@ -170,11 +167,6 @@ fun PlannerScreen(onShowDetails: () -> Unit = {}) {
                 }
             }
         }
-
-        Button(
-            onClick = onShowDetails,
-            modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 24.dp)
-        ) { Text("More Details") }
     }
 }
 }
