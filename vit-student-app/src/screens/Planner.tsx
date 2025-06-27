@@ -1,4 +1,5 @@
 import React, { useRef, useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
 import {
   SafeAreaView,
   View,
@@ -20,6 +21,7 @@ export default function Planner() {
   const [index, setIndex] = useState<number>(0);
   const day = DAYS[index];
   const classes: ClassEntry[] = WEEKLY_SCHEDULE[day];
+  const navigation = useNavigation();
 
   const pan = useRef(
     PanResponder.create({
@@ -51,7 +53,15 @@ export default function Planner() {
         { paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0 },
       ]}
     >
-      <Text style={styles.heading}>Weekly Timetable</Text>
+      <View style={styles.headerRow}>
+        <Text style={styles.heading}>Weekly Timetable</Text>
+        <TouchableOpacity
+          style={styles.calenderButton}
+          onPress={() => navigation.navigate('CalenderScreen' as never)}
+        >
+          <Text style={styles.calenderButtonText}>Calender</Text>
+        </TouchableOpacity>
+      </View>
 
       <ScrollView
         horizontal
@@ -97,6 +107,7 @@ export default function Planner() {
           </TouchableOpacity>
         ))}
       </ScrollView>
+
     </SafeAreaView>
   );
 }
@@ -106,9 +117,14 @@ const styles = StyleSheet.create({
   heading: {
     fontSize: 22,
     fontWeight: '700',
-    marginVertical: 16,
-    marginHorizontal: 16,
     color: '#333',
+  },
+  headerRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginHorizontal: 16,
+    marginVertical: 16,
   },
   dayRow: {
     flexGrow: 0,
@@ -146,4 +162,11 @@ const styles = StyleSheet.create({
   classRight: { justifyContent: 'space-between', alignItems: 'flex-end' },
   timeText: { fontSize: 12, color: '#333' },
   roomText: { fontSize: 10, color: '#666', marginTop: 2 },
+  calenderButton: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 8,
+    backgroundColor: '#6C5CE7',
+  },
+  calenderButtonText: { color: '#fff', fontWeight: '600' },
 });
