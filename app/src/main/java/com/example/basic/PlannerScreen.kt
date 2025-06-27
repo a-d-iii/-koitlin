@@ -22,13 +22,6 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ToggleOn
-import androidx.compose.material.icons.outlined.ToggleOff
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconToggleButton
-import androidx.navigation.NavController
-import com.example.basic.navigation.Screen
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -42,34 +35,33 @@ import androidx.compose.ui.input.pointer.pointerInput
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
 @Composable
-fun PlannerScreen(navController: NavController) {
+fun PlannerScreen() {
     val days = WEEKLY_SCHEDULE.keys.toList()
     var dayIndex by remember { mutableStateOf(0) }
     var dragAmount by remember { mutableStateOf(0f) }
     val classes by remember(dayIndex) { derivedStateOf { WEEKLY_SCHEDULE[days[dayIndex]].orEmpty() } }
 
-    Box(modifier = Modifier.fillMaxSize()) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color(0xFFF0F2F5))
-                .pointerInput(dayIndex) {
-                    detectHorizontalDragGestures(
-                        onHorizontalDrag = { _, delta ->
-                            dragAmount += delta
-                        },
-                        onDragEnd = {
-                            if (dragAmount < -100 && dayIndex < days.lastIndex) {
-                                dayIndex++
-                            } else if (dragAmount > 100 && dayIndex > 0) {
-                                dayIndex--
-                            }
-                            dragAmount = 0f
-                        },
-                        onDragCancel = { dragAmount = 0f }
-                    )
-                }
-        ) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color(0xFFF0F2F5))
+            .pointerInput(dayIndex) {
+                detectHorizontalDragGestures(
+                    onHorizontalDrag = { _, delta ->
+                        dragAmount += delta
+                    },
+                    onDragEnd = {
+                        if (dragAmount < -100 && dayIndex < days.lastIndex) {
+                            dayIndex++
+                        } else if (dragAmount > 100 && dayIndex > 0) {
+                            dayIndex--
+                        }
+                        dragAmount = 0f
+                    },
+                    onDragCancel = { dragAmount = 0f }
+                )
+            }
+    ) {
         Text(
             text = "Weekly Timetable",
             style = MaterialTheme.typography.headlineSmall,
@@ -176,21 +168,5 @@ fun PlannerScreen(navController: NavController) {
             }
         }
     }
-        var toggled by remember { mutableStateOf(false) }
-        IconToggleButton(
-            checked = toggled,
-            onCheckedChange = {
-                toggled = it
-                navController.navigate(Screen.Empty.route)
-            },
-            modifier = Modifier
-                .align(Alignment.BottomStart)
-                .padding(16.dp)
-        ) {
-            Icon(
-                imageVector = if (toggled) Icons.Filled.ToggleOn else Icons.Outlined.ToggleOff,
-                contentDescription = "Toggle"
-            )
-        }
-    }
+}
 }
