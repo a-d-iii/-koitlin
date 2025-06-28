@@ -2,7 +2,6 @@ package com.example.basic
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -38,34 +37,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import java.time.DayOfWeek
 import java.time.LocalDate
-import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
 import java.time.temporal.TemporalAdjusters
 import java.util.Locale
-
-// Simple schedule model for the calendar
-private enum class ClassType { THEORY, LAB, BREAK, LUNCH }
-
-private data class DayClass(
-    val title: String,
-    val start: LocalTime,
-    val end: LocalTime,
-    val type: ClassType
-)
-
-private val SAMPLE_DAY = listOf(
-    DayClass("Math", LocalTime.of(9, 0), LocalTime.of(9, 50), ClassType.THEORY),
-    DayClass("Physics Lab", LocalTime.of(10, 0), LocalTime.of(10, 50), ClassType.LAB),
-    DayClass("Break", LocalTime.of(11, 0), LocalTime.of(12, 0), ClassType.BREAK),
-    DayClass("Lunch", LocalTime.of(12, 0), LocalTime.of(13, 30), ClassType.LUNCH),
-    DayClass("Algorithms", LocalTime.of(13, 30), LocalTime.of(14, 20), ClassType.THEORY),
-    DayClass("Electronics", LocalTime.of(14, 30), LocalTime.of(15, 10), ClassType.LAB),
-    DayClass("Databases", LocalTime.of(15, 20), LocalTime.of(16, 0), ClassType.THEORY)
-)
-
-private val WEEK_CLASSES: Map<DayOfWeek, List<DayClass>> =
-    DayOfWeek.values().associateWith { SAMPLE_DAY }
 
 @Composable
 fun MoreScreen() {
@@ -79,7 +54,6 @@ fun MoreScreen() {
     val weekDates = remember {
         (0..6).map { startOfWeek.plusDays(it.toLong()) }
     }
-    var selectedDay by remember { mutableStateOf(today.dayOfWeek) }
     // Use a single shade for the top and bottom dividers
     val dividerColor = Color.DarkGray
 
@@ -105,14 +79,8 @@ fun MoreScreen() {
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             weekDates.forEach { date ->
-                val selected = date.dayOfWeek == selectedDay
                 Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(4.dp))
-                        .background(if (selected) Color(0xFFBBDEFB) else Color.Transparent)
-                        .clickable { selectedDay = date.dayOfWeek }
-                        .padding(vertical = 4.dp, horizontal = 6.dp)
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     val day = date.dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.getDefault())
                     Text(
@@ -183,119 +151,80 @@ fun MoreScreen() {
             }
         }
 
-        // Calendar grid showing hours of the day with class blocks
+        // Calendar grid showing hours of the day
         val lineColor = Color(0xFFE0E0E0)
-        val hourHeight = 96.dp
-        // Only show hours from 9 am to 4 pm
-        val hours = (9..16).map { hour ->
+        val hours = (0..23).map { hour ->
             val displayHour = if (hour % 12 == 0) 12 else hour % 12
             val ampm = if (hour < 12) "am" else "pm"
             "%02d:00 %s".format(displayHour, ampm)
         }
         val calendarScroll = rememberScrollState()
-        val dayClasses = WEEK_CLASSES[selectedDay] ?: emptyList()
-        BoxWithConstraints(
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 16.dp)
-                .height(hourHeight * hours.size)
                 .verticalScroll(calendarScroll)
         ) {
-            val labelWidth = maxWidth * 0.2f
-            val contentWidth = maxWidth - labelWidth - 1.dp
-
-            Box {
-                Column {
-                    hours.forEach { label ->
-                        Row(
+            hours.forEach { label ->
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(96.dp)
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .weight(0.2f)
+                            .fillMaxHeight(),
+                    ) {
+                        Text(
+                            text = label,
+                            style = MaterialTheme.typography.bodyLarge,
+                            fontWeight = FontWeight.Bold,
                             modifier = Modifier
-                                .fillMaxWidth()
-                                .height(hourHeight)
-                        ) {
-                            Box(
-                                modifier = Modifier
-                                    .width(labelWidth)
-                                    .fillMaxHeight()
-                            ) {
-                                Text(
-                                    text = label,
-                                    style = MaterialTheme.typography.bodyLarge,
-                                    fontWeight = FontWeight.Bold,
-                                    modifier = Modifier
-                                        .align(Alignment.TopCenter)
-                                        .offset(y = 8.dp)
-                                )
-                            }
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxHeight()
-                                    .width(1.dp)
-                                    .background(lineColor)
-                            )
-                            Box(
-                                modifier = Modifier
-                                    .width(contentWidth)
-                                    .fillMaxHeight()
-                            ) {
-                                Divider(
-                                    color = lineColor,
-                                    modifier = Modifier
-                                        .align(Alignment.TopStart)
-                                        .padding(start = 4.dp)
-                                        .fillMaxWidth(),
-                                    thickness = 1.dp
-                                )
-                            }
-                        }
-                    }
-                    Row(modifier = Modifier.fillMaxWidth()) {
-                        Box(modifier = Modifier.width(labelWidth))
-                        Box(
-                            modifier = Modifier
-                                .width(1.dp)
-                                .background(lineColor)
+                                .align(Alignment.TopCenter)
+                                .offset(y = 8.dp)
                         )
-                        Box(
-                            modifier = Modifier
-                                .width(contentWidth)
-                        ) {
-                            Divider(
-                                color = lineColor,
-                                modifier = Modifier
-                                    .padding(start = 4.dp)
-                                    .fillMaxWidth(),
-                                thickness = 1.dp
-                            )
-                        }
-                    }
-                }
-
-                dayClasses.forEach { cls ->
-                    val startMinutes = cls.start.hour * 60 + cls.start.minute
-                    val endMinutes = cls.end.hour * 60 + cls.end.minute
-                    val top = hourHeight * (startMinutes / 60f)
-                    val height = hourHeight * ((endMinutes - startMinutes) / 60f)
-                    val color = when (cls.type) {
-                        ClassType.THEORY -> Color(0xFFD7E8FF)
-                        ClassType.LAB -> Color(0xFFFFF9C4)
-                        ClassType.BREAK, ClassType.LUNCH -> Color(0xFFE0E0E0)
                     }
                     Box(
                         modifier = Modifier
-                            .offset(x = labelWidth + 1.dp + 4.dp, y = top)
-                            .width(contentWidth - 8.dp)
-                            .height(height - 8.dp)
-                            .clip(RoundedCornerShape(6.dp))
-                            .background(color)
+                            .fillMaxHeight()
+                            .width(1.dp)
+                            .background(lineColor)
+                    )
+                    Box(
+                        modifier = Modifier
+                            .weight(0.8f)
+                            .fillMaxHeight()
                     ) {
-                        Column(modifier = Modifier.padding(4.dp)) {
-                            Text(cls.title, fontWeight = FontWeight.SemiBold)
-                            Text(
-                                "${cls.start} – ${cls.end}",
-                                style = MaterialTheme.typography.bodySmall
-                            )
-                        }
+                        Divider(
+                            color = lineColor,
+                            modifier = Modifier
+                                .align(Alignment.TopStart)
+                                .padding(start = 4.dp)
+                                .fillMaxWidth(),
+                            thickness = 1.dp
+                        )
                     }
+                }
+            }
+            Row(modifier = Modifier.fillMaxWidth()) {
+                Box(modifier = Modifier.weight(0.2f))
+                Box(
+                    modifier = Modifier
+                        .width(1.dp)
+                        .background(lineColor)
+                )
+                Box(
+                    modifier = Modifier
+                        .weight(0.8f)
+                ) {
+                    Divider(
+                        color = lineColor,
+                        modifier = Modifier
+                            .padding(start = 4.dp)
+                            .fillMaxWidth(),
+                        thickness = 1.dp
+                    )
                 }
             }
         }
