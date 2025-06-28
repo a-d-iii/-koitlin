@@ -28,17 +28,22 @@ import androidx.compose.ui.unit.dp
 import com.example.basic.DoubleRingProgress
 import com.example.basic.MiniLineGraph
 
-private data class Subject(val name: String, val code: String, val attendance: Float)
+private data class Subject(
+    val name: String,
+    val code: String,
+    val total: Float,
+    val between: Float
+)
 
 @Composable
 fun AttendanceScreen() {
     val subjects = listOf(
-        Subject("Mathematics", "MAT101", 0.85f),
-        Subject("Physics", "PHY102", 0.75f),
-        Subject("Chemistry", "CHE103", 0.60f),
-        Subject("Computer Science", "CSE104", 0.95f),
-        Subject("English", "ENG105", 0.80f),
-        Subject("Electronics", "ELE106", 0.50f)
+        Subject("Mathematics", "MAT101", total = 1.0f, between = 1.0f),
+        Subject("Physics", "PHY102", total = 0.72f, between = 0.69f),
+        Subject("Chemistry", "CHE103", total = 0.60f, between = 0.50f),
+        Subject("Computer Science", "CSE104", total = 0.95f, between = 0.85f),
+        Subject("English", "ENG105", total = 0.80f, between = 0.70f),
+        Subject("Electronics", "ELE106", total = 0.50f, between = 0.40f)
     )
 
     Column(
@@ -94,21 +99,20 @@ fun AttendanceScreen() {
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         val progressColor = when {
-                            subject.attendance >= 0.75f -> Color(0xFF55b45e)
-                            subject.attendance >= 0.70f -> Color(0xFFe5a967)
+                            subject.total >= 0.75f -> Color(0xFF55b45e)
+                            subject.total >= 0.70f -> Color(0xFFe5a967)
                             else -> Color(0xFFe06846)
                         }
-                        val inner = (subject.attendance - 0.1f).coerceAtLeast(0f)
                         DoubleRingProgress(
-                            outerProgress = subject.attendance,
-                            innerProgress = inner,
+                            outerProgress = subject.total,
+                            innerProgress = subject.between,
                             modifier = Modifier.size(96.dp),
                             color = progressColor,
                             trackColor = progressColor.copy(alpha = 0.3f)
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
-                            text = "Btw exams: ${(inner * 100).toInt()}%",
+                            text = "Btw exams: ${(subject.between * 100).toInt()}%",
                             style = MaterialTheme.typography.bodyLarge,
                             color = Color.Gray,
                             fontWeight = FontWeight.Bold
