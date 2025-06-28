@@ -1,163 +1,174 @@
 package com.example.basic
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.drawscope.inset
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.background
 
-private data class Subject(
-    val name: String,
+private data class SubjectProgress(
+    val title: String,
     val code: String,
-    val attendance: Int,
+    val current: Int,
     val lastMonth: Int,
     val color: Color
 )
 
-private val subjects = listOf(
-    Subject("Physics", "PHY-101", 92, 84, Color(0xFF2D72F4)),
-    Subject("Mathematics", "MAT-201", 80, 68, Color(0xFFF39B32)),
-    Subject("Chemistry", "CHE-102", 88, 90, Color(0xFF2D72F4))
-)
+@Composable
+fun AttendanceScreen() {
+    val subjects = listOf(
+        SubjectProgress("Physics", "PHY-101", 92, 84, Color(0xFF2D72F4)),
+        SubjectProgress("Mathematics", "MATH-201", 80, 68, Color(0xFFF39B32)),
+        SubjectProgress("Chemistry", "CHEM-103", 88, 90, Color(0xFF2D72F4))
+    )
 
-private const val GAP_ANGLE = 0f
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color(0xFFF4F5F7)),
+        contentPadding = PaddingValues(vertical = 16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        items(subjects.size) { index ->
+            AttendanceCard(item = subjects[index])
+        }
+    }
+}
 
 @Composable
-private fun ProgressRing(percent: Int, color: Color, modifier: Modifier = Modifier) {
-    Box(modifier.size(96.dp), contentAlignment = Alignment.Center) {
-        Canvas(modifier = Modifier.fillMaxSize()) {
-            val stroke = 12.dp.toPx()
-            val sweepTrack = 360f - GAP_ANGLE
-            val startTrack = 270f + GAP_ANGLE / 2
-            drawArc(
-                color = Color(0xFFD9DADD),
-                startAngle = startTrack,
-                sweepAngle = sweepTrack,
-                useCenter = false,
-                style = Stroke(width = stroke, cap = StrokeCap.Round)
+private fun AttendanceCard(item: SubjectProgress) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(128.dp)
+            .clip(RoundedCornerShape(20.dp))
+            .background(Color.White)
+            .padding(24.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Column(Modifier.weight(1f)) {
+            Text(
+                text = item.title,
+                fontSize = 22.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = Color(0xFF111111),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
-            val sweep = (percent.coerceIn(0, 100)) * 3.6f
-            drawArc(
-                color = color,
-                startAngle = 270f,
-                sweepAngle = sweep,
-                useCenter = false,
-                style = Stroke(width = stroke, cap = StrokeCap.Round)
-            )
-
-            // small inner circle for additional visual depth
-            drawCircle(
-                color = Color.White,
-                radius = size.minDimension * 0.15f,
-                center = center
+            Spacer(Modifier.height(4.dp))
+            Text(
+                text = item.code,
+                fontSize = 15.sp,
+                fontWeight = FontWeight.Medium,
+                color = Color(0xFF6E7480)
             )
         }
+
+        Column(horizontalAlignment = Alignment.End) {
+            DoubleRingGauge(
+                currentPercent = item.current,
+                lastPercent = item.lastMonth,
+                color = item.color,
+                size = 96.dp,
+                trackColor = Color(0xFFD9DADD)
+            )
+            Spacer(Modifier.height(8.dp))
+            Text(
+                text = "Last month: ${item.lastMonth}%",
+                fontSize = 15.sp,
+                fontWeight = FontWeight.Medium,
+                color = Color(0xFF6E7480)
+            )
+        }
+    }
+}
+
+@Composable
+private fun DoubleRingGauge(
+    currentPercent: Int,
+    lastPercent: Int,
+    color: Color,
+    size: Dp,
+    trackColor: Color
+) {
+    val gapDeg = 12f
+    val startDeg = -90f
+    val outerSweep = lastPercent * 3.6f - gapDeg
+    val innerSweep = currentPercent * 3.6f - gapDeg
+
+    Box(Modifier.size(size), contentAlignment = Alignment.Center) {
+        Canvas(Modifier.fillMaxSize()) {
+            val outerStroke = 12.dp.toPx()
+            val innerStroke = 6.dp.toPx()
+
+            drawArc(
+                color = trackColor,
+                startAngle = startDeg + gapDeg / 2,
+                sweepAngle = 360f - gapDeg,
+                useCenter = false,
+                style = Stroke(width = outerStroke, cap = StrokeCap.Butt)
+            )
+            val arcInset = (outerStroke - innerStroke) / 2 + outerStroke / 2
+            inset(arcInset, arcInset) {
+                drawArc(
+                    color = trackColor,
+                    startAngle = startDeg + gapDeg / 2,
+                    sweepAngle = 360f - gapDeg,
+                    useCenter = false,
+                    style = Stroke(width = innerStroke, cap = StrokeCap.Butt)
+                )
+            }
+
+            drawArc(
+                color = color,
+                startAngle = startDeg,
+                sweepAngle = outerSweep.coerceAtLeast(0f),
+                useCenter = false,
+                style = Stroke(width = outerStroke, cap = StrokeCap.Round)
+            )
+            inset(arcInset, arcInset) {
+                drawArc(
+                    color = color,
+                    startAngle = startDeg,
+                    sweepAngle = innerSweep.coerceAtLeast(0f),
+                    useCenter = false,
+                    style = Stroke(width = innerStroke, cap = StrokeCap.Round)
+                )
+            }
+        }
         Text(
-            text = "$percent %",
+            text = "$currentPercent%",
             fontSize = 32.sp,
             fontWeight = FontWeight.Bold,
             color = Color(0xFF111111)
         )
-    }
-}
-
-@Composable
-private fun SubjectCard(item: Subject, modifier: Modifier = Modifier) {
-    Card(
-        modifier = modifier
-            .fillMaxWidth(0.9f)
-            .height(128.dp),
-        shape = RoundedCornerShape(20.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
-    ) {
-        ConstraintLayout(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(24.dp)
-        ) {
-            val (title, ring, last) = createRefs()
-            Column(
-                modifier = Modifier.constrainAs(title) {
-                    start.linkTo(parent.start)
-                    top.linkTo(parent.top)
-                    bottom.linkTo(parent.bottom)
-                },
-                verticalArrangement = Arrangement.Center
-            ) {
-                Text(
-                    text = item.name,
-                    fontSize = 22.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    color = Color(0xFF111111)
-                )
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    text = item.code.uppercase(),
-                    fontSize = 15.sp,
-                    fontWeight = FontWeight.Medium,
-                    color = Color(0xFF6E7480)
-                )
-            }
-            Column(
-                modifier = Modifier.constrainAs(ring) {
-                    end.linkTo(parent.end)
-                    top.linkTo(title.top)
-                },
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                ProgressRing(percent = item.attendance, color = item.color)
-            }
-            Row(
-                modifier = Modifier.constrainAs(last) {
-                    start.linkTo(ring.start)
-                    top.linkTo(ring.bottom, margin = 8.dp)
-                }
-            ) {
-                Text(
-                    text = "Last month:",
-                    fontSize = 15.sp,
-                    fontWeight = FontWeight.Medium,
-                    color = Color(0xFF6E7480)
-                )
-                Spacer(modifier = Modifier.width(4.dp))
-                Text(
-                    text = "${item.lastMonth} %",
-                    fontSize = 15.sp,
-                    fontWeight = FontWeight.Medium,
-                    color = Color(0xFF111111)
-                )
-            }
-        }
-    }
-}
-
-@Composable
-fun AttendanceScreen() {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color(0xFFF4F5F7))
-            .padding(vertical = 16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        subjects.forEach { subject ->
-            SubjectCard(item = subject, modifier = Modifier.padding(horizontal = 0.dp))
-        }
     }
 }
 
