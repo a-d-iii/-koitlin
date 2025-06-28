@@ -19,8 +19,7 @@ import androidx.compose.ui.text.font.FontWeight
 
 @Composable
 fun DoubleRingProgress(
-    outerProgress: Float,
-    innerProgress: Float,
+    progress: Float,
     modifier: Modifier = Modifier,
     color: Color = Color(0xFF3F51B5),
     trackColor: Color = color.copy(alpha = 0.3f),
@@ -50,7 +49,7 @@ fun DoubleRingProgress(
             drawArc(
                 color = color,
                 startAngle = -90f,
-                sweepAngle = 360f * outerProgress.coerceIn(0f, 1f),
+                sweepAngle = 360f * progress.coerceIn(0f, 1f),
                 useCenter = false,
                 style = stroke,
                 size = Size(outerRadius * 2, outerRadius * 2),
@@ -72,7 +71,7 @@ fun DoubleRingProgress(
             drawArc(
                 color = color,
                 startAngle = -90f,
-                sweepAngle = 360f * innerProgress.coerceIn(0f, 1f),
+                sweepAngle = 360f * progress.coerceIn(0f, 1f),
                 useCenter = false,
                 style = stroke,
                 size = Size(innerRadius * 2, innerRadius * 2),
@@ -80,7 +79,7 @@ fun DoubleRingProgress(
             )
         }
         Text(
-            text = "${(outerProgress * 100).toInt()}%",
+            text = "${(progress * 100).toInt()}%",
             style = MaterialTheme.typography.titleLarge,
             color = MaterialTheme.colorScheme.onSurface,
             fontWeight = FontWeight.Bold
