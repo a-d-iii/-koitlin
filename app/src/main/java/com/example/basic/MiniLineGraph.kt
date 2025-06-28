@@ -50,7 +50,7 @@ fun MiniLineGraph(
         drawPath(
             path = fillPath,
             brush = Brush.verticalGradient(
-                colors = listOf(Color.Gray.copy(alpha = 0.5f), Color.White)
+                colors = listOf(lineColor.copy(alpha = 0.7f), Color.Transparent)
             ),
             style = Fill
         )

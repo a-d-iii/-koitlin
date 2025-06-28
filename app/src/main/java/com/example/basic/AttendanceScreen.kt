@@ -95,13 +95,22 @@ fun AttendanceScreen() {
                         modifier = Modifier.align(Alignment.CenterVertically),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
+                        val progressColor = when {
+                            subject.attendance >= 0.75f -> Color(0xFF55b45e)
+                            subject.attendance >= 0.70f -> Color(0xFFe5a967)
+                            else -> Color(0xFFe06846)
+                        }
+                        val inner = (subject.attendance - 0.1f).coerceAtLeast(0f)
                         DoubleRingProgress(
-                            progress = subject.attendance,
-                            modifier = Modifier.size(96.dp)
+                            outerProgress = subject.attendance,
+                            innerProgress = inner,
+                            modifier = Modifier.size(96.dp),
+                            color = progressColor,
+                            trackColor = progressColor.copy(alpha = 0.3f)
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
-                            text = "Btw exams: ${(subject.attendance * 100).toInt()}%",
+                            text = "Btw exams: ${(inner * 100).toInt()}%",
                             style = MaterialTheme.typography.bodyMedium,
                             color = Color.Gray,
                             fontWeight = FontWeight.Bold
