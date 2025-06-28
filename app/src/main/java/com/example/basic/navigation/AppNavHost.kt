@@ -168,7 +168,7 @@ fun AppNavHost() {
             composable(Screen.Home.route) { HomeScreen() }
             composable(Screen.Planner.route) { PlannerScreen() }
             composable(Screen.Attendance.route) {
-                AttendanceScreen(onShowDetails = { navController.navigate(Screen.AttendanceDetails.route) })
+                AttendanceScreen()
             }
             composable(Screen.Food.route) {
                 FoodMenuScreen(
