@@ -61,12 +61,13 @@ fun AttendanceScreen() {
                         .fillMaxWidth()
                         .heightIn(min = 160.dp)
                         .padding(16.dp),
-                    verticalAlignment = Alignment.Top,
+                    verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Column(
                         modifier = Modifier
-                            .fillMaxHeight(),
+                            .fillMaxHeight()
+                            .align(Alignment.Bottom),
                         verticalArrangement = Arrangement.SpaceBetween
                     ) {
                         Column {
@@ -94,16 +95,9 @@ fun AttendanceScreen() {
                         modifier = Modifier.align(Alignment.CenterVertically),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        val progressColor = when {
-                            subject.attendance >= 0.75f -> Color(0xFF55b45e)
-                            subject.attendance >= 0.70f -> Color(0xFFe5a967)
-                            else -> Color(0xFFe06846)
-                        }
                         DoubleRingProgress(
                             progress = subject.attendance,
-                            modifier = Modifier.size(96.dp),
-                            color = progressColor,
-                            trackColor = progressColor.copy(alpha = 0.3f)
+                            modifier = Modifier.size(96.dp)
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
