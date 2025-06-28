@@ -33,7 +33,7 @@ private val subjects = listOf(
     Subject("Chemistry", "CHE-102", 88, 90, Color(0xFF2D72F4))
 )
 
-private const val GAP_ANGLE = 12f
+private const val GAP_ANGLE = 0f
 
 @Composable
 private fun ProgressRing(percent: Int, color: Color, modifier: Modifier = Modifier) {
@@ -57,6 +57,13 @@ private fun ProgressRing(percent: Int, color: Color, modifier: Modifier = Modifi
                 useCenter = false,
                 style = Stroke(width = stroke, cap = StrokeCap.Round)
             )
+
+            // small inner circle for additional visual depth
+            drawCircle(
+                color = Color.White,
+                radius = size.minDimension * 0.15f,
+                center = center
+            )
         }
         Text(
             text = "$percent %",
@@ -71,7 +78,7 @@ private fun ProgressRing(percent: Int, color: Color, modifier: Modifier = Modifi
 private fun SubjectCard(item: Subject, modifier: Modifier = Modifier) {
     Card(
         modifier = modifier
-            .fillMaxWidth()
+            .fillMaxWidth(0.9f)
             .height(128.dp),
         shape = RoundedCornerShape(20.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
@@ -145,7 +152,8 @@ fun AttendanceScreen() {
             .fillMaxSize()
             .background(Color(0xFFF4F5F7))
             .padding(vertical = 16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         subjects.forEach { subject ->
             SubjectCard(item = subject, modifier = Modifier.padding(horizontal = 0.dp))
