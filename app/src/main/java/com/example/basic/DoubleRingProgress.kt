@@ -22,8 +22,8 @@ fun DoubleRingProgress(
     outerProgress: Float,
     innerProgress: Float,
     modifier: Modifier = Modifier,
-    color: Color = Color(0xFF3F51B5),
-    trackColor: Color = color.copy(alpha = 0.3f),
+    outerColor: Color = Color(0xFF3F51B5),
+    innerColor: Color = outerColor,
     thickness: Dp = 8.dp,
     gap: Dp = 4.dp
 ) {
@@ -34,10 +34,12 @@ fun DoubleRingProgress(
             val gapPx = gap.toPx()
             val outerRadius = size.minDimension / 2
             val innerRadius = outerRadius - strokeWidth - gapPx
+            val outerTrackColor = outerColor.copy(alpha = 0.3f)
+            val innerTrackColor = innerColor.copy(alpha = 0.3f)
 
             // Outer track
             drawArc(
-                color = trackColor,
+                color = outerTrackColor,
                 startAngle = -90f,
                 sweepAngle = 360f,
                 useCenter = false,
@@ -48,7 +50,7 @@ fun DoubleRingProgress(
 
             // Outer progress
             drawArc(
-                color = color,
+                color = outerColor,
                 startAngle = -90f,
                 sweepAngle = 360f * outerProgress.coerceIn(0f, 1f),
                 useCenter = false,
@@ -59,7 +61,7 @@ fun DoubleRingProgress(
 
             // Inner track
             drawArc(
-                color = trackColor,
+                color = innerTrackColor,
                 startAngle = -90f,
                 sweepAngle = 360f,
                 useCenter = false,
@@ -70,7 +72,7 @@ fun DoubleRingProgress(
 
             // Inner progress
             drawArc(
-                color = color,
+                color = innerColor,
                 startAngle = -90f,
                 sweepAngle = 360f * innerProgress.coerceIn(0f, 1f),
                 useCenter = false,
