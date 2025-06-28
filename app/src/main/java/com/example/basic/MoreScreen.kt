@@ -234,7 +234,9 @@ fun MoreScreen() {
                                     fontWeight = FontWeight.Bold,
                                     modifier = Modifier
                                         .align(Alignment.TopCenter)
-                                        .offset(y = (-8).dp)
+                                        // Shift labels slightly higher so
+                                        // they line up with the hour divider
+                                        .offset(y = (-12).dp)
                                 )
                             }
                             Box(
