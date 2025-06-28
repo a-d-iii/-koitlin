@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.width
 import androidx.compose.ui.Alignment
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -24,6 +26,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.basic.DoubleRingProgress
+import com.example.basic.MiniLineGraph
 
 private data class Subject(val name: String, val code: String, val attendance: Float)
 
@@ -56,21 +59,36 @@ fun AttendanceScreen() {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
+                        .heightIn(min = 160.dp)
                         .padding(16.dp),
-                    verticalAlignment = Alignment.Top,
+                    verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Column {
-                        Text(
-                            text = subject.name,
-                            style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.Bold
-                        )
-                        Text(
-                            text = subject.code,
-                            style = MaterialTheme.typography.bodySmall,
-                            color = Color.Gray,
-                            fontWeight = FontWeight.Bold
+                    Column(
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .align(Alignment.Bottom),
+                        verticalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Column {
+                            Text(
+                                text = subject.name,
+                                style = MaterialTheme.typography.headlineSmall,
+                                fontWeight = FontWeight.Bold
+                            )
+                            Text(
+                                text = subject.code,
+                                style = MaterialTheme.typography.titleMedium,
+                                color = Color.Gray,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+                        MiniLineGraph(
+                            data = listOf(0.6f, 0.8f, 0.7f, 0.9f, 0.65f),
+                            modifier = Modifier
+                                .padding(top = 8.dp)
+                                .width(80.dp)
+                                .height(32.dp)
                         )
                     }
                     Column(
