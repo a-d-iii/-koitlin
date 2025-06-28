@@ -109,7 +109,7 @@ fun AttendanceScreen() {
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
                             text = "Btw exams: ${(inner * 100).toInt()}%",
-                            style = MaterialTheme.typography.bodyMedium,
+                            style = MaterialTheme.typography.bodyLarge,
                             color = Color.Gray,
                             fontWeight = FontWeight.Bold
                         )
