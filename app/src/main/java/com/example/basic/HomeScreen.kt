@@ -220,7 +220,7 @@ fun HomeHeader(modifier: Modifier = Modifier) {
             )
             Text(
                 date,
-                style = MaterialTheme.typography.bodySmall
+                style = MaterialTheme.typography.bodyMedium
             )
         }
         Box(

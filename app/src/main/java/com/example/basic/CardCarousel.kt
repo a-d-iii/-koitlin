@@ -158,7 +158,7 @@ private fun NumberRowAnimated(
                 Text(
                     text = "${idx + 1}",
                     color = Color.White,
-                    style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.SemiBold),
+                    style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
                     modifier = Modifier.graphicsLayer(scaleX = animNum, scaleY = animNum)
                 )
             }

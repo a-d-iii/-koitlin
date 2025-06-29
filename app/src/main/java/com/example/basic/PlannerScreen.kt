@@ -148,7 +148,7 @@ fun PlannerScreen() {
                             )
                             Text(
                                 text = cls.faculty,
-                                style = MaterialTheme.typography.bodySmall,
+                                style = MaterialTheme.typography.bodyMedium,
                                 color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f),
                                 modifier = Modifier.padding(top = 2.dp)
                             )
@@ -156,12 +156,12 @@ fun PlannerScreen() {
                         Column(horizontalAlignment = Alignment.End) {
                             Text(
                                 text = "${cls.start} – ${cls.end}",
-                                style = MaterialTheme.typography.bodySmall,
+                                style = MaterialTheme.typography.bodyMedium,
                                 color = MaterialTheme.colorScheme.onBackground
                             )
                             Text(
                                 text = cls.room,
-                                style = MaterialTheme.typography.labelSmall,
+                                style = MaterialTheme.typography.labelMedium,
                                 color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f),
                                 modifier = Modifier.padding(top = 2.dp)
                             )

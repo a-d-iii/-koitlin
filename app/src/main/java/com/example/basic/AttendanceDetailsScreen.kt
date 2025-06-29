@@ -280,13 +280,13 @@ private fun DaySelector(
                 Text(
                     day.date.dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.getDefault()),
                     color = textColor,
-                    style = MaterialTheme.typography.labelSmall,
+                    style = MaterialTheme.typography.labelMedium,
                     fontWeight = FontWeight.Bold
                 )
                 Text(
                     day.date.dayOfMonth.toString(),
                     color = textColor,
-                    style = MaterialTheme.typography.labelSmall,
+                    style = MaterialTheme.typography.labelMedium,
                     fontWeight = FontWeight.Bold
                 )
             }
@@ -376,7 +376,7 @@ private fun ScheduleList(date: LocalDate, events: List<ClassEvent>) {
                         Text(
                             displayTime,
                             color = timeColor,
-                            style = MaterialTheme.typography.labelSmall,
+                            style = MaterialTheme.typography.labelMedium,
                             maxLines = 1,
                             modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
                         )
@@ -444,7 +444,7 @@ private fun EventCard(event: ClassEvent, modifier: Modifier = Modifier) {
                 Text(
                     event.category.label,
                     color = Color.White.copy(alpha = 0.9f),
-                    style = MaterialTheme.typography.labelSmall
+                    style = MaterialTheme.typography.labelMedium
                 )
             }
         }

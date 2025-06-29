@@ -23,21 +23,21 @@ private val Inter = FontFamily(Font(R.font.inter))
 private val DefaultTypography = Typography()
 
 private val AppTypography = Typography(
-    displayLarge = TextStyle(fontFamily = Inter, fontSize = 40.sp),
-    displayMedium = TextStyle(fontFamily = Inter, fontSize = 34.sp),
-    displaySmall = TextStyle(fontFamily = Inter, fontSize = 30.sp),
-    headlineLarge = TextStyle(fontFamily = Inter, fontSize = 28.sp),
-    headlineMedium = TextStyle(fontFamily = Inter, fontSize = 24.sp),
-    headlineSmall = TextStyle(fontFamily = Inter, fontSize = 20.sp),
-    titleLarge = TextStyle(fontFamily = Inter, fontSize = 24.sp),
-    titleMedium = TextStyle(fontFamily = Inter, fontSize = 20.sp),
-    titleSmall = TextStyle(fontFamily = Inter, fontSize = 16.sp),
-    bodyLarge = TextStyle(fontFamily = Inter, fontSize = 16.sp),
-    bodyMedium = TextStyle(fontFamily = Inter, fontSize = 14.sp),
-    bodySmall = TextStyle(fontFamily = Inter, fontSize = 12.sp),
+    displayLarge = TextStyle(fontFamily = Inter, fontSize = 48.sp),
+    displayMedium = TextStyle(fontFamily = Inter, fontSize = 40.sp),
+    displaySmall = TextStyle(fontFamily = Inter, fontSize = 36.sp),
+    headlineLarge = TextStyle(fontFamily = Inter, fontSize = 30.sp),
+    headlineMedium = TextStyle(fontFamily = Inter, fontSize = 26.sp),
+    headlineSmall = TextStyle(fontFamily = Inter, fontSize = 22.sp),
+    titleLarge = TextStyle(fontFamily = Inter, fontSize = 28.sp),
+    titleMedium = TextStyle(fontFamily = Inter, fontSize = 24.sp),
+    titleSmall = TextStyle(fontFamily = Inter, fontSize = 20.sp),
+    bodyLarge = TextStyle(fontFamily = Inter, fontSize = 18.sp),
+    bodyMedium = TextStyle(fontFamily = Inter, fontSize = 16.sp),
+    bodySmall = TextStyle(fontFamily = Inter, fontSize = 14.sp),
     labelLarge = TextStyle(fontFamily = Inter, fontSize = 14.sp),
     labelMedium = TextStyle(fontFamily = Inter, fontSize = 12.sp),
-    labelSmall = TextStyle(fontFamily = Inter, fontSize = 10.sp),
+    labelSmall = TextStyle(fontFamily = Inter, fontSize = 11.sp),
 )
 
 @Composable
