@@ -10,6 +10,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.border
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarToday
@@ -28,6 +29,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.graphicsLayer
@@ -158,16 +160,20 @@ fun FoodMenuScreen(onShowSummary: () -> Unit, onViewMonth: () -> Unit = {}) {
                 )
             }
             Spacer(modifier = Modifier.height(8.dp))
-            Surface(
-                shape = RoundedCornerShape(20.dp),
-                color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.align(Alignment.CenterHorizontally)
+            Box(
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .border(
+                        width = 1.dp,
+                        color = MaterialTheme.colorScheme.onBackground,
+                        shape = RoundedCornerShape(20.dp)
+                    )
+                    .padding(horizontal = 12.dp, vertical = 4.dp)
             ) {
                 Text(
                     text = dayLabel,
-                    color = MaterialTheme.colorScheme.onPrimary,
-                    fontWeight = FontWeight.SemiBold,
-                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp)
+                    color = MaterialTheme.colorScheme.onBackground,
+                    fontWeight = FontWeight.SemiBold
                 )
             }
             Spacer(modifier = Modifier.height(16.dp))
@@ -239,13 +245,16 @@ private fun MealCard(
     }
     val ended = now.after(end.time)
     val containerColor = background
+    var showRating by remember { mutableStateOf(false) }
+    var rating by remember { mutableStateOf(0) }
+    val rateScale = remember { Animatable(1f) }
     Card(
         shape = RoundedCornerShape(8.dp),
         colors = CardDefaults.cardColors(containerColor = containerColor),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         modifier = Modifier
             .fillMaxWidth()
-            .height(110.dp)
+            .heightIn(min = 110.dp)
     ) {
         Column(modifier = Modifier.padding(12.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -261,7 +270,11 @@ private fun MealCard(
                     color = MaterialTheme.colorScheme.onBackground,
                     style = MaterialTheme.typography.bodyMedium,
                     modifier = Modifier
-                        .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(12.dp))
+                        .border(
+                            width = 1.dp,
+                            color = MaterialTheme.colorScheme.onBackground,
+                            shape = RoundedCornerShape(12.dp)
+                        )
                         .padding(horizontal = 8.dp, vertical = 2.dp)
                 )
                 Spacer(modifier = Modifier.width(8.dp))
@@ -314,7 +327,43 @@ private fun MealCard(
             Spacer(modifier = Modifier.height(4.dp))
             Text(text = meal.items.joinToString(", "), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f))
             Spacer(modifier = Modifier.height(8.dp))
- 
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.End
+            ) {
+                if (showRating) {
+                    Row {
+                        (1..5).forEach { i ->
+                            Icon(
+                                imageVector = Icons.Default.Star,
+                                contentDescription = "Star $i",
+                                tint = if (i <= rating) Color(0xFFFFD700) else Color.LightGray,
+                                modifier = Modifier
+                                    .size(24.dp)
+                                    .clickable { rating = i }
+                            )
+                        }
+                    }
+                } else {
+                    Button(
+                        onClick = {
+                            scope.launch {
+                                rateScale.animateTo(1.2f, animationSpec = tween(200))
+                                showRating = true
+                            }
+                        },
+                        modifier = Modifier
+                            .scale(rateScale.value)
+                            .height(32.dp),
+                        shape = RoundedCornerShape(4.dp),
+                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFBBDEFB))
+                    ) {
+                        Text("Rate", color = MaterialTheme.colorScheme.onBackground)
+                    }
+                }
+            }
+
         }
     }
 }
