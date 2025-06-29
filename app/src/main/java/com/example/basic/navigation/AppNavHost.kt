@@ -22,6 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -120,7 +121,13 @@ fun AppNavHost() {
                             val iconModifier = if (screen == Screen.Home) Modifier.size(32.dp) else Modifier
                             Icon(iconImage, contentDescription = screen.label, modifier = iconModifier)
                         },
-                        label = { Text(screen.label) },
+                        label = {
+                            Text(
+                                screen.label,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis
+                            )
+                        },
                         selected = selected,
                         onClick = {
                             when (screen) {
