@@ -28,8 +28,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Fastfood
 import androidx.compose.material.icons.filled.Cloud
 import androidx.compose.material.icons.filled.Person
+ 
 import androidx.compose.material.icons.filled.UnfoldLess
 import androidx.compose.material.icons.filled.UnfoldMore
+ 
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -130,8 +132,10 @@ fun SummaryCard() {
             }
             Spacer(Modifier.height(16.dp))
             ClassSummaryBar()
+ 
             Spacer(Modifier.height(16.dp))
             UtilitiesSection()
+ 
             Spacer(Modifier.height(16.dp))
             MenuSection(contentPadding = 16.dp)
             Spacer(Modifier.height(16.dp))
@@ -261,6 +265,7 @@ private fun DayProgressBar(modifier: Modifier = Modifier) {
             .background(MaterialTheme.colorScheme.surface)
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
+ 
     ) {
         Text(
             "30% day left",
@@ -349,12 +354,35 @@ private fun UtilityBox(label: String) {
                 label,
                 style = MaterialTheme.typography.bodySmall,
                 textAlign = TextAlign.Center
+=======
+    ) {
+        Text(
+            "30% day left",
+            fontWeight = FontWeight.SemiBold,
+            style = MaterialTheme.typography.bodyMedium
+        )
+        Spacer(Modifier.height(8.dp))
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(8.dp)
+                .clip(RoundedCornerShape(4.dp))
+                .background(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f))
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth(0.3f)
+                    .fillMaxHeight()
+                    .clip(RoundedCornerShape(4.dp))
+                    .background(MaterialTheme.colorScheme.primary)
+ 
             )
         }
     }
 }
 
 @Composable
+ 
 private fun UtilitiesSection() {
     SectionHeader("Utilities")
     var expanded by remember { mutableStateOf(false) }
@@ -400,6 +428,48 @@ private fun UtilitiesSection() {
                     }
                 }
             }
+=======
+private fun ClassSummaryBar() {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.Center
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(0.85f)
+                .height(48.dp)
+                .clip(RoundedCornerShape(24.dp))
+                .background(MaterialTheme.colorScheme.surface)
+                .padding(horizontal = 16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            Text(
+                "6 classes",
+                style = MaterialTheme.typography.bodyMedium,
+                fontWeight = FontWeight.SemiBold
+            )
+            Box(
+                modifier = Modifier
+                    .size(6.dp)
+                    .background(Color(0xFF448AFF), CircleShape)
+            )
+            Text(
+                "2 labs",
+                style = MaterialTheme.typography.bodyMedium,
+                fontWeight = FontWeight.SemiBold
+            )
+            Box(
+                modifier = Modifier
+                    .size(6.dp)
+                    .background(Color(0xFF80D8FF), CircleShape)
+            )
+            Text(
+                "3 project",
+                style = MaterialTheme.typography.bodyMedium,
+                fontWeight = FontWeight.SemiBold
+            )
+ 
         }
     }
 }
