@@ -8,6 +8,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.border
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -204,30 +207,45 @@ private fun BottomPanel(onDismiss: () -> Unit) {
 @Composable
 fun HomeHeader(modifier: Modifier = Modifier) {
     val date = remember {
-        LocalDate.now().format(DateTimeFormatter.ofPattern("EEEE, MMMM d, yyyy"))
+        LocalDate.of(2025, 6, 28)
+            .format(DateTimeFormatter.ofPattern("EEEE, MMMM d, yyyy"))
     }
     Row(
-        modifier = modifier
-            .background(MaterialTheme.colorScheme.surface),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
+        modifier = modifier,
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
     ) {
         Column {
             Text(
-                "Hello user",
-                style = MaterialTheme.typography.titleLarge,
+                "Good afternoon",
+                style = MaterialTheme.typography.headlineMedium,
+                fontWeight = FontWeight.Bold
+            )
+            Text(
+                "ADITHYAA",
+                style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold
             )
             Text(
                 date,
-                style = MaterialTheme.typography.bodyMedium
+                style = MaterialTheme.typography.bodyMedium,
+                color = Color.Gray
             )
         }
         Box(
+            contentAlignment = Alignment.Center,
             modifier = Modifier
-                .size(56.dp)
-                .background(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f), CircleShape)
-        )
+                .size(64.dp)
+                .border(2.dp, Color(0xFF448AFF), CircleShape)
+                .background(Color(0xFF1565C0).copy(alpha = 0.2f), CircleShape)
+        ) {
+            Icon(
+                imageVector = Icons.Filled.Person,
+                contentDescription = "Profile",
+                tint = Color(0xFF1565C0),
+                modifier = Modifier.size(32.dp)
+            )
+        }
     }
 }
 
