@@ -84,23 +84,7 @@ const BottomPanel = forwardRef<BottomPanelHandle, Props>(
       outputRange: [PANEL_HEIGHT, 0],
       extrapolate: 'clamp',
     });
-
-    return (
-      <Animated.View
-        style={[
-          styles.container,
-          { transform: [{ translateY }] },
-          !isVisible && { pointerEvents: 'none' },
-        ]}
-      >
-        {/* Floating close button */}
-        <Pressable style={styles.closeButton} onPress={() => slideDown()}>
-          <Ionicons name="chevron-down" size={20} color="#333" />
-        </Pressable>
-
-        <ScrollView
-          style={styles.scrollContent}
-          bounces
+ 
           overScrollMode="always"
           scrollEventThrottle={16}
           onScrollEndDrag={({ nativeEvent }) => {
@@ -179,28 +163,11 @@ const styles = StyleSheet.create({
   utilityGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    justifyContent: 'space-between',
+    justifyContent: 'space-evenly',
   },
   utilityItem: {
     width: '24%',
     alignItems: 'center',
     marginVertical: 12,
-  },
-  utilityIcon: {
-    marginBottom: 4,
-  },
-  utilityLabel: {
-    fontSize: 12,
-    color: '#333',
-    textAlign: 'center',
-  },
-  closeButton: {
-    position: 'absolute',
-    bottom: 8,
-    alignSelf: 'center',
-    backgroundColor: '#fff',
-    borderRadius: 20,
-    padding: 6,
-    elevation: 2,
-  },
+  
 });
