@@ -12,6 +12,8 @@ import com.example.basic.ui.theme.mdPrimary
 import com.example.basic.ui.theme.mdSecondary
 import com.example.basic.ui.theme.mdSurface
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.Font
 import com.example.basic.R
@@ -21,21 +23,21 @@ private val Inter = FontFamily(Font(R.font.inter))
 private val DefaultTypography = Typography()
 
 private val AppTypography = Typography(
-    displayLarge = DefaultTypography.displayLarge.copy(fontFamily = Inter),
-    displayMedium = DefaultTypography.displayMedium.copy(fontFamily = Inter),
-    displaySmall = DefaultTypography.displaySmall.copy(fontFamily = Inter),
-    headlineLarge = DefaultTypography.headlineLarge.copy(fontFamily = Inter),
-    headlineMedium = DefaultTypography.headlineMedium.copy(fontFamily = Inter),
-    headlineSmall = DefaultTypography.headlineSmall.copy(fontFamily = Inter),
-    titleLarge = DefaultTypography.titleLarge.copy(fontFamily = Inter),
-    titleMedium = DefaultTypography.titleMedium.copy(fontFamily = Inter),
-    titleSmall = DefaultTypography.titleSmall.copy(fontFamily = Inter),
-    bodyLarge = DefaultTypography.bodyLarge.copy(fontFamily = Inter),
-    bodyMedium = DefaultTypography.bodyMedium.copy(fontFamily = Inter),
-    bodySmall = DefaultTypography.bodySmall.copy(fontFamily = Inter),
-    labelLarge = DefaultTypography.labelLarge.copy(fontFamily = Inter),
-    labelMedium = DefaultTypography.labelMedium.copy(fontFamily = Inter),
-    labelSmall = DefaultTypography.labelSmall.copy(fontFamily = Inter),
+    displayLarge = TextStyle(fontFamily = Inter, fontSize = 32.sp),
+    displayMedium = TextStyle(fontFamily = Inter, fontSize = 28.sp),
+    displaySmall = TextStyle(fontFamily = Inter, fontSize = 24.sp),
+    headlineLarge = TextStyle(fontFamily = Inter, fontSize = 22.sp),
+    headlineMedium = TextStyle(fontFamily = Inter, fontSize = 20.sp),
+    headlineSmall = TextStyle(fontFamily = Inter, fontSize = 18.sp),
+    titleLarge = TextStyle(fontFamily = Inter, fontSize = 16.sp),
+    titleMedium = TextStyle(fontFamily = Inter, fontSize = 14.sp),
+    titleSmall = TextStyle(fontFamily = Inter, fontSize = 12.sp),
+    bodyLarge = TextStyle(fontFamily = Inter, fontSize = 16.sp),
+    bodyMedium = TextStyle(fontFamily = Inter, fontSize = 14.sp),
+    bodySmall = TextStyle(fontFamily = Inter, fontSize = 12.sp),
+    labelLarge = TextStyle(fontFamily = Inter, fontSize = 14.sp),
+    labelMedium = TextStyle(fontFamily = Inter, fontSize = 12.sp),
+    labelSmall = TextStyle(fontFamily = Inter, fontSize = 10.sp),
 )
 
 @Composable
@@ -49,7 +51,9 @@ fun VitStudentAppTheme(content: @Composable () -> Unit) {
             background = mdBackground,
             onBackground = mdOnBackground,
             surface = mdSurface,
-            onSurface = mdOnSurface
+            onSurface = mdOnSurface,
+            error = mdError,
+            onError = mdOnError
         ),
         typography = AppTypography,
         content = content

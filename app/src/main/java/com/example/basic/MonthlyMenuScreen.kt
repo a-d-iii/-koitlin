@@ -274,9 +274,9 @@ private fun DayCard(
                 Text(
                     dayLabel(day.date),
                     fontWeight = FontWeight.Bold,
-                    color = Color.White,
+                    color = MaterialTheme.colorScheme.onPrimary,
                     modifier = Modifier
-                        .background(Color(0xFF333333), RoundedCornerShape(12.dp))
+                        .background(MaterialTheme.colorScheme.primary, RoundedCornerShape(12.dp))
                         .padding(horizontal = 8.dp, vertical = 4.dp)
                 )
             }
@@ -290,7 +290,7 @@ private fun DayCard(
                     Icon(
                         imageVector = if (liked) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
                         contentDescription = "Wishlist",
-                        tint = if (liked) Color.Red else Color.Black,
+                        tint = if (liked) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onBackground,
                         modifier = Modifier
                             .size(20.dp)
                             .clickable { onToggleLike(key) }
