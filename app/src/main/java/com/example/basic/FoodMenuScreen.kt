@@ -314,7 +314,7 @@ private fun MealCard(
             Spacer(modifier = Modifier.height(4.dp))
             Text(text = meal.items.joinToString(", "), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f))
             Spacer(modifier = Modifier.height(8.dp))
-            // Removed rate button
+ 
         }
     }
 }

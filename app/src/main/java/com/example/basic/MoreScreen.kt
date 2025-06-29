@@ -206,7 +206,7 @@ fun MoreScreen() {
         val hours = (0..23).map { hour ->
             val displayHour = if (hour % 12 == 0) 12 else hour % 12
             val ampm = if (hour < 12) "am" else "pm"
-            "%02d:00 %s".format(displayHour, ampm)
+            "$displayHour $ampm"
         }
         val calendarScroll = rememberScrollState()
         val dayClasses = WEEK_CLASSES[selectedDay] ?: emptyList()
@@ -259,7 +259,6 @@ fun MoreScreen() {
                                     color = lineColor,
                                     modifier = Modifier
                                         .align(Alignment.TopStart)
-                                        .padding(start = 4.dp)
                                         .fillMaxWidth(),
                                     thickness = 1.dp
                                 )
@@ -279,9 +278,7 @@ fun MoreScreen() {
                         ) {
                             Divider(
                                 color = lineColor,
-                                modifier = Modifier
-                                    .padding(start = 4.dp)
-                                    .fillMaxWidth(),
+                                modifier = Modifier.fillMaxWidth(),
                                 thickness = 1.dp
                             )
                         }
@@ -298,8 +295,8 @@ fun MoreScreen() {
                     val top = (startUnit * dpPerUnit).dp
                     val height = ((endUnit - startUnit) * dpPerUnit).dp
                     val color = when (cls.type) {
-                        ClassType.THEORY -> MaterialTheme.colorScheme.primary.copy(alpha = 0.3f)
-                        ClassType.LAB -> MaterialTheme.colorScheme.secondary.copy(alpha = 0.3f)
+                        ClassType.THEORY -> MaterialTheme.colorScheme.primary
+                        ClassType.LAB -> MaterialTheme.colorScheme.secondary
                         ClassType.BREAK, ClassType.LUNCH -> MaterialTheme.colorScheme.surfaceVariant
                     }
                     Box(

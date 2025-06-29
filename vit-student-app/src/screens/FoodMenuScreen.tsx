@@ -417,10 +417,7 @@ const styles = StyleSheet.create({
   },
   likeBtn: {
     marginLeft: 8,
-  },
-  mealItems: {
-    color: '#555',
-  },
+  }, 
   button: {
     marginTop: 20,
     paddingVertical: 10,
