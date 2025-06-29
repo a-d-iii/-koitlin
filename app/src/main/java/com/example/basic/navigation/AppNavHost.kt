@@ -110,7 +110,7 @@ fun AppNavHost() {
             val navBackStackEntry by navController.currentBackStackEntryAsState()
             val currentRoute = navBackStackEntry?.destination?.route
             NavigationBar(
-                containerColor = MaterialTheme.colorScheme.surface,
+                containerColor = Color.White,
                 tonalElevation = 0.dp
             ) {
                 items.forEach { screen ->

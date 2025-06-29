@@ -224,11 +224,11 @@ private fun DaySelector(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(52.dp)
-                .background(MaterialTheme.colorScheme.surface)
+                .background(Color(0xFFF5F5F5))
                 .drawBehind {
                     val stroke = 1.dp.toPx()
-                    drawLine(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f), Offset(0f, 0f), Offset(size.width, 0f), strokeWidth = stroke)
-                    drawLine(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f), Offset(0f, size.height), Offset(size.width, size.height), strokeWidth = stroke)
+                    drawLine(Color(0xFFBDBDBD), Offset(0f, 0f), Offset(size.width, 0f), strokeWidth = stroke)
+                    drawLine(Color(0xFFBDBDBD), Offset(0f, size.height), Offset(size.width, size.height), strokeWidth = stroke)
                 }
         )
         Row(
@@ -242,7 +242,7 @@ private fun DaySelector(
         Text(
             month,
             fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.onBackground,
+            color = Color.DarkGray,
             modifier = Modifier.padding(end = 8.dp)
         )
         LazyRow(
@@ -253,8 +253,8 @@ private fun DaySelector(
         ) {
             itemsIndexed(days) { index, day ->
                 val isSelected = index == selected
-                val textColor = if (isSelected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onBackground
-                val bgColor = if (isSelected) MaterialTheme.colorScheme.primary else Color.Transparent
+                val textColor = if (isSelected) Color.White else Color.Black
+                val bgColor = if (isSelected) Color(0xFFB388FF) else Color.Transparent
                 val shape = RoundedCornerShape(topStart = 0.dp, topEnd = 0.dp, bottomStart = 12.dp, bottomEnd = 12.dp)
  
                 val highlightOverlap = if (isSelected) 16.dp else 0.dp
@@ -303,12 +303,12 @@ private fun CurrentDayHeader(date: LocalDate) {
             text = date.dayOfWeek.getDisplayName(TextStyle.FULL, Locale.getDefault()),
             fontSize = 20.sp,
             fontWeight = FontWeight.Medium,
-            color = MaterialTheme.colorScheme.onBackground
+            color = Color(0xFF757575)
         )
         Text(
             text = date.format(java.time.format.DateTimeFormatter.ofPattern("dd MMMM yyyy")),
             fontSize = 14.sp,
-            color = MaterialTheme.colorScheme.onBackground
+            color = Color(0xFF757575)
         )
     }
 }
@@ -379,14 +379,14 @@ private fun ScheduleList(date: LocalDate, events: List<ClassEvent>) {
                         )
                     }
                     val fillColor = when {
-                        isCurrent -> MaterialTheme.colorScheme.primary
-                        isPast -> MaterialTheme.colorScheme.error
+                        isCurrent -> Color(0xFF1E88E5)
+                        isPast -> Color(0xFFD32F2F)
                         else -> Color.Transparent
                     }
                     val borderColor = when {
-                        isCurrent -> MaterialTheme.colorScheme.primary
-                        isPast -> MaterialTheme.colorScheme.error
-                        else -> MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f)
+                        isCurrent -> Color(0xFF1E88E5)
+                        isPast -> Color(0xFFD32F2F)
+                        else -> Color.LightGray
                     }
                     Box(
                         contentAlignment = Alignment.Center,

@@ -89,7 +89,7 @@ fun MoreScreen() {
     }
     var selectedDay by remember { mutableStateOf(today.dayOfWeek) }
     // Use a single shade for the top and bottom dividers
-    val dividerColor = MaterialTheme.colorScheme.onSurface
+    val dividerColor = Color.DarkGray
 
     Column(
         modifier = Modifier
@@ -120,7 +120,7 @@ fun MoreScreen() {
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier
                         .clip(RoundedCornerShape(4.dp))
-                        .background(if (selected) MaterialTheme.colorScheme.primary.copy(alpha = 0.3f) else Color.Transparent)
+                        .background(if (selected) Color(0xFFBBDEFB) else Color.Transparent)
                         .clickable { selectedDay = date.dayOfWeek }
                         .padding(vertical = 4.dp, horizontal = 6.dp)
                 ) {
@@ -152,7 +152,7 @@ fun MoreScreen() {
                 .height(collapsedHeight)
                 .align(Alignment.CenterHorizontally)
                 .clip(RoundedCornerShape(8.dp))
-                .background(MaterialTheme.colorScheme.surfaceVariant)
+                .background(Color(0xFFE7E7E7))
                 .clickable(
                     interactionSource = remember { MutableInteractionSource() },
                     indication = null
@@ -167,7 +167,7 @@ fun MoreScreen() {
                 Text(
                     text = "5 classes left \u00B7 4 hr 55 min free",
                     modifier = Modifier.weight(1f),
-                    color = MaterialTheme.colorScheme.onBackground
+                    color = Color.Gray
                 )
                 Icon(
                     imageVector = if (expanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
@@ -181,7 +181,7 @@ fun MoreScreen() {
                         .offset(y = collapsedHeight)
                         .fillMaxWidth()
                         .clip(RoundedCornerShape(bottomStart = 8.dp, bottomEnd = 8.dp))
-                        .background(MaterialTheme.colorScheme.surfaceVariant)
+                        .background(Color(0xFFE7E7E7))
                 ) {
                     Text(
                         text = "More details about classes...",
@@ -194,7 +194,7 @@ fun MoreScreen() {
         }
 
         // Calendar grid showing hours of the day with class blocks
-        val lineColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f)
+        val lineColor = Color(0xFFE0E0E0)
         val hourHeight = 96.dp
         // Use 62 units per hour so the first and last "minute" provide
         // visual spacing and are never filled with class blocks
@@ -296,9 +296,9 @@ fun MoreScreen() {
                     val top = (startUnit * dpPerUnit).dp
                     val height = ((endUnit - startUnit) * dpPerUnit).dp
                     val color = when (cls.type) {
-                        ClassType.THEORY -> MaterialTheme.colorScheme.primary.copy(alpha = 0.3f)
-                        ClassType.LAB -> MaterialTheme.colorScheme.secondary.copy(alpha = 0.3f)
-                        ClassType.BREAK, ClassType.LUNCH -> MaterialTheme.colorScheme.surfaceVariant
+                        ClassType.THEORY -> Color(0xFFD7E8FF)
+                        ClassType.LAB -> Color(0xFFFFF9C4)
+                        ClassType.BREAK, ClassType.LUNCH -> Color(0xFFE0E0E0)
                     }
                     Box(
                         modifier = Modifier

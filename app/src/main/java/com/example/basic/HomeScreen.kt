@@ -61,7 +61,7 @@ fun HomeScreen() {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(MaterialTheme.colorScheme.onBackground.copy(alpha = 0.4f))
+                    .background(Color(0x66000000))
                     .clickable { panel = PanelState.None }
             )
         }
@@ -93,7 +93,7 @@ private fun WhatsNextPanel(onDismiss: () -> Unit) {
             .fillMaxWidth()
             .height(250.dp),
         shadowElevation = 8.dp,
-        color = MaterialTheme.colorScheme.surface
+        color = Color.White
     ) {
         Column(
             modifier = Modifier
@@ -145,7 +145,7 @@ private fun BottomPanel(onDismiss: () -> Unit) {
             .fillMaxWidth()
             .height(300.dp),
         shadowElevation = 8.dp,
-        color = MaterialTheme.colorScheme.surface
+        color = Color(0xFFF0F2F5)
     ) {
         Column(
             modifier = Modifier
@@ -201,7 +201,7 @@ fun HomeHeader(modifier: Modifier = Modifier) {
     }
     Row(
         modifier = modifier
-            .background(MaterialTheme.colorScheme.surface),
+            .background(Color.White),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
@@ -219,7 +219,7 @@ fun HomeHeader(modifier: Modifier = Modifier) {
         Box(
             modifier = Modifier
                 .size(56.dp)
-                .background(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f), CircleShape)
+                .background(Color(0xFFCCCCCC), CircleShape)
         )
     }
 }
