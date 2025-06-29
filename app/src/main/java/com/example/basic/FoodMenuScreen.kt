@@ -195,10 +195,10 @@ fun FoodMenuScreen(onShowSummary: () -> Unit, onViewMonth: () -> Unit = {}) {
 }
 
 private val mealColors = listOf(
+    Color(0xFFFFEEF0),
     Color(0xFFEEF7FF),
     Color(0xFFE8FFF0),
-    Color(0xFFFFF5E0),
-    Color(0xFFFFEEF0)
+    Color(0xFFFFF5E0)
 )
 
 private fun mealIcon(name: String) = when (name.lowercase()) {
@@ -303,11 +303,11 @@ private fun MealCard(
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
                 Button(
                     onClick = onRate,
-                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
                 ) {
-                    Icon(Icons.Default.Star, contentDescription = null, tint = MaterialTheme.colorScheme.onSecondaryContainer, modifier = Modifier.size(16.dp))
+                    Icon(Icons.Default.Star, contentDescription = null, tint = MaterialTheme.colorScheme.onPrimary, modifier = Modifier.size(16.dp))
                     Spacer(Modifier.width(4.dp))
-                    Text("Rate", color = MaterialTheme.colorScheme.onSecondaryContainer)
+                    Text("Rate", color = MaterialTheme.colorScheme.onPrimary)
                 }
             }
         }
