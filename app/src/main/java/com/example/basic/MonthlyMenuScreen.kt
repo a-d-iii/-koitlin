@@ -38,19 +38,18 @@ data class DayData(val date: String, val meals: List<Meal>)
 
 data class WeekSection(val title: String, val color: Color, val dayColor: Color, val days: List<DayData>)
 
-// New palette colors
 private val WEEK_COLORS = listOf(
-    Color(0xFF69CBFF),
-    Color(0xFF1CDDFE),
-    Color(0xFF0DECE3),
-    Color(0xFF69F6BC)
+    Color(0xFFF0E4D7),
+    Color(0xFFE7F0D7),
+    Color(0xFFD7E8F0),
+    Color(0xFFF0D7E8)
 )
 
 private val DAY_COLORS = listOf(
-    Color(0xFF69CBFF),
-    Color(0xFF1CDDFE),
-    Color(0xFFB2FB91),
-    Color(0xFFF9F871)
+    Color(0xFFE5D7CB),
+    Color(0xFFDCE5CB),
+    Color(0xFFCBDCE5),
+    Color(0xFFE5CBDC)
 )
 
 private fun parseMonthlyMenu(json: String): MonthlyMenu {
