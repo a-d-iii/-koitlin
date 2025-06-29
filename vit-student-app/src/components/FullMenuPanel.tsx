@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
   },
   backText: {
     fontSize: 16,
-    color: '#69cbff',
+    color: '#007bff',
     marginRight: 12,
   },
   title: {
