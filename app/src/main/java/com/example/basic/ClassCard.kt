@@ -104,12 +104,6 @@ fun ClassCard(
                 )
         ) {
             BlobPattern(cardWidth, cardHeight)
-            Box(
-                modifier = Modifier
-                    .matchParentSize()
-                    .background(Color.Black.copy(alpha = 0.2f))
-            )
-
             // Weekday and date
             Column(
                 modifier = Modifier
@@ -183,7 +177,7 @@ fun ClassCard(
                 Row(
                     modifier = Modifier
                         .clip(RoundedCornerShape(8.dp))
-                        .background(Color.Black.copy(alpha = 0.45f))
+                        .background(Color.Black.copy(alpha = 0.25f))
                         .padding(horizontal = 12.dp, vertical = 6.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -193,7 +187,7 @@ fun ClassCard(
                 Row(
                     modifier = Modifier
                         .clip(RoundedCornerShape(8.dp))
-                        .background(Color.Black.copy(alpha = 0.45f))
+                        .background(Color.Black.copy(alpha = 0.25f))
                         .padding(horizontal = 12.dp, vertical = 6.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -225,7 +219,6 @@ fun ClassCard(
             Box(
                 modifier = Modifier
                     .matchParentSize()
-                    .background(Color.Black.copy(alpha = 0.25f))
                     .padding(24.dp)
             ) {
                 Column {
