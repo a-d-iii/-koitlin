@@ -28,6 +28,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Fastfood
 import androidx.compose.material.icons.filled.Cloud
+import androidx.compose.material.icons.filled.Speed
+import androidx.compose.material.icons.filled.WaterDrop
  
 import androidx.compose.material.icons.filled.Person
  
@@ -52,6 +54,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -79,8 +82,15 @@ fun SummaryCard() {
                 .fillMaxWidth()
                 .padding(16.dp)
         ) {
-            WeatherCard()
-            Spacer(Modifier.height(16.dp)) 
+            val screenWidth = LocalConfiguration.current.screenWidthDp.dp
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                DayProgressBar(modifier = Modifier.width(screenWidth * 0.4f))
+                WeatherCard()
+            }
+            Spacer(Modifier.height(16.dp))
             ClassSummaryBar()
  
             Spacer(Modifier.height(16.dp))
@@ -121,14 +131,14 @@ private fun Color.darken(factor: Float = 0.8f): Color {
 }
 
 @Composable
-private fun WeatherCard() {
+private fun WeatherCard(modifier: Modifier = Modifier) {
     Card(
-        shape = RoundedCornerShape(50.dp),
+        shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(containerColor = Color.Transparent),
         elevation = CardDefaults.cardElevation(0.dp),
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(160.dp)
+        modifier = modifier
+            .width(LocalConfiguration.current.screenWidthDp.dp * 0.3f)
+            .height(200.dp)
     ) {
         Box(
             modifier = Modifier
@@ -140,72 +150,51 @@ private fun WeatherCard() {
                 .padding(16.dp)
                 .fillMaxSize()
         ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .align(Alignment.TopStart)
-                    .offset(y = 8.dp)
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.Cloud,
-                    contentDescription = "Cloudy",
-                    tint = Color.White,
-                    modifier = Modifier.size(72.dp)
-                )
-                Spacer(Modifier.width(12.dp))
-                Text(
-                    "Cloudy",
-                    color = Color.White,
-                    style = MaterialTheme.typography.headlineMedium,
-                    fontWeight = FontWeight.Bold
-                )
-            }
             Column(
-                horizontalAlignment = Alignment.End,
-                modifier = Modifier
-                    .align(Alignment.TopEnd)
-                    .offset(y = 4.dp)
+                modifier = Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
                     "25°",
                     color = Color.White,
-                    style = MaterialTheme.typography.displayLarge,
+                    style = MaterialTheme.typography.displaySmall,
                     fontWeight = FontWeight.Bold
                 )
-                Text(
-                    "Feels like 27°",
-                    color = Color.White,
-                    style = MaterialTheme.typography.labelMedium,
-                    modifier = Modifier.offset(x = (-10).dp, y = (-10).dp)
+                Icon(
+                    imageVector = Icons.Filled.Cloud,
+                    contentDescription = "Cloudy",
+                    tint = Color.White,
+                    modifier = Modifier
+                        .size(48.dp)
+                        .padding(vertical = 4.dp)
                 )
-            }
-            Row(
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .padding(horizontal = 24.dp),
-                horizontalArrangement = Arrangement.SpaceAround
-            ) {
-                WeatherInfo("60%", "Humidity")
-                WeatherInfo("10 km/h", "Wind")
-                WeatherInfo("28°", "Max")
+                Spacer(Modifier.weight(1f))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceEvenly,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    WeatherInfo(Icons.Filled.WaterDrop, "60%")
+                    WeatherInfo(Icons.Filled.Speed, "10 km/h")
+                }
             }
         }
     }
 }
 
 @Composable
-private fun WeatherInfo(value: String, label: String) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.padding(horizontal = 12.dp)
+private fun WeatherInfo(icon: ImageVector, value: String) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.padding(horizontal = 8.dp)
     ) {
+        Icon(icon, contentDescription = null, tint = Color.White, modifier = Modifier.size(14.dp))
         Text(
             value,
             color = Color.White,
-            style = MaterialTheme.typography.titleMedium,
-            fontWeight = FontWeight.Bold
+            style = MaterialTheme.typography.labelMedium,
+            modifier = Modifier.padding(start = 4.dp)
         )
-        Text(label, color = Color.White, style = MaterialTheme.typography.labelMedium)
     }
 }
 
