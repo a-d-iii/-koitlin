@@ -14,6 +14,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -266,6 +267,7 @@ private fun DaySelector(
                         .height(itemHeight)
                         // keep the top flush with the bar while the highlight
                         // extends only downward
+                        .shadow(if (isSelected) 12.dp else 0.dp, shape, clip = false)
                         .clip(shape)
                         .background(bgColor, shape)
 
@@ -397,6 +399,7 @@ private fun ScheduleList(date: LocalDate, events: List<ClassEvent>) {
                                     scaleY = pulse
                                 }
                             }
+                            .shadow(if (isPast) 4.dp else 0.dp, CircleShape, clip = false)
                             .clip(CircleShape)
                             .background(if (fillColor == Color.Transparent) MaterialTheme.colorScheme.background else fillColor)
                             .border(2.dp, borderColor, CircleShape)
@@ -424,7 +427,7 @@ private fun EventCard(event: ClassEvent, modifier: Modifier = Modifier) {
     Card(
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(containerColor = event.category.color),
-        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         modifier = modifier
             .padding(vertical = 8.dp)
             .height(80.dp)

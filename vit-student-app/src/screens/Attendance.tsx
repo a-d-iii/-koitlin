@@ -1,14 +1,9 @@
  
 import React from 'react';
 import { SafeAreaView, StyleSheet } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
 
 export default function Attendance() {
-  return (
-    <LinearGradient colors={['#69cbff', '#1cddfe']} style={{ flex: 1 }}>
-      <SafeAreaView style={[styles.container, { backgroundColor: 'transparent' }]} />
-    </LinearGradient>
-  );
+  return <SafeAreaView style={styles.container} />;
 }
 
 const styles = StyleSheet.create({

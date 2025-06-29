@@ -1,6 +1,5 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useUser } from '../context/UserContext';
 
@@ -8,7 +7,6 @@ export default function Profile() {
   const { icon } = useUser();
 
   return (
-    <LinearGradient colors={['#69cbff', '#1cddfe']} style={{ flex: 1 }}>
     <View style={styles.container}>
       <View style={styles.avatarWrap}>
         <Ionicons name={icon as any} size={96} color="#fff" />
@@ -32,7 +30,6 @@ export default function Profile() {
         <Text style={styles.infoText}>Department: Computer Science</Text>
       </View>
     </View>
-    </LinearGradient>
   );
 }
 
@@ -53,7 +50,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   name: {
-    fontSize: 32,
+    fontSize: 24,
     fontWeight: '700',
     color: '#333',
     marginBottom: 24,
