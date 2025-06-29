@@ -118,6 +118,7 @@ fun AttendanceDetailsScreen(onBack: () -> Unit) {
     var dragAmount by remember { mutableStateOf(0f) }
 
     Scaffold(
+        containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             CenterAlignedTopAppBar(
                 title = { Text("Schedule", fontWeight = FontWeight.Bold) },

@@ -44,7 +44,7 @@ fun PlannerScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFF0F2F5))
+            .background(MaterialTheme.colorScheme.background)
             .pointerInput(dayIndex) {
                 detectHorizontalDragGestures(
                     onHorizontalDrag = { _, delta ->
@@ -126,7 +126,7 @@ fun PlannerScreen() {
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(vertical = 6.dp),
-                        colors = CardDefaults.cardColors(containerColor = Color.White),
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
                         elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
                         shape = RoundedCornerShape(12.dp)
                     ) {
