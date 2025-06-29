@@ -113,13 +113,13 @@ fun ClassCard(
                 Text(
                     weekday,
                     color = Color.White,
-                    fontSize = 36.sp,
+                    style = MaterialTheme.typography.displayMedium,
                     fontWeight = FontWeight.Black
                 )
                 Text(
                     dateNum,
                     color = Color.White,
-                    fontSize = 24.sp,
+                    style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold
                 )
             }
@@ -137,7 +137,7 @@ fun ClassCard(
             Text(
                 locationName,
                 color = Color.White,
-                fontSize = 14.sp,
+                style = MaterialTheme.typography.labelLarge,
                 fontWeight = FontWeight.SemiBold,
                 modifier = Modifier
                     .align(Alignment.TopEnd)
@@ -160,11 +160,27 @@ fun ClassCard(
                     .padding(horizontal = 24.dp),
                 horizontalAlignment = Alignment.Start
             ) {
-                Text(courseCode, color = Color.White, fontSize = 36.sp, fontWeight = FontWeight.Black, modifier = Modifier.padding(start = 20.dp, bottom = 8.dp))
+                Text(
+                    courseCode,
+                    color = Color.White,
+                    style = MaterialTheme.typography.displayMedium,
+                    fontWeight = FontWeight.Black,
+                    modifier = Modifier.padding(start = 20.dp, bottom = 8.dp)
+                )
                 if (roomDetail.isNotEmpty()) {
-                    Text(roomDetail, color = Color(0xFFF0F0F0), fontSize = 28.sp, modifier = Modifier.padding(start = 20.dp, bottom = 8.dp))
+                    Text(
+                        roomDetail,
+                        color = Color(0xFFF0F0F0),
+                        style = MaterialTheme.typography.headlineLarge,
+                        modifier = Modifier.padding(start = 20.dp, bottom = 8.dp)
+                    )
                 }
-                Text(info.time, color = Color(0xFFF0F0F0), fontSize = 24.sp, modifier = Modifier.padding(start = 20.dp))
+                Text(
+                    info.time,
+                    color = Color(0xFFF0F0F0),
+                    style = MaterialTheme.typography.titleLarge,
+                    modifier = Modifier.padding(start = 20.dp)
+                )
             }
 
             Row(
@@ -182,7 +198,13 @@ fun ClassCard(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Icon(Icons.Filled.Camera, contentDescription = null, tint = Color.White)
-                    Text("Capture", color = Color.White, fontSize = 14.sp, fontWeight = FontWeight.SemiBold, modifier = Modifier.padding(start = 6.dp))
+                    Text(
+                        "Capture",
+                        color = Color.White,
+                        style = MaterialTheme.typography.labelLarge,
+                        fontWeight = FontWeight.SemiBold,
+                        modifier = Modifier.padding(start = 6.dp)
+                    )
                 }
                 Row(
                     modifier = Modifier
@@ -192,7 +214,13 @@ fun ClassCard(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Icon(Icons.Filled.Star, contentDescription = null, tint = Color.White)
-                    Text("Rate", color = Color.White, fontSize = 14.sp, fontWeight = FontWeight.SemiBold, modifier = Modifier.padding(start = 6.dp))
+                    Text(
+                        "Rate",
+                        color = Color.White,
+                        style = MaterialTheme.typography.labelLarge,
+                        fontWeight = FontWeight.SemiBold,
+                        modifier = Modifier.padding(start = 6.dp)
+                    )
                 }
             }
         }
@@ -237,14 +265,14 @@ fun ClassCard(
                             Text(
                                 it.time,
                                 color = Color(0xFFE0F0FF),
-                                fontSize = 16.sp,
+                                style = MaterialTheme.typography.bodyLarge,
                                 fontWeight = FontWeight.SemiBold,
                                 modifier = Modifier.width(90.dp)
                             )
                             Text(
                                 display,
                                 color = if (past) Color(0xFFFF6666) else Color.White,
-                                fontSize = 16.sp,
+                                style = MaterialTheme.typography.bodyLarge,
                                 fontWeight = FontWeight.Medium
                             )
                         }
@@ -313,18 +341,34 @@ private fun TemperatureBadge(
             modifier = Modifier.padding(bottom = 2.dp)
         ) {
             Icon(Icons.Filled.DeviceThermostat, contentDescription = null, tint = Color.White, modifier = Modifier.size(18.dp))
-            Text(value, color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(start = 6.dp))
+            Text(
+                value,
+                color = Color.White,
+                style = MaterialTheme.typography.bodyLarge,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(start = 6.dp)
+            )
         }
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.padding(bottom = 2.dp)
         ) {
             Icon(Icons.Filled.WaterDrop, contentDescription = null, tint = Color.White, modifier = Modifier.size(14.dp))
-            Text(humidity, color = Color.White, fontSize = 12.sp, modifier = Modifier.padding(start = 6.dp))
+            Text(
+                humidity,
+                color = Color.White,
+                style = MaterialTheme.typography.labelMedium,
+                modifier = Modifier.padding(start = 6.dp)
+            )
         }
         Row(verticalAlignment = Alignment.CenterVertically) {
             Icon(Icons.Filled.Speed, contentDescription = null, tint = Color.White, modifier = Modifier.size(14.dp))
-            Text(wind, color = Color.White, fontSize = 12.sp, modifier = Modifier.padding(start = 6.dp))
+            Text(
+                wind,
+                color = Color.White,
+                style = MaterialTheme.typography.labelMedium,
+                modifier = Modifier.padding(start = 6.dp)
+            )
         }
     }
 }

@@ -18,6 +18,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.draw.clip
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.platform.LocalContext
@@ -25,6 +26,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import com.example.basic.ui.theme.gradientBottom
+import com.example.basic.ui.theme.gradientTop
 import org.json.JSONObject
 import java.util.*
 import java.time.LocalDate
@@ -185,7 +188,7 @@ fun MonthlyMenuScreen(onBack: () -> Unit) {
             state = listState,
             modifier = Modifier
                 .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background)
+                .background(Brush.verticalGradient(listOf(gradientTop, gradientBottom)))
                 .padding(padding),
             contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
         ) {

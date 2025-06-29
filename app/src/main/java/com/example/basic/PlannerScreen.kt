@@ -1,6 +1,7 @@
 package com.example.basic
 
 import androidx.compose.foundation.background
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -32,6 +33,8 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.pointer.pointerInput
+import com.example.basic.ui.theme.gradientBottom
+import com.example.basic.ui.theme.gradientTop
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
 @Composable
@@ -44,7 +47,7 @@ fun PlannerScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
+            .background(Brush.verticalGradient(listOf(gradientTop, gradientBottom)))
             .padding(16.dp)
             .pointerInput(dayIndex) {
                 detectHorizontalDragGestures(
@@ -87,7 +90,7 @@ fun PlannerScreen() {
                 )
                 Text(
                     text = d.take(3),
-                    fontSize = 14.sp,
+                    style = MaterialTheme.typography.labelLarge,
                     fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal,
                     color = textColor,
                     modifier = Modifier
@@ -127,7 +130,7 @@ fun PlannerScreen() {
                             .fillMaxWidth()
                             .padding(vertical = 6.dp),
                         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-                        elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
+                        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
                         shape = RoundedCornerShape(12.dp)
                     ) {
                         Row(
@@ -139,13 +142,13 @@ fun PlannerScreen() {
                         Column(modifier = Modifier.weight(1f)) {
                             Text(
                                 text = cls.course,
-                                fontSize = 14.sp,
+                                style = MaterialTheme.typography.bodyLarge,
                                 fontWeight = FontWeight.SemiBold,
                                 color = MaterialTheme.colorScheme.onBackground
                             )
                             Text(
                                 text = cls.faculty,
-                                fontSize = 12.sp,
+                                style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f),
                                 modifier = Modifier.padding(top = 2.dp)
                             )
@@ -153,12 +156,12 @@ fun PlannerScreen() {
                         Column(horizontalAlignment = Alignment.End) {
                             Text(
                                 text = "${cls.start} – ${cls.end}",
-                                fontSize = 12.sp,
+                                style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onBackground
                             )
                             Text(
                                 text = cls.room,
-                                fontSize = 10.sp,
+                                style = MaterialTheme.typography.labelSmall,
                                 color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f),
                                 modifier = Modifier.padding(top = 2.dp)
                             )

@@ -18,7 +18,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
@@ -34,6 +33,7 @@ import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.foundation.layout.offset
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -44,6 +44,8 @@ import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
 import java.time.temporal.TemporalAdjusters
 import java.util.Locale
+import com.example.basic.ui.theme.gradientBottom
+import com.example.basic.ui.theme.gradientTop
 
 // Simple schedule model for the calendar
 private enum class ClassType { THEORY, LAB, BREAK, LUNCH }
@@ -94,7 +96,7 @@ fun MoreScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
+            .background(Brush.verticalGradient(listOf(gradientTop, gradientBottom)))
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -305,7 +307,6 @@ fun MoreScreen() {
                             .offset(x = labelWidth + 1.dp + 4.dp, y = top)
                             .width(contentWidth - 8.dp)
                             .height(height)
-                            .shadow(4.dp, RoundedCornerShape(6.dp))
                             .clip(RoundedCornerShape(6.dp))
                             .background(color)
                     ) {
