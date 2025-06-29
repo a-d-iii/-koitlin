@@ -12,7 +12,6 @@ import {
   Dimensions,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
@@ -50,13 +49,12 @@ export default function MoreRootScreen() {
   );
 
   return (
-    <LinearGradient colors={['#69cbff', '#1cddfe']} style={{ flex: 1 }}>
-      <SafeAreaView
-        style={[
-          styles.container,
-          { paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0, backgroundColor: 'transparent' },
-        ]}
-      >
+    <SafeAreaView
+      style={[
+        styles.container,
+        { paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0 },
+      ]}
+    >
       <FlatList
         data={utilities}
         renderItem={renderItem}
@@ -67,8 +65,7 @@ export default function MoreRootScreen() {
 
         contentContainerStyle={styles.grid}
       />
-      </SafeAreaView>
-    </LinearGradient>
+    </SafeAreaView>
   );
 }
 

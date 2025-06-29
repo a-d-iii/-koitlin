@@ -13,7 +13,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -39,14 +38,7 @@ fun HomeScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(
-                Brush.verticalGradient(
-                    listOf(
-                        Color(0xFF69CBFF),
-                        Color(0xFF1CDDFE)
-                    )
-                )
-            )
+            .background(MaterialTheme.colorScheme.background)
     ) {
         Box(modifier = Modifier.weight(1f)) {
 
@@ -100,7 +92,7 @@ private fun WhatsNextPanel(onDismiss: () -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
             .height(250.dp),
-        shadowElevation = 0.dp,
+        shadowElevation = 8.dp,
         color = MaterialTheme.colorScheme.surface
     ) {
         Column(
@@ -152,7 +144,7 @@ private fun BottomPanel(onDismiss: () -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
             .height(300.dp),
-        shadowElevation = 0.dp,
+        shadowElevation = 8.dp,
         color = MaterialTheme.colorScheme.surface
     ) {
         Column(

@@ -22,7 +22,7 @@ fun DoubleRingProgress(
     outerProgress: Float,
     innerProgress: Float,
     modifier: Modifier = Modifier,
-    outerColor: Color = Color(0xFF69CBFF),
+    outerColor: Color = Color(0xFF3F51B5),
     innerColor: Color = outerColor,
     thickness: Dp = 8.dp,
     gap: Dp = 4.dp
