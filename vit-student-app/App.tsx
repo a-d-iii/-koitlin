@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { useFonts, Inter_400Regular } from '@expo-google-fonts/inter';
+import { useFonts } from 'expo-font';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
 import {
@@ -136,14 +136,14 @@ function MainTabs() {
 
 export default function App() {
   const [fontsLoaded] = useFonts({
-    Inter_400Regular,
+    Inter: require('./font/Inter-VariableFont_opsz,wght.ttf'),
   });
 
   React.useEffect(() => {
     if (fontsLoaded) {
       (Text as any).defaultProps = (Text as any).defaultProps || {};
       (Text as any).defaultProps.style = [
-        { fontFamily: 'Inter_400Regular' },
+        { fontFamily: 'Inter' },
         (Text as any).defaultProps.style,
       ];
     }
