@@ -13,6 +13,11 @@ available on your system and then execute:
 ./gradlew assembleDebug
 ```
 
+During the build the Inter font is copied from
+`vit-student-app/font/Inter-VariableFont_opsz,wght.ttf` into
+`app/src/main/res/font`. The font file itself is not tracked in git to keep the
+repository lightweight.
+
 The project now uses the Gradle plugin DSL and a modern plugin management
 configuration. This removes deprecation warnings that appeared with newer
 versions of Gradle.
