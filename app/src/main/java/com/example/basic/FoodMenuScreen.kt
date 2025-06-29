@@ -195,10 +195,10 @@ fun FoodMenuScreen(onShowSummary: () -> Unit, onViewMonth: () -> Unit = {}) {
 }
 
 private val mealColors = listOf(
-    Color(0xFF69CBFF),
-    Color(0xFF1CDDFE),
-    Color(0xFF69F6BC),
-    Color(0xFFF9F871)
+    Color(0xFFEEF7FF),
+    Color(0xFFE8FFF0),
+    Color(0xFFFFF5E0),
+    Color(0xFFFFEEF0)
 )
 
 private fun mealIcon(name: String) = when (name.lowercase()) {
