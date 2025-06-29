@@ -8,6 +8,7 @@ import {
   Pressable,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { LinearGradient } from 'expo-linear-gradient';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import type { Meal } from '../data/meals';
@@ -197,7 +198,8 @@ export default function MonthlyMenuScreen() {
 
   const weeks = toWeeks();
   return (
-    <SafeAreaView style={[styles.safe, { backgroundColor: weeks[weekIndex]?.color || '#f2f2f2' }]}>
+    <LinearGradient colors={['#69cbff', '#1cddfe']} style={{ flex: 1 }}>
+    <SafeAreaView style={[styles.safe, { backgroundColor: 'transparent' }]}>
       <SectionList
         ref={listRef}
         sections={weeks}
@@ -220,6 +222,7 @@ export default function MonthlyMenuScreen() {
         contentContainerStyle={styles.listContent}
       />
     </SafeAreaView>
+    </LinearGradient>
   );
 }
 
@@ -241,7 +244,7 @@ const styles = StyleSheet.create({
   },
   sectionHeader: {
     fontWeight: '600',
-    fontSize: 20,
+    fontSize: 26,
     color: '#fff',
   },
   dayBlock: {

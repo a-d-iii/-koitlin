@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.background
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.Alignment
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -28,6 +29,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.basic.DoubleRingProgress
 import com.example.basic.MiniLineGraph
+import com.example.basic.ui.theme.gradientBottom
+import com.example.basic.ui.theme.gradientTop
 
 @Composable
 private fun colorForAttendance(value: Float): Color = when {
@@ -57,7 +60,7 @@ fun AttendanceScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
+            .background(Brush.verticalGradient(listOf(gradientTop, gradientBottom)))
             .verticalScroll(rememberScrollState())
             .padding(16.dp)
     ) {
@@ -74,7 +77,7 @@ fun AttendanceScreen() {
                     .heightIn(min = 160.dp)
                     .padding(vertical = 8.dp),
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-                elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+                elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
             ) {
                 Row(
                     modifier = Modifier

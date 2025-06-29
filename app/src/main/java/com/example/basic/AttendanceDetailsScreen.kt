@@ -1,6 +1,7 @@
 package com.example.basic
 
 import androidx.compose.foundation.background
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -14,7 +15,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -47,6 +47,8 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.runtime.rememberCoroutineScope
 import com.example.basic.WEEKLY_SCHEDULE
 import kotlinx.coroutines.launch
+import com.example.basic.ui.theme.gradientBottom
+import com.example.basic.ui.theme.gradientTop
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -118,7 +120,7 @@ fun AttendanceDetailsScreen(onBack: () -> Unit) {
     var dragAmount by remember { mutableStateOf(0f) }
 
     Scaffold(
-        containerColor = MaterialTheme.colorScheme.background,
+        containerColor = Color.Transparent,
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
@@ -144,6 +146,7 @@ fun AttendanceDetailsScreen(onBack: () -> Unit) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .background(Brush.verticalGradient(listOf(gradientTop, gradientBottom)))
                 .padding(padding)
                 .pointerInput(selected) {
                     detectHorizontalDragGestures(
@@ -267,7 +270,6 @@ private fun DaySelector(
                         .height(itemHeight)
                         // keep the top flush with the bar while the highlight
                         // extends only downward
-                        .shadow(if (isSelected) 12.dp else 0.dp, shape, clip = false)
                         .clip(shape)
                         .background(bgColor, shape)
 
@@ -278,13 +280,13 @@ private fun DaySelector(
                 Text(
                     day.date.dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.getDefault()),
                     color = textColor,
-                    fontSize = 12.sp,
+                    style = MaterialTheme.typography.labelSmall,
                     fontWeight = FontWeight.Bold
                 )
                 Text(
                     day.date.dayOfMonth.toString(),
                     color = textColor,
-                    fontSize = 12.sp,
+                    style = MaterialTheme.typography.labelSmall,
                     fontWeight = FontWeight.Bold
                 )
             }
@@ -302,13 +304,13 @@ private fun CurrentDayHeader(date: LocalDate) {
     ) {
         Text(
             text = date.dayOfWeek.getDisplayName(TextStyle.FULL, Locale.getDefault()),
-            fontSize = 20.sp,
+            style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.Medium,
             color = MaterialTheme.colorScheme.onBackground
         )
         Text(
             text = date.format(java.time.format.DateTimeFormatter.ofPattern("dd MMMM yyyy")),
-            fontSize = 14.sp,
+            style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onBackground
         )
     }
@@ -374,7 +376,7 @@ private fun ScheduleList(date: LocalDate, events: List<ClassEvent>) {
                         Text(
                             displayTime,
                             color = timeColor,
-                            fontSize = 12.sp,
+                            style = MaterialTheme.typography.labelSmall,
                             maxLines = 1,
                             modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
                         )
@@ -399,7 +401,6 @@ private fun ScheduleList(date: LocalDate, events: List<ClassEvent>) {
                                     scaleY = pulse
                                 }
                             }
-                            .shadow(if (isPast) 4.dp else 0.dp, CircleShape, clip = false)
                             .clip(CircleShape)
                             .background(if (fillColor == Color.Transparent) MaterialTheme.colorScheme.background else fillColor)
                             .border(2.dp, borderColor, CircleShape)
@@ -427,7 +428,7 @@ private fun EventCard(event: ClassEvent, modifier: Modifier = Modifier) {
     Card(
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(containerColor = event.category.color),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         modifier = modifier
             .padding(vertical = 8.dp)
             .height(80.dp)
@@ -440,7 +441,11 @@ private fun EventCard(event: ClassEvent, modifier: Modifier = Modifier) {
         ) {
             Column(modifier = Modifier.weight(1f)) {
                 Text(event.course, color = Color.White, fontWeight = FontWeight.Bold)
-                Text(event.category.label, color = Color.White.copy(alpha = 0.9f), fontSize = 12.sp)
+                Text(
+                    event.category.label,
+                    color = Color.White.copy(alpha = 0.9f),
+                    style = MaterialTheme.typography.labelSmall
+                )
             }
         }
     }

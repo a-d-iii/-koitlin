@@ -13,9 +13,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.basic.ui.theme.gradientBottom
+import com.example.basic.ui.theme.gradientTop
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import kotlinx.coroutines.launch
@@ -38,7 +41,11 @@ fun HomeScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
+            .background(
+                Brush.verticalGradient(
+                    listOf(gradientTop, gradientBottom)
+                )
+            )
     ) {
         Box(modifier = Modifier.weight(1f)) {
 
@@ -92,7 +99,7 @@ private fun WhatsNextPanel(onDismiss: () -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
             .height(250.dp),
-        shadowElevation = 8.dp,
+        shadowElevation = 0.dp,
         color = MaterialTheme.colorScheme.surface
     ) {
         Column(
@@ -144,7 +151,7 @@ private fun BottomPanel(onDismiss: () -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
             .height(300.dp),
-        shadowElevation = 8.dp,
+        shadowElevation = 0.dp,
         color = MaterialTheme.colorScheme.surface
     ) {
         Column(

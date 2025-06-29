@@ -109,7 +109,7 @@ private fun WeatherCard() {
     Card(
         shape = RoundedCornerShape(50.dp),
         colors = CardDefaults.cardColors(containerColor = Color.Transparent),
-        elevation = CardDefaults.cardElevation(8.dp),
+        elevation = CardDefaults.cardElevation(0.dp),
         modifier = Modifier
             .fillMaxWidth()
             .height(160.dp)
@@ -140,7 +140,7 @@ private fun WeatherCard() {
                 Text(
                     "Cloudy",
                     color = Color.White,
-                    fontSize = 32.sp,
+                    style = MaterialTheme.typography.headlineMedium,
                     fontWeight = FontWeight.Bold
                 )
             }
@@ -153,13 +153,13 @@ private fun WeatherCard() {
                 Text(
                     "25°",
                     color = Color.White,
-                    fontSize = 52.sp,
+                    style = MaterialTheme.typography.displayLarge,
                     fontWeight = FontWeight.Bold
                 )
                 Text(
                     "Feels like 27°",
                     color = Color.White,
-                    fontSize = 12.sp,
+                    style = MaterialTheme.typography.labelSmall,
                     modifier = Modifier.offset(x = (-10).dp, y = (-10).dp)
                 )
             }
@@ -186,10 +186,10 @@ private fun WeatherInfo(value: String, label: String) {
         Text(
             value,
             color = Color.White,
-            fontWeight = FontWeight.Bold,
-            fontSize = 20.sp
+            style = MaterialTheme.typography.titleMedium,
+            fontWeight = FontWeight.Bold
         )
-        Text(label, color = Color.White, fontSize = 12.sp)
+        Text(label, color = Color.White, style = MaterialTheme.typography.labelSmall)
     }
 }
 
@@ -201,7 +201,7 @@ private fun RowScope.InfoBox(value: String, label: String) {
             .height(100.dp)
             .padding(horizontal = 4.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        elevation = CardDefaults.cardElevation(1.dp)
+        elevation = CardDefaults.cardElevation(0.dp)
     ) {
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -261,7 +261,7 @@ private fun MenuSection(contentPadding: Dp) {
                             .padding(vertical = 8.dp),
                         border = BorderStroke(1.dp, Color(0xFFE0E0E0)),
                         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-                        elevation = CardDefaults.cardElevation(1.dp)
+                        elevation = CardDefaults.cardElevation(0.dp)
                     ) {
                         Column(
                             modifier = Modifier
@@ -282,7 +282,7 @@ private fun MenuSection(contentPadding: Dp) {
                             )
                             Text(
                                 menu,
-                                fontSize = 12.sp,
+                                style = MaterialTheme.typography.bodySmall,
                                 modifier = Modifier.padding(top = 4.dp),
                                 textAlign = TextAlign.Center
                             )
@@ -339,7 +339,7 @@ private fun TasksSection() {
                     .padding(vertical = 4.dp)
                     .height(96.dp),
                 colors = CardDefaults.cardColors(containerColor = task.color),
-                elevation = CardDefaults.cardElevation(4.dp)
+                elevation = CardDefaults.cardElevation(0.dp)
             ) {
                 Box(Modifier.fillMaxSize()) {
                     Box(
@@ -378,7 +378,7 @@ private fun TasksSection() {
                             )
                             Text(
                                 task.details,
-                                fontSize = 12.sp,
+                                style = MaterialTheme.typography.bodySmall,
                                 color = Color(0xFF666666),
                                 textDecoration = if (checked) TextDecoration.LineThrough else TextDecoration.None
                             )
@@ -386,7 +386,7 @@ private fun TasksSection() {
                     }
                     Text(
                         task.priority.label,
-                        fontSize = 10.sp,
+                        style = MaterialTheme.typography.labelSmall,
                         color = accent,
                         modifier = Modifier
                             .align(Alignment.BottomEnd)
