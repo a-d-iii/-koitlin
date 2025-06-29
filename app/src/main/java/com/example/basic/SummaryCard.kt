@@ -21,7 +21,9 @@ import androidx.compose.foundation.indication
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Fastfood
 import androidx.compose.material.icons.filled.Cloud
@@ -40,6 +42,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -68,9 +71,25 @@ fun SummaryCard() {
                 .fillMaxWidth()
                 .padding(16.dp)
         ) {
-            WeatherCard()
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(160.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                DayProgressBar(
+                    modifier = Modifier
+                        .fillMaxWidth(0.4f)
+                )
+                Spacer(modifier = Modifier.weight(1f))
+                WeatherCard(
+                    modifier = Modifier
+                        .fillMaxWidth(0.25f)
+                )
+            }
             Spacer(Modifier.height(16.dp))
-            TimetableSection()
+            ClassSummaryBar()
             Spacer(Modifier.height(16.dp))
             MenuSection(contentPadding = 16.dp)
             Spacer(Modifier.height(16.dp))
@@ -105,13 +124,12 @@ private fun Color.darken(factor: Float = 0.8f): Color {
 }
 
 @Composable
-private fun WeatherCard() {
+private fun WeatherCard(modifier: Modifier = Modifier) {
     Card(
         shape = RoundedCornerShape(50.dp),
         colors = CardDefaults.cardColors(containerColor = Color.Transparent),
         elevation = CardDefaults.cardElevation(0.dp),
-        modifier = Modifier
-            .fillMaxWidth()
+        modifier = modifier
             .height(160.dp)
     ) {
         Box(
@@ -194,40 +212,80 @@ private fun WeatherInfo(value: String, label: String) {
 }
 
 @Composable
-private fun RowScope.InfoBox(value: String, label: String) {
-    Card(
-        modifier = Modifier
-            .weight(1f)
-            .height(100.dp)
-            .padding(horizontal = 4.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        elevation = CardDefaults.cardElevation(0.dp)
+private fun DayProgressBar(modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier
+            .clip(RoundedCornerShape(16.dp))
+            .background(MaterialTheme.colorScheme.surface)
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+        Text(
+            "30% day left",
+            fontWeight = FontWeight.SemiBold,
+            style = MaterialTheme.typography.bodyMedium
+        )
+        Spacer(Modifier.height(8.dp))
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(8.dp)
+                .clip(RoundedCornerShape(4.dp))
+                .background(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f))
         ) {
-            Text(
-                text = value,
-                style = MaterialTheme.typography.headlineMedium,
-                fontWeight = FontWeight.Bold
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth(0.3f)
+                    .fillMaxHeight()
+                    .clip(RoundedCornerShape(4.dp))
+                    .background(MaterialTheme.colorScheme.primary)
             )
-            Text(label, style = MaterialTheme.typography.bodyMedium)
         }
     }
 }
 
 @Composable
-private fun TimetableSection() {
-    SectionHeader("Today's Timetable")
+private fun ClassSummaryBar() {
     Row(
         modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween
+        horizontalArrangement = Arrangement.Center
     ) {
-        InfoBox(value = "6", label = "classes today")
-        InfoBox(value = "2", label = "labs")
-        InfoBox(value = "1", label = "project")
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(0.85f)
+                .height(48.dp)
+                .clip(RoundedCornerShape(24.dp))
+                .background(MaterialTheme.colorScheme.surface)
+                .padding(horizontal = 16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            Text(
+                "6 classes",
+                style = MaterialTheme.typography.bodyMedium,
+                fontWeight = FontWeight.SemiBold
+            )
+            Box(
+                modifier = Modifier
+                    .size(6.dp)
+                    .background(Color(0xFF448AFF), CircleShape)
+            )
+            Text(
+                "2 labs",
+                style = MaterialTheme.typography.bodyMedium,
+                fontWeight = FontWeight.SemiBold
+            )
+            Box(
+                modifier = Modifier
+                    .size(6.dp)
+                    .background(Color(0xFF80D8FF), CircleShape)
+            )
+            Text(
+                "3 project",
+                style = MaterialTheme.typography.bodyMedium,
+                fontWeight = FontWeight.SemiBold
+            )
+        }
     }
 }
 
@@ -235,66 +293,55 @@ private fun TimetableSection() {
 private fun MenuSection(contentPadding: Dp) {
     SectionHeader("Today's Menu")
     val screenWidth = LocalConfiguration.current.screenWidthDp.dp
-    val cardWidth = screenWidth * 0.42f
+    val cardWidth = screenWidth * 0.35f
     val cardHeight = 120.dp
-    val spacing = (screenWidth - cardWidth * 2) / 3f
-    val rowPadding = (spacing - contentPadding).coerceAtLeast(0.dp)
     val meals = listOf(
         "Breakfast" to "Pancakes & Juice",
         "Lunch" to "Chicken Salad",
         "Snacks" to "Fruit & Yogurt",
         "Dinner" to "Salmon & Veggies"
     )
-    Column {
-        meals.chunked(2).forEach { rowItems ->
-            Row(
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .horizontalScroll(rememberScrollState())
+            .padding(horizontal = contentPadding),
+        horizontalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        meals.forEach { (label, menu) ->
+            Card(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = rowPadding),
-                horizontalArrangement = Arrangement.spacedBy(spacing)
+                    .width(cardWidth)
+                    .height(cardHeight)
+                    .padding(vertical = 8.dp),
+                border = BorderStroke(1.dp, Color(0xFFE0E0E0)),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                elevation = CardDefaults.cardElevation(0.dp)
             ) {
-                rowItems.forEach { (label, menu) ->
-                    Card(
-                        modifier = Modifier
-                            .width(cardWidth)
-                            .height(cardHeight)
-                            .padding(vertical = 8.dp),
-                        border = BorderStroke(1.dp, Color(0xFFE0E0E0)),
-                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-                        elevation = CardDefaults.cardElevation(0.dp)
-                    ) {
-                        Column(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(12.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Icon(
-                                Icons.Default.Fastfood,
-                                contentDescription = null,
-                                tint = Color(0xFFFF6A00)
-                            )
-                            Text(
-                                label,
-                                fontWeight = FontWeight.SemiBold,
-                                modifier = Modifier.padding(top = 4.dp),
-                                textAlign = TextAlign.Center
-                            )
-                            Text(
-                                menu,
-                                style = MaterialTheme.typography.bodyMedium,
-                                modifier = Modifier.padding(top = 4.dp),
-                                textAlign = TextAlign.Center
-                            )
-                        }
-                    }
-                }
-                if (rowItems.size == 1) Spacer(
+                Column(
                     modifier = Modifier
-                        .width(cardWidth)
-                        .height(cardHeight)
-                        .padding(vertical = 8.dp)
-                )
+                        .fillMaxWidth()
+                        .padding(12.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Icon(
+                        Icons.Default.Fastfood,
+                        contentDescription = null,
+                        tint = Color(0xFFFF6A00)
+                    )
+                    Text(
+                        label,
+                        fontWeight = FontWeight.SemiBold,
+                        modifier = Modifier.padding(top = 4.dp),
+                        textAlign = TextAlign.Center
+                    )
+                    Text(
+                        menu,
+                        style = MaterialTheme.typography.bodyMedium,
+                        modifier = Modifier.padding(top = 4.dp),
+                        textAlign = TextAlign.Center
+                    )
+                }
             }
         }
     }
