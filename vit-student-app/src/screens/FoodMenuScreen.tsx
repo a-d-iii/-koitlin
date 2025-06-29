@@ -17,7 +17,6 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import type { Meal } from '../data/meals';
 import { useNavigation } from '@react-navigation/native';
-import RatingModal from '../components/RatingModal';
 // Load the bundled menu as an offline fallback so the screen always has data
 // even when network requests fail.
 import localMenu from '../../monthly-menu-may-2025.json';
@@ -35,8 +34,6 @@ export default function FoodMenuScreen() {
   const [menu, setMenu] = useState<MonthlyMenu>(localMenu as MonthlyMenu);
   const [loading, setLoading] = useState(true);
   const [likes, setLikes] = useState<Record<string, boolean>>({});
-  const [ratings, setRatings] = useState<Record<string, number>>({});
-  const [ratingMeal, setRatingMeal] = useState<string | null>(null);
   const [currentTime, setCurrentTime] = useState(new Date());
   const navigation = useNavigation();
   const iconAnim = useRef(new Animated.Value(0)).current;
@@ -214,7 +211,7 @@ export default function FoodMenuScreen() {
               },
             ]}
           >
-          <Ionicons name="restaurant" size={24} color="#69cbff" />
+          <Ionicons name="restaurant" size={24} color="#ff9800" />
           </Animated.View>
         </View>
         <View style={styles.dateChip}>
@@ -262,7 +259,7 @@ export default function FoodMenuScreen() {
                     <Ionicons
                       name={mealIcon(m.name)}
                       size={16}
-                      color="#69cbff"
+                      color="#ff9800"
                       style={styles.mealIcon}
                     />
                   </Animated.View>
@@ -291,15 +288,7 @@ export default function FoodMenuScreen() {
                 </View>
               </View>
               <Text style={styles.mealItems}>{m.items.join(', ')}</Text>
-              <Pressable
-                style={styles.rateButton}
-                onPress={() => setRatingMeal(m.name)}
-              >
-                <Ionicons name="star" size={16} color="#fff" />
-                <Text style={styles.rateButtonText}>
-                  {ratings[m.name] ? `${ratings[m.name]}★` : 'Rate'}
-                </Text>
-              </Pressable>
+              {/* Rate button removed */}
             </View>
           );
         })}
@@ -308,15 +297,7 @@ export default function FoodMenuScreen() {
           <Text style={styles.buttonText}>Food Summary</Text>
         </TouchableOpacity>
       </ScrollView>
-      <RatingModal
-        visible={!!ratingMeal}
-        onClose={() => setRatingMeal(null)}
-        onSubmit={(r) =>
-          ratingMeal && setRatings((prev) => ({ ...prev, [ratingMeal]: r }))
-        }
-        initialRating={ratingMeal ? ratings[ratingMeal] || 0 : 0}
-        prompt="Rate this Meal"
-      />
+      {/* Rating modal removed */}
       <View style={styles.monthBar}>
         <TouchableOpacity
           style={styles.monthButton}
@@ -439,21 +420,6 @@ const styles = StyleSheet.create({
   },
   mealItems: {
     color: '#555',
-  },
-  rateButton: {
-    flexDirection: 'row',
-    backgroundColor: '#69cbff',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 8,
-    alignItems: 'center',
-    alignSelf: 'flex-end',
-    marginTop: 8,
-  },
-  rateButtonText: {
-    color: '#fff',
-    marginLeft: 4,
-    fontWeight: '600',
   },
   button: {
     marginTop: 20,
