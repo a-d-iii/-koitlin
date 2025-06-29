@@ -331,11 +331,13 @@ private fun MealCard(
                         modifier = Modifier.size(16.dp)
                     )
                     Spacer(Modifier.width(4.dp))
+ 
                     Text(
                         "Rate",
                         color = Color.Black,
                         style = MaterialTheme.typography.labelSmall
                     )
+ 
                 }
             }
         }
