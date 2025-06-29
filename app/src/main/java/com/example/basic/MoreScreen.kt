@@ -93,8 +93,7 @@ fun MoreScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
-            .padding(16.dp),
+            .background(MaterialTheme.colorScheme.background),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
@@ -110,7 +109,8 @@ fun MoreScreen() {
         )
         Row(
             modifier = Modifier
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             weekDates.forEach { date ->
@@ -304,7 +304,6 @@ fun MoreScreen() {
                             .offset(x = labelWidth + 1.dp + 4.dp, y = top)
                             .width(contentWidth - 8.dp)
                             .height(height)
-                            .shadow(4.dp, RoundedCornerShape(6.dp))
                             .clip(RoundedCornerShape(6.dp))
                             .background(color)
                     ) {

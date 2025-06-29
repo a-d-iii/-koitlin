@@ -160,7 +160,6 @@ fun MonthlyMenuScreen(onBack: () -> Unit) {
                 title = {
                     Text(
                         "Monthly Menu",
-                        style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold,
                         textAlign = TextAlign.Center,
                         modifier = Modifier.fillMaxWidth()

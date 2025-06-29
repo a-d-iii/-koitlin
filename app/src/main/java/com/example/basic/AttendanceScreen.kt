@@ -60,12 +60,6 @@ fun AttendanceScreen() {
             .verticalScroll(rememberScrollState())
             .padding(16.dp)
     ) {
-        Text(
-            text = "Attendance",
-            style = MaterialTheme.typography.titleLarge,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(bottom = 16.dp)
-        )
         subjects.forEach { subject ->
             Card(
                 modifier = Modifier
