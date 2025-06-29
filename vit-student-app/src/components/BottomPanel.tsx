@@ -12,7 +12,6 @@ import {
   ScrollView,
   StyleSheet,
   Text,
-  Pressable,
   View,
 } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
@@ -93,10 +92,9 @@ const BottomPanel = forwardRef<BottomPanelHandle, Props>(
           !isVisible && { pointerEvents: 'none' },
         ]}
       >
-        {/* Floating close button */}
-        <Pressable style={styles.closeButton} onPress={() => slideDown()}>
-          <Ionicons name="chevron-down" size={20} color="#333" />
-        </Pressable>
+        <View style={styles.handleContainer}>
+          <View style={styles.handleBar} />
+        </View>
 
         <ScrollView
           style={styles.scrollContent}
@@ -155,6 +153,17 @@ const styles = StyleSheet.create({
     elevation: 0,
     zIndex: 10,
   },
+  handleContainer: {
+    height: 24,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  handleBar: {
+    width: 60,
+    height: 6,
+    backgroundColor: '#ccc',
+    borderRadius: 3,
+  },
   scrollContent: {
     paddingHorizontal: 16,
   },
@@ -182,7 +191,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   utilityItem: {
-    width: '24%',
+    width: '30%',
     alignItems: 'center',
     marginVertical: 12,
   },
@@ -193,14 +202,5 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#333',
     textAlign: 'center',
-  },
-  closeButton: {
-    position: 'absolute',
-    bottom: 8,
-    alignSelf: 'center',
-    backgroundColor: '#fff',
-    borderRadius: 20,
-    padding: 6,
-    elevation: 2,
   },
 });
