@@ -109,7 +109,7 @@ private fun WeatherCard() {
     Card(
         shape = RoundedCornerShape(50.dp),
         colors = CardDefaults.cardColors(containerColor = Color.Transparent),
-        elevation = CardDefaults.cardElevation(8.dp),
+        elevation = CardDefaults.cardElevation(0.dp),
         modifier = Modifier
             .fillMaxWidth()
             .height(160.dp)
@@ -201,7 +201,7 @@ private fun RowScope.InfoBox(value: String, label: String) {
             .height(100.dp)
             .padding(horizontal = 4.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        elevation = CardDefaults.cardElevation(1.dp)
+        elevation = CardDefaults.cardElevation(0.dp)
     ) {
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -261,7 +261,7 @@ private fun MenuSection(contentPadding: Dp) {
                             .padding(vertical = 8.dp),
                         border = BorderStroke(1.dp, Color(0xFFE0E0E0)),
                         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-                        elevation = CardDefaults.cardElevation(1.dp)
+                        elevation = CardDefaults.cardElevation(0.dp)
                     ) {
                         Column(
                             modifier = Modifier
@@ -339,7 +339,7 @@ private fun TasksSection() {
                     .padding(vertical = 4.dp)
                     .height(96.dp),
                 colors = CardDefaults.cardColors(containerColor = task.color),
-                elevation = CardDefaults.cardElevation(4.dp)
+                elevation = CardDefaults.cardElevation(0.dp)
             ) {
                 Box(Modifier.fillMaxSize()) {
                     Box(

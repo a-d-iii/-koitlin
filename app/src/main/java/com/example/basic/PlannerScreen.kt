@@ -127,7 +127,7 @@ fun PlannerScreen() {
                             .fillMaxWidth()
                             .padding(vertical = 6.dp),
                         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-                        elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
+                        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
                         shape = RoundedCornerShape(12.dp)
                     ) {
                         Row(

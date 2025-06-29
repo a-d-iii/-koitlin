@@ -150,11 +150,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#f0f2f5',
     borderTopLeftRadius: 16,
     borderTopRightRadius: 16,
-    elevation: 6,
-    shadowColor: '#000',
-    shadowOpacity: 0.15,
-    shadowRadius: 10,
-    shadowOffset: { width: 0, height: -3 },
+    elevation: 0,
     zIndex: 10,
   },
   handleContainer: {

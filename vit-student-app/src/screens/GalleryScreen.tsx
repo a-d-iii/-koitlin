@@ -12,6 +12,7 @@ import {
   StatusBar,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { LinearGradient } from 'expo-linear-gradient';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Picker } from '@react-native-picker/picker';
 
@@ -67,7 +68,8 @@ export default function GalleryScreen() {
   const classIds = Object.keys(photosByClass);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <LinearGradient colors={['#69cbff', '#1cddfe']} style={{ flex: 1 }}>
+    <SafeAreaView style={[styles.container, { backgroundColor: 'transparent' }] }>
       <Text style={styles.heading}>Gallery</Text>
 
       <View style={styles.pickerWrap}>
@@ -98,6 +100,7 @@ export default function GalleryScreen() {
         />
       )}
     </SafeAreaView>
+    </LinearGradient>
   );
 }
 
@@ -108,7 +111,7 @@ const styles = StyleSheet.create({
     paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
   },
   heading: {
-    fontSize: 22,
+    fontSize: 28,
     fontWeight: '700',
     margin: 16,
     color: '#333',

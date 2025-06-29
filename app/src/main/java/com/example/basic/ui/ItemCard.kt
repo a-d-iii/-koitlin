@@ -19,7 +19,7 @@ fun ItemCard(text: String) {
             .height(200.dp)
             .padding(16.dp),
         shape = CardDefaults.shape,
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         androidx.constraintlayout.compose.ConstraintLayout(modifier = Modifier.fillMaxWidth()) {
             val (label) = createRefs()
