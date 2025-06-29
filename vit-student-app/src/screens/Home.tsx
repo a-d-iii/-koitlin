@@ -122,7 +122,7 @@ export default function Home() {
       style={[
         styles.root,
         {
-          backgroundColor: '#f0f0f0',
+          backgroundColor: '#ffffff',
           paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
         },
       ]}
