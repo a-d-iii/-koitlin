@@ -154,7 +154,6 @@ fun MonthlyMenuScreen(onBack: () -> Unit) {
 
 
     Scaffold(
-        containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
@@ -184,7 +183,7 @@ fun MonthlyMenuScreen(onBack: () -> Unit) {
             state = listState,
             modifier = Modifier
                 .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background)
+                .background(Color.White)
                 .padding(padding),
             contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
         ) {

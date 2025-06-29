@@ -38,7 +38,7 @@ fun HomeScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
+            .background(Color(0xFFF0F0F0))
     ) {
         Box(modifier = Modifier.weight(1f)) {
 
