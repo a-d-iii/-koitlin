@@ -67,7 +67,7 @@ fun PlannerScreen() {
             text = "Weekly Timetable",
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.Bold,
-            color = Color(0xFF333333),
+            color = MaterialTheme.colorScheme.onBackground,
             modifier = Modifier.padding(vertical = 16.dp)
         )
 
@@ -78,11 +78,11 @@ fun PlannerScreen() {
             itemsIndexed(days) { i, d ->
                 val selected = i == dayIndex
                 val bgColor by animateColorAsState(
-                    if (selected) Color(0xFF6C5CE7) else Color(0xFFE0E0E0),
+                    if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant,
                     animationSpec = tween(300)
                 )
                 val textColor by animateColorAsState(
-                    if (selected) Color.White else Color(0xFF333333),
+                    if (selected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onBackground,
                     animationSpec = tween(300)
                 )
                 Text(
@@ -141,12 +141,12 @@ fun PlannerScreen() {
                                 text = cls.course,
                                 fontSize = 14.sp,
                                 fontWeight = FontWeight.SemiBold,
-                                color = Color(0xFF333333)
+                                color = MaterialTheme.colorScheme.onBackground
                             )
                             Text(
                                 text = cls.faculty,
                                 fontSize = 12.sp,
-                                color = Color(0xFF666666),
+                                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f),
                                 modifier = Modifier.padding(top = 2.dp)
                             )
                         }
@@ -154,12 +154,12 @@ fun PlannerScreen() {
                             Text(
                                 text = "${cls.start} – ${cls.end}",
                                 fontSize = 12.sp,
-                                color = Color(0xFF333333)
+                                color = MaterialTheme.colorScheme.onBackground
                             )
                             Text(
                                 text = cls.room,
                                 fontSize = 10.sp,
-                                color = Color(0xFF666666),
+                                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f),
                                 modifier = Modifier.padding(top = 2.dp)
                             )
                         }
