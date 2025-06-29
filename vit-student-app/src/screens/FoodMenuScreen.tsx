@@ -214,7 +214,7 @@ export default function FoodMenuScreen() {
               },
             ]}
           >
-          <Ionicons name="restaurant" size={24} color="#69cbff" />
+          <Ionicons name="restaurant" size={24} color="#ff9800" />
           </Animated.View>
         </View>
         <View style={styles.dateChip}>
@@ -262,7 +262,7 @@ export default function FoodMenuScreen() {
                     <Ionicons
                       name={mealIcon(m.name)}
                       size={16}
-                      color="#69cbff"
+                      color="#ff9800"
                       style={styles.mealIcon}
                     />
                   </Animated.View>
@@ -451,7 +451,7 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
   rateButtonText: {
-    color: '#fff',
+    color: '#000',
     marginLeft: 4,
     fontWeight: '600',
   },
