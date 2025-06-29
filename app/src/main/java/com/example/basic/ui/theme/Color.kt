@@ -2,12 +2,13 @@ package com.example.basic.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val mdPrimary = Color(0xFF3F51B5)
-val mdSecondary = Color(0xFF009688)
-val mdBackground = Color(0xFFF8F8F8)
-val mdSurface = Color.White
-val mdOnPrimary = Color.White
-val mdOnSecondary = Color.White
+// Updated palette based on new design
+val mdPrimary = Color(0xFF69CBFF)      // #69cbff
+val mdSecondary = Color(0xFF1CDDFE)    // #1cddfe
+val mdBackground = Color(0xFF0DECE3)   // #0dece3
+val mdSurface = Color(0xFF69F6BC)      // #69f6bc
+val mdOnPrimary = Color(0xFFB2FB91)    // #b2fb91
+val mdOnSecondary = Color(0xFFF9F871)  // #f9f871
 val mdOnBackground = Color(0xFF333333)
 val mdOnSurface = Color(0xFF333333)
 val mdError = Color(0xFFB00020)
