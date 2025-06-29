@@ -27,7 +27,7 @@ type Props = {
 export default function AnimatedWaterText({
   text,
   fontSize,
-  fillColor = '#69cbff',
+  fillColor = '#66ccff',
   containerWidth = SCREEN_WIDTH * 0.8,
   containerHeight = fontSize * 1.2,
 }: Props) {
