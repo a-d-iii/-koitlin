@@ -99,7 +99,6 @@ fun FoodMenuScreen(onShowSummary: () -> Unit, onViewMonth: () -> Unit = {}) {
     }
     val dayLabel = remember { java.text.SimpleDateFormat("EEEE, MMMM d", Locale.getDefault()).format(Date()) }
     var likes by remember { mutableStateOf(setOf<String>()) }
-    var ratingMeal by remember { mutableStateOf<Meal?>(null) }
 
     val menu by produceState(initialValue = emptyList<Meal>()) {
         withContext(Dispatchers.IO) { value = sampleMenu }
@@ -181,7 +180,6 @@ fun FoodMenuScreen(onShowSummary: () -> Unit, onViewMonth: () -> Unit = {}) {
                     onLike = {
                         likes = if (likes.contains(meal.name)) likes - meal.name else likes + meal.name
                     },
-                    onRate = { ratingMeal = meal },
                     background = mealColors[index % mealColors.size]
                 )
                 Spacer(modifier = Modifier.height(16.dp))
@@ -197,9 +195,7 @@ fun FoodMenuScreen(onShowSummary: () -> Unit, onViewMonth: () -> Unit = {}) {
 
         MonthBar(onClick = onViewMonth, modifier = Modifier.align(Alignment.BottomCenter))
 
-        ratingMeal?.let { meal ->
-            RatingDialog(meal = meal, onDismiss = { ratingMeal = null }) { ratingMeal = null }
-        }
+        // Removed rating dialog as the rate button is no longer shown
     }
 }
 
@@ -224,7 +220,6 @@ private fun MealCard(
     now: Date,
     liked: Boolean,
     onLike: () -> Unit,
-    onRate: () -> Unit,
     background: Color
 ) {
     val scope = rememberCoroutineScope()
@@ -319,66 +314,12 @@ private fun MealCard(
             Spacer(modifier = Modifier.height(4.dp))
             Text(text = meal.items.joinToString(", "), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f))
             Spacer(modifier = Modifier.height(8.dp))
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
-                Button(
-                    onClick = onRate,
-                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
-                ) {
-                    Icon(
-                        Icons.Default.Star,
-                        contentDescription = null,
-                        tint = Color.Black,
-                        modifier = Modifier.size(16.dp)
-                    )
-                    Spacer(Modifier.width(4.dp))
  
-                    Text(
-                        "Rate",
-                        color = Color.Black,
-                        style = MaterialTheme.typography.labelSmall
-                    )
- 
-                }
-            }
         }
     }
 }
 
-@Composable
-fun RatingDialog(meal: Meal, onDismiss: () -> Unit, onSubmit: (Int) -> Unit) {
-    var rating by remember { mutableStateOf(0) }
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = { Text(text = "Rate ${meal.name}") },
-        text = {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text(text = "How was it?", style = MaterialTheme.typography.bodyMedium)
-                Spacer(modifier = Modifier.height(8.dp))
-                Row(horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()) {
-                    (1..5).forEach { i ->
-                        Icon(
-                            imageVector = if (i <= rating) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.error,
-                            modifier = Modifier
-                                .size(32.dp)
-                                .clickable(
-                                    interactionSource = remember { MutableInteractionSource() },
-                                    indication = null
-                                ) { rating = i }
-                        )
-                    }
-                }
-            }
-        },
-        confirmButton = {
-            Button(onClick = { onSubmit(rating); onDismiss() }) { Text("Submit") }
-        },
-        dismissButton = {
-            OutlinedButton(onClick = onDismiss) { Text("Cancel") }
-        }
-    )
-}
+
 
 @Composable
 private fun MonthBar(onClick: () -> Unit, modifier: Modifier = Modifier) {
