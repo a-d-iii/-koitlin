@@ -400,7 +400,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
 
-    backgroundColor: '#69cbff',
+    backgroundColor: '#007bff',
 
     borderTopColor: '#ddd',
     borderTopWidth: StyleSheet.hairlineWidth,
