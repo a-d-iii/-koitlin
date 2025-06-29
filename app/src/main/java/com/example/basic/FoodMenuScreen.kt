@@ -260,7 +260,7 @@ private fun MealCard(
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
                     text = String.format("%02d:%02d - %02d:%02d", meal.startHour, meal.startMinute, meal.endHour, meal.endMinute),
-                    style = MaterialTheme.typography.bodySmall,
+                    style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onBackground
                 )
                 Spacer(Modifier.weight(1f))
@@ -272,7 +272,7 @@ private fun MealCard(
                         modifier = Modifier.size(16.dp)
                     )
                     Spacer(Modifier.width(4.dp))
-                    Text(text = if (ended) "Done" else status, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onBackground)
+                    Text(text = if (ended) "Done" else status, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onBackground)
                     if (!ended) {
                         Spacer(Modifier.width(8.dp))
                         val target = if (status == "Upcoming") start.timeInMillis else end.timeInMillis
@@ -281,7 +281,7 @@ private fun MealCard(
                         val m = (diff % 3600000) / 60000
                         val s = (diff % 60000) / 1000
                         val timer = if (h > 0) String.format("%02d:%02d:%02d", h, m, s) else String.format("%02d:%02d", m, s)
-                        Text(timer, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onBackground)
+                        Text(timer, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onBackground)
                     }
                     Spacer(Modifier.width(8.dp))
                     Icon(
@@ -305,7 +305,7 @@ private fun MealCard(
                 }
             }
             Spacer(modifier = Modifier.height(4.dp))
-            Text(text = meal.items.joinToString(", "), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f))
+            Text(text = meal.items.joinToString(", "), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f))
             Spacer(modifier = Modifier.height(8.dp))
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
                 Button(

@@ -307,7 +307,7 @@ private fun DayCard(
                             .clickable { onAdd(key) }
                     )
                 }
-                Text(meal.items.joinToString(", "), style = MaterialTheme.typography.bodySmall)
+                Text(meal.items.joinToString(", "), style = MaterialTheme.typography.bodyMedium)
                 if (index != day.meals.lastIndex) Spacer(Modifier.height(8.dp))
             }
         }

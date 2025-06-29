@@ -159,7 +159,7 @@ private fun WeatherCard() {
                 Text(
                     "Feels like 27°",
                     color = Color.White,
-                    style = MaterialTheme.typography.labelSmall,
+                    style = MaterialTheme.typography.labelMedium,
                     modifier = Modifier.offset(x = (-10).dp, y = (-10).dp)
                 )
             }
@@ -189,7 +189,7 @@ private fun WeatherInfo(value: String, label: String) {
             style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.Bold
         )
-        Text(label, color = Color.White, style = MaterialTheme.typography.labelSmall)
+        Text(label, color = Color.White, style = MaterialTheme.typography.labelMedium)
     }
 }
 
@@ -282,7 +282,7 @@ private fun MenuSection(contentPadding: Dp) {
                             )
                             Text(
                                 menu,
-                                style = MaterialTheme.typography.bodySmall,
+                                style = MaterialTheme.typography.bodyMedium,
                                 modifier = Modifier.padding(top = 4.dp),
                                 textAlign = TextAlign.Center
                             )
@@ -378,7 +378,7 @@ private fun TasksSection() {
                             )
                             Text(
                                 task.details,
-                                style = MaterialTheme.typography.bodySmall,
+                                style = MaterialTheme.typography.bodyMedium,
                                 color = Color(0xFF666666),
                                 textDecoration = if (checked) TextDecoration.LineThrough else TextDecoration.None
                             )
@@ -386,7 +386,7 @@ private fun TasksSection() {
                     }
                     Text(
                         task.priority.label,
-                        style = MaterialTheme.typography.labelSmall,
+                        style = MaterialTheme.typography.labelMedium,
                         color = accent,
                         modifier = Modifier
                             .align(Alignment.BottomEnd)

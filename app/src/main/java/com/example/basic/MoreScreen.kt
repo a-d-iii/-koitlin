@@ -314,7 +314,7 @@ fun MoreScreen() {
                             Text(cls.title, fontWeight = FontWeight.SemiBold)
                             Text(
                                 "${cls.start} – ${cls.end}",
-                                style = MaterialTheme.typography.bodySmall
+                                style = MaterialTheme.typography.bodyMedium
                             )
                         }
                     }
