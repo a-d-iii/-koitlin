@@ -18,6 +18,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
@@ -93,7 +94,8 @@ fun MoreScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background),
+            .background(MaterialTheme.colorScheme.background)
+            .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
@@ -109,8 +111,7 @@ fun MoreScreen() {
         )
         Row(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+                .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             weekDates.forEach { date ->
@@ -304,6 +305,7 @@ fun MoreScreen() {
                             .offset(x = labelWidth + 1.dp + 4.dp, y = top)
                             .width(contentWidth - 8.dp)
                             .height(height)
+                            .shadow(4.dp, RoundedCornerShape(6.dp))
                             .clip(RoundedCornerShape(6.dp))
                             .background(color)
                     ) {
