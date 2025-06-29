@@ -21,6 +21,7 @@ import androidx.compose.foundation.indication
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.ui.draw.clip
@@ -371,66 +372,55 @@ private fun UtilitiesSection() {
 private fun MenuSection(contentPadding: Dp) {
     SectionHeader("Today's Menu")
     val screenWidth = LocalConfiguration.current.screenWidthDp.dp
-    val cardWidth = screenWidth * 0.42f
+    val cardWidth = screenWidth * 0.35f
     val cardHeight = 120.dp
-    val spacing = (screenWidth - cardWidth * 2) / 3f
-    val rowPadding = (spacing - contentPadding).coerceAtLeast(0.dp)
     val meals = listOf(
         "Breakfast" to "Pancakes & Juice",
         "Lunch" to "Chicken Salad",
         "Snacks" to "Fruit & Yogurt",
         "Dinner" to "Salmon & Veggies"
     )
-    Column {
-        meals.chunked(2).forEach { rowItems ->
-            Row(
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .horizontalScroll(rememberScrollState())
+            .padding(horizontal = contentPadding),
+        horizontalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        meals.forEach { (label, menu) ->
+            Card(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = rowPadding),
-                horizontalArrangement = Arrangement.spacedBy(spacing)
+                    .width(cardWidth)
+                    .height(cardHeight)
+                    .padding(vertical = 8.dp),
+                border = BorderStroke(1.dp, Color(0xFFE0E0E0)),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                elevation = CardDefaults.cardElevation(0.dp)
             ) {
-                rowItems.forEach { (label, menu) ->
-                    Card(
-                        modifier = Modifier
-                            .width(cardWidth)
-                            .height(cardHeight)
-                            .padding(vertical = 8.dp),
-                        border = BorderStroke(1.dp, Color(0xFFE0E0E0)),
-                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-                        elevation = CardDefaults.cardElevation(0.dp)
-                    ) {
-                        Column(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(12.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Icon(
-                                Icons.Default.Fastfood,
-                                contentDescription = null,
-                                tint = Color(0xFFFF6A00)
-                            )
-                            Text(
-                                label,
-                                fontWeight = FontWeight.SemiBold,
-                                modifier = Modifier.padding(top = 4.dp),
-                                textAlign = TextAlign.Center
-                            )
-                            Text(
-                                menu,
-                                style = MaterialTheme.typography.bodyMedium,
-                                modifier = Modifier.padding(top = 4.dp),
-                                textAlign = TextAlign.Center
-                            )
-                        }
-                    }
-                }
-                if (rowItems.size == 1) Spacer(
+                Column(
                     modifier = Modifier
-                        .width(cardWidth)
-                        .height(cardHeight)
-                        .padding(vertical = 8.dp)
-                )
+                        .fillMaxWidth()
+                        .padding(12.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Icon(
+                        Icons.Default.Fastfood,
+                        contentDescription = null,
+                        tint = Color(0xFFFF6A00)
+                    )
+                    Text(
+                        label,
+                        fontWeight = FontWeight.SemiBold,
+                        modifier = Modifier.padding(top = 4.dp),
+                        textAlign = TextAlign.Center
+                    )
+                    Text(
+                        menu,
+                        style = MaterialTheme.typography.bodyMedium,
+                        modifier = Modifier.padding(top = 4.dp),
+                        textAlign = TextAlign.Center
+                    )
+                }
             }
         }
     }
