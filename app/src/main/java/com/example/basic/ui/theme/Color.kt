@@ -2,10 +2,9 @@ package com.example.basic.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-// Minimalist palette – mostly white with light blue accents
-val mdPrimary = Color(0xFF69CBFF)      // accent blue
-val mdSecondary = Color(0xFF1CDDFE)    // secondary accent
-val mdBackground = Color.White
+val mdPrimary = Color(0xFF3F51B5)
+val mdSecondary = Color(0xFF009688)
+val mdBackground = Color(0xFFF8F8F8)
 val mdSurface = Color.White
 val mdOnPrimary = Color.White
 val mdOnSecondary = Color.White

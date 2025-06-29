@@ -108,7 +108,7 @@ export default function FoodMenuScreen() {
     day: 'numeric',
   });
   const meals = menu?.[todayKey];
-  const mealColors = ['#ffffff', '#ffffff', '#ffffff', '#ffffff'];
+  const mealColors = ['#ffeef0', '#eef7ff', '#e8fff0', '#fff5e0'];
 
   if (loading) {
     return (
@@ -212,7 +212,7 @@ export default function FoodMenuScreen() {
               },
             ]}
           >
-          <Ionicons name="restaurant" size={24} color="#69cbff" />
+          <Ionicons name="restaurant" size={24} color="#ff6347" />
           </Animated.View>
         </View>
         <View style={styles.dateChip}>
@@ -260,7 +260,7 @@ export default function FoodMenuScreen() {
                     <Ionicons
                       name={mealIcon(m.name)}
                       size={16}
-                      color="#69cbff"
+                      color="#ffa500"
                       style={styles.mealIcon}
                     />
                   </Animated.View>
@@ -331,7 +331,7 @@ export default function FoodMenuScreen() {
 const styles = StyleSheet.create({
   safe: {
     flex: 1,
-    backgroundColor: '#ffffff',
+    backgroundColor: '#f5f5f5',
   },
   container: {
     padding: 16,
@@ -348,16 +348,14 @@ const styles = StyleSheet.create({
   centered: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   dateChip: {
     alignSelf: 'center',
-    backgroundColor: '#ffffff',
+    backgroundColor: '#000',
     paddingVertical: 4,
     paddingHorizontal: 12,
     borderRadius: 20,
     marginBottom: 16,
-    borderWidth: StyleSheet.hairlineWidth,
-    borderColor: '#ccc',
   },
   dateChipText: {
-    color: '#333',
+    color: '#fff',
     fontWeight: '600',
   },
   mealBlock: {
@@ -386,13 +384,11 @@ const styles = StyleSheet.create({
   mealTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#333',
-    backgroundColor: '#ffffff',
+    color: '#fff',
+    backgroundColor: '#333',
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: 12,
-    borderWidth: StyleSheet.hairlineWidth,
-    borderColor: '#ccc',
   },
   mealHeaderRight: {
     flexDirection: 'row',
@@ -404,7 +400,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
 
-    backgroundColor: '#69cbff',
+    backgroundColor: '#007bff',
 
     borderTopColor: '#ddd',
     borderTopWidth: StyleSheet.hairlineWidth,
@@ -442,7 +438,7 @@ const styles = StyleSheet.create({
   },
   rateButton: {
     flexDirection: 'row',
-    backgroundColor: '#69cbff',
+    backgroundColor: '#ff6347',
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 8,
@@ -460,7 +456,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 16,
     borderRadius: 8,
-    backgroundColor: '#69cbff',
+    backgroundColor: '#ff6347',
     alignItems: 'center',
     flexDirection: 'row',
     alignSelf: 'center',

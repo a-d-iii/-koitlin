@@ -299,7 +299,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 12,
     right: 16,
-    backgroundColor: '#69cbff',
+    backgroundColor: '#007bff',
     paddingVertical: 8,
     paddingHorizontal: 12,
     borderRadius: 8,
