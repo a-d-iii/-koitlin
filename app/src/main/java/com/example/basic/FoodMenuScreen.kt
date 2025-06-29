@@ -147,12 +147,13 @@ fun FoodMenuScreen(onShowSummary: () -> Unit, onViewMonth: () -> Unit = {}) {
                 Icon(
                     imageVector = Icons.Default.Restaurant,
                     contentDescription = null,
-                    tint = MaterialTheme.colorScheme.primary,
+                    tint = Color(0xFFFF9800),
                     modifier = Modifier
                         .size(24.dp)
                         .graphicsLayer {
                             scaleX = iconScale
                             scaleY = iconScale
+                            rotationZ = iconRotate
                         }
                         .alignByBaseline()
                 )
@@ -228,6 +229,12 @@ private fun MealCard(
 ) {
     val scope = rememberCoroutineScope()
     val scale = remember { Animatable(1f) }
+    val iconAnim = rememberInfiniteTransition()
+    val mealIconRotation by iconAnim.animateFloat(
+        initialValue = -10f,
+        targetValue = 10f,
+        animationSpec = infiniteRepeatable(tween(800), RepeatMode.Reverse)
+    )
     val start = Calendar.getInstance().apply { set(Calendar.HOUR_OF_DAY, meal.startHour); set(Calendar.MINUTE, meal.startMinute) }
     val end = Calendar.getInstance().apply { set(Calendar.HOUR_OF_DAY, meal.endHour); set(Calendar.MINUTE, meal.endMinute) }
     val status = when {
@@ -247,7 +254,12 @@ private fun MealCard(
     ) {
         Column(modifier = Modifier.padding(12.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(mealIcon(meal.name), contentDescription = null, tint = MaterialTheme.colorScheme.primary)
+                Icon(
+                    mealIcon(meal.name),
+                    contentDescription = null,
+                    tint = Color(0xFFFF9800),
+                    modifier = Modifier.graphicsLayer { rotationZ = mealIconRotation }
+                )
                 Spacer(modifier = Modifier.width(6.dp))
                 Text(
                     text = meal.name,
@@ -312,9 +324,18 @@ private fun MealCard(
                     onClick = onRate,
                     colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
                 ) {
-                    Icon(Icons.Default.Star, contentDescription = null, tint = MaterialTheme.colorScheme.onPrimary, modifier = Modifier.size(16.dp))
+                    Icon(
+                        Icons.Default.Star,
+                        contentDescription = null,
+                        tint = Color.Black,
+                        modifier = Modifier.size(16.dp)
+                    )
                     Spacer(Modifier.width(4.dp))
-                    Text("Rate", color = MaterialTheme.colorScheme.onPrimary)
+                    Text(
+                        "Rate",
+                        color = Color.Black,
+                        style = MaterialTheme.typography.labelSmall
+                    )
                 }
             }
         }
