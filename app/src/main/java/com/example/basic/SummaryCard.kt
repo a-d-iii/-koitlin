@@ -25,18 +25,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Fastfood
 import androidx.compose.material.icons.filled.Cloud
- 
-import androidx.compose.material.icons.filled.Person
- 
-import androidx.compose.material.icons.filled.UnfoldLess
-import androidx.compose.material.icons.filled.UnfoldMore
- 
- 
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
@@ -77,13 +69,8 @@ fun SummaryCard() {
                 .padding(16.dp)
         ) {
             WeatherCard()
-            Spacer(Modifier.height(16.dp)) 
-            ClassSummaryBar()
- 
             Spacer(Modifier.height(16.dp))
-            UtilitiesSection()
- 
- 
+            TimetableSection()
             Spacer(Modifier.height(16.dp))
             MenuSection(contentPadding = 16.dp)
             Spacer(Modifier.height(16.dp))
@@ -207,119 +194,24 @@ private fun WeatherInfo(value: String, label: String) {
 }
 
 @Composable
- 
-private fun DayProgressBar(modifier: Modifier = Modifier) {
-    Column(
-        modifier = modifier
-            .clip(RoundedCornerShape(16.dp))
-            .background(MaterialTheme.colorScheme.surface)
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
- 
-    ) {
-        Text(
-            "30% day left",
-            fontWeight = FontWeight.SemiBold,
-            style = MaterialTheme.typography.bodyMedium
-        )
-        Spacer(Modifier.height(8.dp))
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(8.dp)
-                .clip(RoundedCornerShape(4.dp))
-                .background(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f))
-        ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth(0.3f)
-                    .fillMaxHeight()
-                    .clip(RoundedCornerShape(4.dp))
-                    .background(MaterialTheme.colorScheme.primary)
-            )
-        }
-    }
-}
-
-@Composable
-private fun ClassSummaryBar() {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.Center
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth(0.85f)
-                .height(48.dp)
-                .clip(RoundedCornerShape(24.dp))
-                .background(MaterialTheme.colorScheme.surface)
-                .padding(horizontal = 16.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            Text(
-                "6 classes",
-                style = MaterialTheme.typography.bodyMedium,
-                fontWeight = FontWeight.SemiBold
-            )
-            Box(
-                modifier = Modifier
-                    .size(6.dp)
-                    .background(Color(0xFF448AFF), CircleShape)
-            )
-            Text(
-                "2 labs",
-                style = MaterialTheme.typography.bodyMedium,
-                fontWeight = FontWeight.SemiBold
-            )
-            Box(
-                modifier = Modifier
-                    .size(6.dp)
-                    .background(Color(0xFF80D8FF), CircleShape)
-            )
-            Text(
-                "3 project",
-                style = MaterialTheme.typography.bodyMedium,
-                fontWeight = FontWeight.SemiBold
-            )
-        }
-    }
-}
-
-@Composable
-private fun UtilityBox(label: String) {
+private fun RowScope.InfoBox(value: String, label: String) {
     Card(
         modifier = Modifier
-            .width(72.dp)
-            .height(96.dp),
-        border = BorderStroke(1.dp, Color(0xFFE0E0E0)),
+            .weight(1f)
+            .height(100.dp)
+            .padding(horizontal = 4.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         elevation = CardDefaults.cardElevation(0.dp)
-    ) {
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                label,
-                style = MaterialTheme.typography.bodySmall,
-                textAlign = TextAlign.Center
- 
     ) {
         Column(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
- 
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth(0.3f)
-                    .fillMaxHeight()
-                    .clip(RoundedCornerShape(4.dp))
-                    .background(MaterialTheme.colorScheme.primary)
- 
- 
+            Text(
+                text = value,
+                style = MaterialTheme.typography.headlineMedium,
+                fontWeight = FontWeight.Bold
             )
             Text(label, style = MaterialTheme.typography.bodyMedium)
         }
@@ -327,99 +219,15 @@ private fun UtilityBox(label: String) {
 }
 
 @Composable
- 
- 
-private fun UtilitiesSection() {
-    SectionHeader("Utilities")
-    var expanded by remember { mutableStateOf(false) }
-    val utilities = listOf(
-        "Clock", "Calendar", "Notes", "Files",
-        "Camera", "Maps", "Gallery", "Music"
-    )
-    Column {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            IconButton(onClick = { expanded = !expanded }) {
-                Icon(
-                    imageVector = if (expanded) Icons.Filled.UnfoldLess else Icons.Filled.UnfoldMore,
-                    contentDescription = if (expanded) "Collapse" else "Expand"
-                )
-            }
-            Row(
-                modifier = Modifier.weight(1f),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                utilities.take(4).forEach { label ->
-                    UtilityBox(label)
-                }
-            }
-        }
-        if (expanded) {
-            utilities.drop(4).chunked(4).forEach { rowItems ->
-                Spacer(Modifier.height(8.dp))
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    rowItems.forEach { label ->
-                        UtilityBox(label)
-                    }
-                    if (rowItems.size < 4) {
-                        repeat(4 - rowItems.size) {
-                            Spacer(modifier = Modifier.width(72.dp))
-                        }
-                    }
-                }
-            }
- 
-private fun ClassSummaryBar() {
- 
+private fun TimetableSection() {
+    SectionHeader("Today's Timetable")
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
- 
-        Row(
-            modifier = Modifier
-                .fillMaxWidth(0.85f)
-                .height(48.dp)
-                .clip(RoundedCornerShape(24.dp))
-                .background(MaterialTheme.colorScheme.surface)
-                .padding(horizontal = 16.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            Text(
-                "6 classes",
-                style = MaterialTheme.typography.bodyMedium,
-                fontWeight = FontWeight.SemiBold
-            )
-            Box(
-                modifier = Modifier
-                    .size(6.dp)
-                    .background(Color(0xFF448AFF), CircleShape)
-            )
-            Text(
-                "2 labs",
-                style = MaterialTheme.typography.bodyMedium,
-                fontWeight = FontWeight.SemiBold
-            )
-            Box(
-                modifier = Modifier
-                    .size(6.dp)
-                    .background(Color(0xFF80D8FF), CircleShape)
-            )
-            Text(
-                "3 project",
-                style = MaterialTheme.typography.bodyMedium,
-                fontWeight = FontWeight.SemiBold
-            )
- 
-        }
- 
+        InfoBox(value = "6", label = "classes today")
+        InfoBox(value = "2", label = "labs")
+        InfoBox(value = "1", label = "project")
     }
 }
 
