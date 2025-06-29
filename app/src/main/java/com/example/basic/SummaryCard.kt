@@ -79,7 +79,7 @@ fun SummaryCard() {
                 .fillMaxWidth()
                 .padding(16.dp)
         ) {
-            WeatherCard()
+            WeatherCard(modifier = Modifier.align(Alignment.CenterHorizontally))
             Spacer(Modifier.height(16.dp)) 
             ClassSummaryBar()
  
@@ -121,13 +121,13 @@ private fun Color.darken(factor: Float = 0.8f): Color {
 }
 
 @Composable
-private fun WeatherCard() {
+private fun WeatherCard(modifier: Modifier = Modifier) {
     Card(
         shape = RoundedCornerShape(50.dp),
         colors = CardDefaults.cardColors(containerColor = Color.Transparent),
         elevation = CardDefaults.cardElevation(0.dp),
-        modifier = Modifier
-            .fillMaxWidth()
+        modifier = modifier
+            .width(LocalConfiguration.current.screenWidthDp.dp * 0.3f)
             .height(160.dp)
     ) {
         Box(
