@@ -65,7 +65,6 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun SummaryCard() {
-    val headerHeight = LocalConfiguration.current.screenHeightDp.dp * 0.1f
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -74,7 +73,7 @@ fun SummaryCard() {
         HomeHeader(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(headerHeight)
+                .padding(16.dp)
         )
         Spacer(Modifier.height(16.dp))
         Column(
