@@ -22,6 +22,8 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.ui.draw.clip
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Fastfood
 import androidx.compose.material.icons.filled.Cloud
@@ -296,31 +298,18 @@ private fun UtilityBox(label: String) {
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         elevation = CardDefaults.cardElevation(0.dp)
     ) {
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                label,
-                style = MaterialTheme.typography.bodySmall,
-                textAlign = TextAlign.Center
- 
-    ) {
         Column(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
- 
             Box(
                 modifier = Modifier
-                    .fillMaxWidth(0.3f)
-                    .fillMaxHeight()
+                    .size(32.dp)
                     .clip(RoundedCornerShape(4.dp))
                     .background(MaterialTheme.colorScheme.primary)
- 
- 
             )
+            Spacer(Modifier.height(8.dp))
             Text(label, style = MaterialTheme.typography.bodyMedium)
         }
     }
@@ -374,52 +363,7 @@ private fun UtilitiesSection() {
                     }
                 }
             }
- 
-private fun ClassSummaryBar() {
- 
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
- 
-        Row(
-            modifier = Modifier
-                .fillMaxWidth(0.85f)
-                .height(48.dp)
-                .clip(RoundedCornerShape(24.dp))
-                .background(MaterialTheme.colorScheme.surface)
-                .padding(horizontal = 16.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            Text(
-                "6 classes",
-                style = MaterialTheme.typography.bodyMedium,
-                fontWeight = FontWeight.SemiBold
-            )
-            Box(
-                modifier = Modifier
-                    .size(6.dp)
-                    .background(Color(0xFF448AFF), CircleShape)
-            )
-            Text(
-                "2 labs",
-                style = MaterialTheme.typography.bodyMedium,
-                fontWeight = FontWeight.SemiBold
-            )
-            Box(
-                modifier = Modifier
-                    .size(6.dp)
-                    .background(Color(0xFF80D8FF), CircleShape)
-            )
-            Text(
-                "3 project",
-                style = MaterialTheme.typography.bodyMedium,
-                fontWeight = FontWeight.SemiBold
-            )
- 
         }
- 
     }
 }
 
