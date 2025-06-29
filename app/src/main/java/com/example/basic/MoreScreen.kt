@@ -97,19 +97,19 @@ fun MoreScreen() {
         modifier = Modifier
             .fillMaxSize()
             .background(Brush.verticalGradient(listOf(gradientTop, gradientBottom)))
-            .padding(start = 12.dp, top = 16.dp, end = 16.dp, bottom = 16.dp),
+            .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
             text = monthLabel,
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(vertical = 8.dp)
+            modifier = Modifier.padding(vertical = 16.dp)
         )
         Divider(
             color = dividerColor,
             thickness = 0.5.dp,
-            modifier = Modifier.padding(vertical = 8.dp)
+            modifier = Modifier.padding(vertical = 12.dp)
         )
         Row(
             modifier = Modifier
@@ -143,7 +143,7 @@ fun MoreScreen() {
         Divider(
             color = dividerColor,
             thickness = 0.5.dp,
-            modifier = Modifier.padding(vertical = 8.dp)
+            modifier = Modifier.padding(vertical = 12.dp)
         )
         // Compact information bar with a toggle icon on the right
         var expanded by remember { mutableStateOf(false) }
@@ -169,8 +169,7 @@ fun MoreScreen() {
                 Text(
                     text = "5 classes left \u00B7 4 hr 55 min free",
                     modifier = Modifier.weight(1f),
-                    color = MaterialTheme.colorScheme.onBackground,
-                    style = MaterialTheme.typography.bodyMedium
+                    color = MaterialTheme.colorScheme.onBackground
                 )
                 Icon(
                     imageVector = if (expanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
@@ -190,8 +189,7 @@ fun MoreScreen() {
                         text = "More details about classes...",
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(start = 12.dp, end = 12.dp, bottom = 8.dp),
-                        style = MaterialTheme.typography.bodyMedium
+                            .padding(start = 12.dp, end = 12.dp, bottom = 8.dp)
                     )
                 }
             }
@@ -205,7 +203,7 @@ fun MoreScreen() {
         val unitsPerHour = 62f
         val dpPerUnit = hourHeight.value / unitsPerHour
         // Show the full day from midnight to 11 pm
-        val hours = listOf("11 pm") + (0..23).map { hour ->
+        val hours = (0..23).map { hour ->
             val displayHour = if (hour % 12 == 0) 12 else hour % 12
             val ampm = if (hour < 12) "am" else "pm"
             "$displayHour $ampm"
@@ -240,8 +238,7 @@ fun MoreScreen() {
                                     style = MaterialTheme.typography.bodyLarge,
                                     fontWeight = FontWeight.Bold,
                                     modifier = Modifier
-                                        .align(Alignment.TopEnd)
-                                        .padding(end = 4.dp)
+                                        .align(Alignment.TopCenter)
                                         // Shift labels slightly higher so
                                         // they line up with the hour divider
                                         .offset(y = (-12).dp)
