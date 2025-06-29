@@ -33,7 +33,8 @@ import androidx.compose.material.icons.filled.WaterDrop
  
 import androidx.compose.material.icons.filled.Person
  
-import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.UnfoldLess
+import androidx.compose.material.icons.filled.UnfoldMore
  
  
 import androidx.compose.material3.Card
@@ -313,49 +314,44 @@ private fun UtilitiesSection() {
         "Clock", "Calendar", "Notes", "Files",
         "Camera", "Maps", "Gallery", "Music"
     )
-    Box {
-        Column {
+    Column {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            IconButton(onClick = { expanded = !expanded }) {
+                Icon(
+                    imageVector = if (expanded) Icons.Filled.UnfoldLess else Icons.Filled.UnfoldMore,
+                    contentDescription = if (expanded) "Collapse" else "Expand"
+                )
+            }
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.weight(1f),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 utilities.take(4).forEach { label ->
                     UtilityBox(label)
                 }
             }
-            if (expanded) {
-                utilities.drop(4).chunked(4).forEach { rowItems ->
-                    Spacer(Modifier.height(8.dp))
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        rowItems.forEach { label ->
-                            UtilityBox(label)
-                        }
-                        if (rowItems.size < 4) {
-                            repeat(4 - rowItems.size) {
-                                Spacer(modifier = Modifier.width(72.dp))
-                            }
+        }
+        if (expanded) {
+            utilities.drop(4).chunked(4).forEach { rowItems ->
+                Spacer(Modifier.height(8.dp))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    rowItems.forEach { label ->
+                        UtilityBox(label)
+                    }
+                    if (rowItems.size < 4) {
+                        repeat(4 - rowItems.size) {
+                            Spacer(modifier = Modifier.width(72.dp))
                         }
                     }
                 }
             }
-        }
-        IconButton(
-            onClick = { expanded = !expanded },
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .padding(top = 8.dp)
-                .size(32.dp)
-                .background(MaterialTheme.colorScheme.surface, CircleShape)
-                .border(BorderStroke(1.dp, Color(0xFFE0E0E0)), CircleShape)
-        ) {
-            Icon(
-                imageVector = Icons.Filled.KeyboardArrowDown,
-                contentDescription = if (expanded) "Collapse" else "Expand",
-                tint = MaterialTheme.colorScheme.onSurface
-            )
         }
     }
 }
