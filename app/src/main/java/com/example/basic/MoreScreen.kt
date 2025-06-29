@@ -91,9 +91,7 @@ fun MoreScreen() {
     val dividerColor = Color.DarkGray
 
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background),
+        modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(

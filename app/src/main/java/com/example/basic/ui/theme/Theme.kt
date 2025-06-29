@@ -3,14 +3,6 @@ package com.example.basic.ui.theme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.material3.Typography
-import com.example.basic.ui.theme.mdBackground
-import com.example.basic.ui.theme.mdOnBackground
-import com.example.basic.ui.theme.mdOnPrimary
-import com.example.basic.ui.theme.mdOnSecondary
-import com.example.basic.ui.theme.mdOnSurface
-import com.example.basic.ui.theme.mdPrimary
-import com.example.basic.ui.theme.mdSecondary
-import com.example.basic.ui.theme.mdSurface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.Font
@@ -41,16 +33,7 @@ private val AppTypography = Typography(
 @Composable
 fun VitStudentAppTheme(content: @Composable () -> Unit) {
     MaterialTheme(
-        colorScheme = lightColorScheme(
-            primary = mdPrimary,
-            onPrimary = mdOnPrimary,
-            secondary = mdSecondary,
-            onSecondary = mdOnSecondary,
-            background = mdBackground,
-            onBackground = mdOnBackground,
-            surface = mdSurface,
-            onSurface = mdOnSurface
-        ),
+        colorScheme = lightColorScheme(),
         typography = AppTypography,
         content = content
     )
