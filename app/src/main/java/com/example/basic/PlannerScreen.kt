@@ -45,7 +45,6 @@ fun PlannerScreen() {
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
-            .padding(16.dp)
             .pointerInput(dayIndex) {
                 detectHorizontalDragGestures(
                     onHorizontalDrag = { _, delta ->
@@ -65,10 +64,11 @@ fun PlannerScreen() {
     ) {
         Text(
             text = "Weekly Timetable",
-            style = MaterialTheme.typography.titleLarge,
+            style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.Bold,
             color = Color(0xFF333333),
-            modifier = Modifier.padding(vertical = 16.dp)
+            modifier = Modifier
+                .padding(vertical = 16.dp, horizontal = 16.dp)
         )
 
         LazyRow(
