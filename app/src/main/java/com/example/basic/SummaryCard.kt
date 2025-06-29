@@ -22,7 +22,6 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.horizontalScroll
-import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.ui.draw.clip
@@ -393,16 +392,10 @@ private fun MenuSection(contentPadding: Dp) {
         "Snacks" to "Fruit & Yogurt",
         "Dinner" to "Salmon & Veggies"
     )
-    val scrollState = rememberScrollState()
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .pointerInput(Unit) {
-                detectHorizontalDragGestures { change, _ ->
-                    change.consume()
-                }
-            }
-            .horizontalScroll(scrollState)
+            .horizontalScroll(rememberScrollState())
             .padding(horizontal = contentPadding),
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
