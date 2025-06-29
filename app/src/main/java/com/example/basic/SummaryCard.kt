@@ -30,16 +30,11 @@ import androidx.compose.material.icons.filled.Fastfood
 import androidx.compose.material.icons.filled.Cloud
 import androidx.compose.material.icons.filled.Speed
 import androidx.compose.material.icons.filled.WaterDrop
+ 
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.AccessTime
-import androidx.compose.material.icons.filled.Event
-import androidx.compose.material.icons.filled.Note
-import androidx.compose.material.icons.filled.Folder
-import androidx.compose.material.icons.filled.Camera
-import androidx.compose.material.icons.filled.Map
-import androidx.compose.material.icons.filled.Photo
-import androidx.compose.material.icons.filled.MusicNote
+ 
+import androidx.compose.material.icons.filled.UnfoldLess
+import androidx.compose.material.icons.filled.UnfoldMore
  
  
 import androidx.compose.material3.Card
@@ -283,7 +278,7 @@ private fun ClassSummaryBar() {
 }
 
 @Composable
-private fun UtilityBox(icon: ImageVector, label: String) {
+private fun UtilityBox(label: String) {
     Card(
         modifier = Modifier
             .width(72.dp)
@@ -300,16 +295,9 @@ private fun UtilityBox(icon: ImageVector, label: String) {
             Box(
                 modifier = Modifier
                     .size(32.dp)
-                    .clip(RoundedCornerShape(4.dp)),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    imageVector = icon,
-                    contentDescription = label,
-                    tint = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.size(18.dp)
-                )
-            }
+                    .clip(RoundedCornerShape(4.dp))
+                    .background(MaterialTheme.colorScheme.primary)
+            )
             Spacer(Modifier.height(8.dp))
             Text(label, style = MaterialTheme.typography.bodyMedium)
         }
@@ -323,59 +311,47 @@ private fun UtilitiesSection() {
     SectionHeader("Utilities")
     var expanded by remember { mutableStateOf(false) }
     val utilities = listOf(
-        Icons.Filled.AccessTime to "Clock",
-        Icons.Filled.Event to "Calendar",
-        Icons.Filled.Note to "Notes",
-        Icons.Filled.Folder to "Files",
-        Icons.Filled.Camera to "Camera",
-        Icons.Filled.Map to "Maps",
-        Icons.Filled.Photo to "Gallery",
-        Icons.Filled.MusicNote to "Music"
+        "Clock", "Calendar", "Notes", "Files",
+        "Camera", "Maps", "Gallery", "Music"
     )
-    Box {
-        Column {
+    Column {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            IconButton(onClick = { expanded = !expanded }) {
+                Icon(
+                    imageVector = if (expanded) Icons.Filled.UnfoldLess else Icons.Filled.UnfoldMore,
+                    contentDescription = if (expanded) "Collapse" else "Expand"
+                )
+            }
             Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly
+                modifier = Modifier.weight(1f),
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                utilities.take(4).forEach { (icon, label) ->
-                    UtilityBox(icon, label)
+                utilities.take(4).forEach { label ->
+                    UtilityBox(label)
                 }
             }
-            if (expanded) {
-                utilities.drop(4).chunked(4).forEach { rowItems ->
-                    Spacer(Modifier.height(8.dp))
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceEvenly
-                    ) {
-                        rowItems.forEach { (icon, label) ->
-                            UtilityBox(icon, label)
-                        }
-                        if (rowItems.size < 4) {
-                            repeat(4 - rowItems.size) {
-                                Spacer(modifier = Modifier.width(72.dp))
-                            }
+        }
+        if (expanded) {
+            utilities.drop(4).chunked(4).forEach { rowItems ->
+                Spacer(Modifier.height(8.dp))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    rowItems.forEach { label ->
+                        UtilityBox(label)
+                    }
+                    if (rowItems.size < 4) {
+                        repeat(4 - rowItems.size) {
+                            Spacer(modifier = Modifier.width(72.dp))
                         }
                     }
                 }
             }
-        }
-        IconButton(
-            onClick = { expanded = !expanded },
-            modifier = Modifier
-                .align(Alignment.BottomStart)
-                .padding(start = 8.dp, top = 8.dp)
-                .size(20.dp)
-                .background(MaterialTheme.colorScheme.surface, CircleShape)
-                .border(BorderStroke(1.dp, Color(0xFFE0E0E0)), CircleShape)
-        ) {
-            Icon(
-                imageVector = Icons.Filled.KeyboardArrowDown,
-                contentDescription = if (expanded) "Collapse" else "Expand",
-                tint = MaterialTheme.colorScheme.onSurface,
-                modifier = Modifier.size(16.dp)
-            )
         }
     }
 }
