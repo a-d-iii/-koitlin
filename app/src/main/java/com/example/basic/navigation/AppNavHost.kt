@@ -8,11 +8,13 @@ import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.MoreHoriz
 import androidx.compose.material.icons.filled.Fastfood
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.outlined.CalendarToday
 import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.MoreHoriz
 import androidx.compose.material.icons.outlined.Fastfood
+import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -37,6 +39,7 @@ import com.example.basic.AttendanceDetailsScreen
 import com.example.basic.HomeScreen
 import com.example.basic.MoreScreen
 import com.example.basic.PlannerScreen
+import com.example.basic.RedoScreen
 
  
 sealed class Screen(
@@ -68,6 +71,12 @@ sealed class Screen(
         "Food",
         Icons.Filled.Fastfood,
         Icons.Outlined.Fastfood
+    )
+    object Redo : Screen(
+        "redo",
+        "Redo",
+        Icons.Filled.Refresh,
+        Icons.Outlined.Refresh
     )
     object More : Screen(
         "more",
@@ -104,7 +113,14 @@ sealed class Screen(
 @Composable
 fun AppNavHost() {
     val navController = rememberNavController()
-    val items = listOf(Screen.Home, Screen.Planner, Screen.Attendance, Screen.Food, Screen.More)
+    val items = listOf(
+        Screen.Home,
+        Screen.Planner,
+        Screen.Attendance,
+        Screen.Food,
+        Screen.Redo,
+        Screen.More
+    )
 
     Scaffold(
         bottomBar = {
@@ -184,6 +200,7 @@ fun AppNavHost() {
                     onViewMonth = { navController.navigate(Screen.MonthlyMenu.route) }
                 )
             }
+            composable(Screen.Redo.route) { RedoScreen() }
             composable(Screen.FoodSummary.route) {
                 FoodSummaryScreen(onBack = { navController.popBackStack() })
             }
