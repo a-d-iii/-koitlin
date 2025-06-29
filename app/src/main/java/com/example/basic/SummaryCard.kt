@@ -200,7 +200,7 @@ private fun RowScope.InfoBox(value: String, label: String) {
             .weight(1f)
             .height(100.dp)
             .padding(horizontal = 4.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         elevation = CardDefaults.cardElevation(1.dp)
     ) {
         Column(
@@ -260,7 +260,7 @@ private fun MenuSection(contentPadding: Dp) {
                             .height(cardHeight)
                             .padding(vertical = 8.dp),
                         border = BorderStroke(1.dp, Color(0xFFE0E0E0)),
-                        colors = CardDefaults.cardColors(containerColor = Color.White),
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
                         elevation = CardDefaults.cardElevation(1.dp)
                     ) {
                         Column(
