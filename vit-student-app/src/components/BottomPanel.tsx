@@ -95,7 +95,7 @@ const BottomPanel = forwardRef<BottomPanelHandle, Props>(
       >
         {/* Floating close button */}
         <Pressable style={styles.closeButton} onPress={() => slideDown()}>
-          <Ionicons name="chevron-down" size={20} color="#333" />
+ 
         </Pressable>
 
         <ScrollView
@@ -179,7 +179,7 @@ const styles = StyleSheet.create({
   utilityGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    justifyContent: 'space-between',
+    justifyContent: 'space-evenly',
   },
   utilityItem: {
     width: '24%',
@@ -189,18 +189,6 @@ const styles = StyleSheet.create({
   utilityIcon: {
     marginBottom: 4,
   },
-  utilityLabel: {
-    fontSize: 12,
-    color: '#333',
-    textAlign: 'center',
-  },
-  closeButton: {
-    position: 'absolute',
-    bottom: 8,
-    alignSelf: 'center',
-    backgroundColor: '#fff',
-    borderRadius: 20,
-    padding: 6,
-    elevation: 2,
+ 
   },
 });
