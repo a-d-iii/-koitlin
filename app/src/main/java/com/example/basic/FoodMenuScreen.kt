@@ -28,6 +28,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.graphicsLayer
@@ -239,13 +240,16 @@ private fun MealCard(
     }
     val ended = now.after(end.time)
     val containerColor = background
+    var showRating by remember { mutableStateOf(false) }
+    var rating by remember { mutableStateOf(0) }
+    val rateScale = remember { Animatable(1f) }
     Card(
         shape = RoundedCornerShape(8.dp),
         colors = CardDefaults.cardColors(containerColor = containerColor),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         modifier = Modifier
             .fillMaxWidth()
-            .height(110.dp)
+            .heightIn(min = 110.dp)
     ) {
         Column(modifier = Modifier.padding(12.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -314,7 +318,40 @@ private fun MealCard(
             Spacer(modifier = Modifier.height(4.dp))
             Text(text = meal.items.joinToString(", "), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f))
             Spacer(modifier = Modifier.height(8.dp))
- 
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.End
+            ) {
+                if (showRating) {
+                    Row {
+                        (1..5).forEach { i ->
+                            Icon(
+                                imageVector = Icons.Default.Star,
+                                contentDescription = "Star $i",
+                                tint = if (i <= rating) Color(0xFFFFD700) else Color.LightGray,
+                                modifier = Modifier
+                                    .size(24.dp)
+                                    .clickable { rating = i }
+                            )
+                        }
+                    }
+                } else {
+                    Button(
+                        onClick = {
+                            scope.launch {
+                                rateScale.animateTo(1.2f, animationSpec = tween(200))
+                                showRating = true
+                            }
+                        },
+                        modifier = Modifier.scale(rateScale.value),
+                        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)
+                    ) {
+                        Text("Rate", color = MaterialTheme.colorScheme.onSecondary)
+                    }
+                }
+            }
+
         }
     }
 }
