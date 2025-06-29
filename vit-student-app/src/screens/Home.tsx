@@ -12,6 +12,7 @@ import {
   StatusBar,
   Platform,
 } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import useWeather from '../hooks/useWeather';
 import CardCarousel from '../components/CardCarousel';
 import WhatsNextPanel, { WhatsNextPanelHandle } from '../components/WhatsNextPanel';
@@ -118,15 +119,16 @@ export default function Home() {
   const locationName = 'Amaravati, IN';
 
   return (
-    <SafeAreaView
-      style={[
-        styles.root,
-        {
-          backgroundColor: '#f0f0f0',
-          paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
-        },
-      ]}
-    >
+    <LinearGradient colors={['#69cbff', '#1cddfe']} style={{ flex: 1 }}>
+      <SafeAreaView
+        style={[
+          styles.root,
+          {
+            backgroundColor: 'transparent',
+            paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
+          },
+        ]}
+      >
       {/* Main Carousel Region */}
       <View style={styles.carouselRegion} {...pan.panHandlers}>
         <CardCarousel
@@ -164,7 +166,8 @@ export default function Home() {
         isVisible={panel === 'bottom'}
         onDismiss={closeBot}
       />
-    </SafeAreaView>
+      </SafeAreaView>
+    </LinearGradient>
   );
 }
 

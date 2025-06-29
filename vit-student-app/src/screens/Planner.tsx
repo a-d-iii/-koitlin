@@ -12,6 +12,7 @@ import {
   GestureResponderEvent,
   PanResponderGestureState,
 } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import { WEEKLY_SCHEDULE, ClassEntry } from '../data/weeklySchedule';
 
 const DAYS = Object.keys(WEEKLY_SCHEDULE);
@@ -45,12 +46,13 @@ export default function Planner() {
   ).current;
 
   return (
-    <SafeAreaView
-      style={[
-        styles.container,
-        { paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0 },
-      ]}
-    >
+    <LinearGradient colors={['#69cbff', '#1cddfe']} style={{ flex: 1 }}>
+      <SafeAreaView
+        style={[
+          styles.container,
+          { paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0, backgroundColor: 'transparent' },
+        ]}
+      >
       <Text style={styles.heading}>Weekly Timetable</Text>
 
       <ScrollView
@@ -97,14 +99,15 @@ export default function Planner() {
           </TouchableOpacity>
         ))}
       </ScrollView>
-    </SafeAreaView>
+      </SafeAreaView>
+    </LinearGradient>
   );
 }
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#f0f2f5' },
   heading: {
-    fontSize: 22,
+    fontSize: 28,
     fontWeight: '700',
     marginVertical: 16,
     marginHorizontal: 16,
@@ -134,11 +137,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 12,
     marginVertical: 6,
-    elevation: 1,
-    shadowColor: '#000',
-    shadowOpacity: 0.05,
-    shadowOffset: { width: 0, height: 0.5 },
-    shadowRadius: 2,
+    elevation: 0,
   },
   classLeft: { flex: 1 },
   courseText: { fontSize: 14, fontWeight: '600', color: '#333' },
