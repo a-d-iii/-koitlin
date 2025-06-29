@@ -29,10 +29,11 @@ import androidx.compose.ui.unit.dp
 import com.example.basic.DoubleRingProgress
 import com.example.basic.MiniLineGraph
 
+@Composable
 private fun colorForAttendance(value: Float): Color = when {
-    value >= 0.75f -> Color(0xFF55b45e)
-    value >= 0.70f -> Color(0xFFe5a967)
-    else -> Color(0xFFe06846)
+    value >= 0.75f -> MaterialTheme.colorScheme.primary
+    value >= 0.70f -> MaterialTheme.colorScheme.secondary
+    else -> MaterialTheme.colorScheme.error
 }
 
 private data class Subject(
@@ -125,7 +126,7 @@ fun AttendanceScreen() {
                         Text(
                             text = "Btw exams: ${(subject.between * 100).toInt()}%",
                             style = MaterialTheme.typography.bodyLarge,
-                            color = Color.Gray,
+                            color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
                             fontWeight = FontWeight.Bold
                         )
                     }

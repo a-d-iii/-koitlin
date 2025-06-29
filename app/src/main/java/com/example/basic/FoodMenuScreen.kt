@@ -139,7 +139,7 @@ fun FoodMenuScreen(onShowSummary: () -> Unit, onViewMonth: () -> Unit = {}) {
                 Icon(
                     imageVector = Icons.Default.Restaurant,
                     contentDescription = null,
-                    tint = Color(0xFFFF6347),
+                    tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier
                         .size(24.dp)
                         .graphicsLayer {
@@ -152,12 +152,12 @@ fun FoodMenuScreen(onShowSummary: () -> Unit, onViewMonth: () -> Unit = {}) {
             Spacer(modifier = Modifier.height(8.dp))
             Surface(
                 shape = RoundedCornerShape(20.dp),
-                color = Color.Black,
+                color = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             ) {
                 Text(
                     text = dayLabel,
-                    color = Color.White,
+                    color = MaterialTheme.colorScheme.onPrimary,
                     fontWeight = FontWeight.SemiBold,
                     modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp)
                 )
@@ -179,10 +179,10 @@ fun FoodMenuScreen(onShowSummary: () -> Unit, onViewMonth: () -> Unit = {}) {
             }
             Button(
                 onClick = onShowSummary,
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50)),
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary),
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             ) {
-                Text("Food Summary", color = Color.White)
+                Text("Food Summary", color = MaterialTheme.colorScheme.onSecondary)
             }
         }
 
@@ -240,32 +240,32 @@ private fun MealCard(
     ) {
         Column(modifier = Modifier.padding(12.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(mealIcon(meal.name), contentDescription = null, tint = Color(0xFFFFA500))
+                Icon(mealIcon(meal.name), contentDescription = null, tint = MaterialTheme.colorScheme.primary)
                 Spacer(modifier = Modifier.width(6.dp))
                 Text(
                     text = meal.name,
-                    color = Color.White,
+                    color = MaterialTheme.colorScheme.onPrimary,
                     style = MaterialTheme.typography.bodyMedium,
                     modifier = Modifier
-                        .background(Color(0xFF333333), RoundedCornerShape(12.dp))
+                        .background(MaterialTheme.colorScheme.onPrimary, RoundedCornerShape(12.dp))
                         .padding(horizontal = 8.dp, vertical = 2.dp)
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
                     text = String.format("%02d:%02d - %02d:%02d", meal.startHour, meal.startMinute, meal.endHour, meal.endMinute),
                     style = MaterialTheme.typography.bodySmall,
-                    color = Color(0xFF333333)
+                    color = MaterialTheme.colorScheme.onBackground
                 )
                 Spacer(Modifier.weight(1f))
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(
                         imageVector = if (ended) Icons.Default.CheckCircle else Icons.Default.Timer,
                         contentDescription = null,
-                        tint = if (ended) Color.Green else Color(0xFFD00000),
+                        tint = if (ended) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.error,
                         modifier = Modifier.size(16.dp)
                     )
                     Spacer(Modifier.width(4.dp))
-                    Text(text = if (ended) "Done" else status, style = MaterialTheme.typography.labelSmall, color = Color(0xFF333333))
+                    Text(text = if (ended) "Done" else status, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onBackground)
                     if (!ended) {
                         Spacer(Modifier.width(8.dp))
                         val target = if (status == "Upcoming") start.timeInMillis else end.timeInMillis
@@ -274,13 +274,13 @@ private fun MealCard(
                         val m = (diff % 3600000) / 60000
                         val s = (diff % 60000) / 1000
                         val timer = if (h > 0) String.format("%02d:%02d:%02d", h, m, s) else String.format("%02d:%02d", m, s)
-                        Text(timer, style = MaterialTheme.typography.labelSmall, color = Color(0xFF333333))
+                        Text(timer, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onBackground)
                     }
                     Spacer(Modifier.width(8.dp))
                     Icon(
                         imageVector = if (liked) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
                         contentDescription = "Like",
-                        tint = if (liked) Color.Red else Color.Black,
+                        tint = if (liked) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onBackground,
                         modifier = Modifier
                             .size(20.dp)
                             .graphicsLayer(scaleX = scale.value, scaleY = scale.value)
@@ -298,16 +298,16 @@ private fun MealCard(
                 }
             }
             Spacer(modifier = Modifier.height(4.dp))
-            Text(text = meal.items.joinToString(", "), style = MaterialTheme.typography.bodySmall, color = Color(0xFF555555))
+            Text(text = meal.items.joinToString(", "), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f))
             Spacer(modifier = Modifier.height(8.dp))
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
                 Button(
                     onClick = onRate,
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFF9800))
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
                 ) {
-                    Icon(Icons.Default.Star, contentDescription = null, tint = Color.White, modifier = Modifier.size(16.dp))
+                    Icon(Icons.Default.Star, contentDescription = null, tint = MaterialTheme.colorScheme.onPrimary, modifier = Modifier.size(16.dp))
                     Spacer(Modifier.width(4.dp))
-                    Text("Rate", color = Color.White)
+                    Text("Rate", color = MaterialTheme.colorScheme.onPrimary)
                 }
             }
         }
@@ -329,7 +329,7 @@ fun RatingDialog(meal: Meal, onDismiss: () -> Unit, onSubmit: (Int) -> Unit) {
                         Icon(
                             imageVector = if (i <= rating) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
                             contentDescription = null,
-                            tint = Color.Red,
+                            tint = MaterialTheme.colorScheme.error,
                             modifier = Modifier
                                 .size(32.dp)
                                 .clickable(
@@ -352,7 +352,7 @@ fun RatingDialog(meal: Meal, onDismiss: () -> Unit, onSubmit: (Int) -> Unit) {
 
 @Composable
 private fun MonthBar(onClick: () -> Unit, modifier: Modifier = Modifier) {
-    Surface(color = Color(0xFF007BFF), modifier = modifier) {
+    Surface(color = MaterialTheme.colorScheme.primary, modifier = modifier) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -364,13 +364,13 @@ private fun MonthBar(onClick: () -> Unit, modifier: Modifier = Modifier) {
             Icon(
                 imageVector = Icons.Default.CalendarToday,
                 contentDescription = null,
-                tint = Color.White,
+                tint = MaterialTheme.colorScheme.onPrimary,
                 modifier = Modifier.size(16.dp)
             )
             Spacer(Modifier.width(6.dp))
             Text(
                 text = "View Full Month",
-                color = Color.White,
+                color = MaterialTheme.colorScheme.onPrimary,
                 style = MaterialTheme.typography.labelLarge
             )
         }
