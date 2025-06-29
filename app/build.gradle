@@ -47,13 +47,20 @@ dependencies {
     implementation 'androidx.compose.ui:ui-tooling-preview'
     debugImplementation 'androidx.compose.ui:ui-tooling'
     implementation 'androidx.compose.foundation:foundation'
-    implementation 'androidx.compose.ui:ui-text-google-fonts:1.5.4'
-    implementation 'com.google.android.gms:play-services-base:18.4.0'
     implementation 'androidx.compose.material3:material3'
     implementation 'androidx.compose.material:material-icons-extended'
     implementation 'androidx.constraintlayout:constraintlayout-compose:1.0.1'
     implementation 'androidx.navigation:navigation-compose:2.7.7'
     implementation 'io.coil-kt:coil-compose:2.4.0'
-    implementation 'com.google.android.gms:play-services-basement:18.4.0'
     implementation 'com.google.android.material:material:1.11.0'
 }
+
+// Automatically copy the Inter font from the vit-student-app directory.
+// This avoids committing the binary font file into source control.
+tasks.register('prepareInterFont', Copy) {
+    from("${rootDir}/vit-student-app/font/Inter-VariableFont_opsz,wght.ttf")
+    into("${projectDir}/src/main/res/font")
+    rename { 'inter.ttf' }
+}
+
+preBuild.dependsOn(prepareInterFont)
