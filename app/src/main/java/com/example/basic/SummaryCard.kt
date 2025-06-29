@@ -101,8 +101,8 @@ fun SummaryCard() {
             }
         }
         Spacer(Modifier.height(16.dp))
-        val progressWidthFraction = 0.4f
-        val weatherWidthFraction = 0.35f
+        val progressWeight = 0.7f
+        val weatherWeight = 0.3f
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -112,17 +112,14 @@ fun SummaryCard() {
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(160.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 DayProgressBar(
-                    modifier = Modifier
-                        .fillMaxWidth(progressWidthFraction)
+                    modifier = Modifier.weight(progressWeight)
                 )
-                Spacer(modifier = Modifier.weight(1f))
                 WeatherCard(
-                    modifier = Modifier
-                        .fillMaxWidth(weatherWidthFraction)
+                    modifier = Modifier.weight(weatherWeight)
                 )
             }
             Spacer(Modifier.height(16.dp))
