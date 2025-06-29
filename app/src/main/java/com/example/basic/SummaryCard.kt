@@ -70,7 +70,7 @@ fun SummaryCard() {
         ) {
             WeatherCard()
             Spacer(Modifier.height(16.dp))
-            ClassSummaryBar()
+            TimetableSection()
             Spacer(Modifier.height(16.dp))
             MenuSection(contentPadding = 16.dp)
             Spacer(Modifier.height(16.dp))
@@ -194,47 +194,40 @@ private fun WeatherInfo(value: String, label: String) {
 }
 
 @Composable
-private fun ClassSummaryBar() {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.Center
+private fun RowScope.InfoBox(value: String, label: String) {
+    Card(
+        modifier = Modifier
+            .weight(1f)
+            .height(100.dp)
+            .padding(horizontal = 4.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        elevation = CardDefaults.cardElevation(0.dp)
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth(0.85f)
-                .height(48.dp)
-                .clip(RoundedCornerShape(24.dp))
-                .background(MaterialTheme.colorScheme.surface)
-                .padding(horizontal = 16.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                "6 classes",
-                style = MaterialTheme.typography.bodyMedium,
-                fontWeight = FontWeight.SemiBold
+                text = value,
+                style = MaterialTheme.typography.headlineMedium,
+                fontWeight = FontWeight.Bold
             )
-            Box(
-                modifier = Modifier
-                    .size(6.dp)
-                    .background(Color(0xFF448AFF), CircleShape)
-            )
-            Text(
-                "2 labs",
-                style = MaterialTheme.typography.bodyMedium,
-                fontWeight = FontWeight.SemiBold
-            )
-            Box(
-                modifier = Modifier
-                    .size(6.dp)
-                    .background(Color(0xFF80D8FF), CircleShape)
-            )
-            Text(
-                "3 project",
-                style = MaterialTheme.typography.bodyMedium,
-                fontWeight = FontWeight.SemiBold
-            )
+            Text(label, style = MaterialTheme.typography.bodyMedium)
         }
+    }
+}
+
+@Composable
+private fun TimetableSection() {
+    SectionHeader("Today's Timetable")
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        InfoBox(value = "6", label = "classes today")
+        InfoBox(value = "2", label = "labs")
+        InfoBox(value = "1", label = "project")
     }
 }
 
