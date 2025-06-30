@@ -45,7 +45,7 @@ import androidx.compose.animation.with
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.runtime.rememberCoroutineScope
-import com.example.basic.WEEKLY_SCHEDULE
+import com.example.basic.ClassEntry
 import kotlinx.coroutines.launch
 import com.example.basic.ui.theme.gradientBottom
 import com.example.basic.ui.theme.gradientTop
@@ -54,6 +54,8 @@ import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.format.TextStyle
 import java.util.Locale
+
+private val SAMPLE_SCHEDULE: Map<String, List<ClassEntry>> = emptyMap()
 
 private enum class EventCategory(val label: String, val color: Color) {
     Personal("Personal", Color(0xFF4CAF50)),
@@ -76,7 +78,7 @@ private data class DaySchedule(val date: LocalDate, val events: List<ClassEvent>
 
 private fun plannerSchedules(): List<DaySchedule> {
     val start = LocalDate.now().with(java.time.DayOfWeek.MONDAY)
-    return WEEKLY_SCHEDULE.entries.mapIndexed { index, entry ->
+    return SAMPLE_SCHEDULE.entries.mapIndexed { index, entry ->
         val events = entry.value.mapIndexed { i, it ->
             ClassEvent(
                 start = it.start,
