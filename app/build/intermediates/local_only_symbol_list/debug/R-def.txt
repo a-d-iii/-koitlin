@@ -1,0 +1,10 @@
+R_DEF: Internal format may change without notice
+local
+font inter
+raw monthly_menu_may_2025
+string app_name
+string attendance
+string food
+string home
+string more
+string planner

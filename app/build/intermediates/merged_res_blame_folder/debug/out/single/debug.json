@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "com.example.basic.app-merged_res-64:/raw_monthly_menu_may_2025.json.flat",
+        "source": "com.example.basic.app-main-66:/raw/monthly_menu_may_2025.json"
+    },
+    {
+        "merged": "com.example.basic.app-merged_res-64:/font_inter.ttf.flat",
+        "source": "com.example.basic.app-main-66:/font/inter.ttf"
+    }
+]
