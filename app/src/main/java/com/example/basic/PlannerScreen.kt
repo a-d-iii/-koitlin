@@ -22,6 +22,8 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -35,14 +37,36 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.pointer.pointerInput
 import com.example.basic.ui.theme.gradientBottom
 import com.example.basic.ui.theme.gradientTop
+import com.example.basic.network.ApiService
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
 @Composable
 fun PlannerScreen() {
-    val days = WEEKLY_SCHEDULE.keys.toList()
+    var semesters by remember { mutableStateOf<List<String>>(emptyList()) }
+    var selectedSemester by remember { mutableStateOf<String?>(null) }
+    var weeklySchedule by remember { mutableStateOf<Timetable>(emptyMap()) }
+    val days = weeklySchedule.keys.toList()
     var dayIndex by remember { mutableStateOf(0) }
     var dragAmount by remember { mutableStateOf(0f) }
-    val classes by remember(dayIndex) { derivedStateOf { WEEKLY_SCHEDULE[days[dayIndex]].orEmpty() } }
+
+    LaunchedEffect(Unit) {
+        semesters = ApiService.getSemesters()
+        if (semesters.isNotEmpty()) {
+            selectedSemester = semesters.first()
+            weeklySchedule = ApiService.getTimetable(selectedSemester!!)
+        }
+    }
+
+    LaunchedEffect(selectedSemester) {
+        selectedSemester?.let {
+            weeklySchedule = ApiService.getTimetable(it)
+            dayIndex = 0
+        }
+    }
+
+    val classes by remember(dayIndex, weeklySchedule) {
+        derivedStateOf { weeklySchedule[days.getOrNull(dayIndex)].orEmpty() }
+    }
 
     Column(
         modifier = Modifier
@@ -66,6 +90,31 @@ fun PlannerScreen() {
                 )
             }
     ) {
+        if (semesters.isNotEmpty()) {
+            var expanded by remember { mutableStateOf(false) }
+            Box {
+                Text(
+                    text = selectedSemester ?: "Select Semester",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(8.dp))
+                        .background(MaterialTheme.colorScheme.surfaceVariant)
+                        .clickable { expanded = true }
+                        .padding(12.dp),
+                    color = MaterialTheme.colorScheme.onBackground,
+                    fontWeight = FontWeight.Bold
+                )
+                DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
+                    semesters.forEach { sem ->
+                        DropdownMenuItem(text = { Text(sem) }, onClick = {
+                            selectedSemester = sem
+                            expanded = false
+                        })
+                    }
+                }
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+        }
         Text(
             text = "Weekly Timetable",
             style = MaterialTheme.typography.titleLarge,
